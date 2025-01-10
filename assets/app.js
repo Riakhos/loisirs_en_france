@@ -1,5 +1,4 @@
 import './bootstrap.js';
-import './js/dropdown.js'
 /*
  * Welcome to your app's main JavaScript file!
  *

@@ -1,16 +1,19 @@
 /** Header Styles **/
 
+/* Navbar */
 .navbar {
     background-color: var(--primary-color);
     box-shadow: 0 4px 6px var(--box-shadow);
 }
 
+/* Navbar Brand */
 .navbar-brand {
     display: flex;
     align-items: center;
     font-weight: bold;
     font-size: 24px;
     text-decoration: none;
+    text-shadow: 3px 3px 6px var(--box-shadowPlus);
 }
 
 .brand-name {
@@ -28,7 +31,31 @@
     /* Couleur transparente pour afficher le dégradé */
     -webkit-text-fill-color: transparent;
     text-shadow: 2px 2px 4px var(--box-shadow);
-    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.brand-logo {
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px var(--box-shadow);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Effets interactifs */
+.brand-name:hover, .brand-logo:hover {
+    text-shadow: 4px 4px 8px var(--box-shadowPlus);
+}
+
+.brand-name:hover {
+    color: var(--secondary-color); 
+    background: linear-gradient(to right, var(--tertiary-color), var(--secondary-color), var(--hover-color));
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-name:focus, .brand-logo:focus {
+    outline: var(--focus-outline);
 }
 
 /* Responsive adjustments */
@@ -36,43 +63,13 @@
     .navbar-brand {
         justify-content: space-between;
     }
-
     .brand-name {
         font-size: 40px;
         margin-left: 15px;
     }
 }
 
-/* Effets interactifs */
-.brand-name:hover {
-    /* Couleur de secours au survol */
-    color: var(--secondary-color);    
-    /* Inversion du dégradé */
-    background: linear-gradient(to right, var(--tertiary-color), var(--secondary-color), var(--hover-color));
-    /* Définir la version standard et Webkit */
-    background-clip: border-box;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /* Ombre renforcée */
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.brand-name:focus {
-    outline: var(--focus-outline);
-}
-
-.brand-logo {
-    border: 2px solid var(--secondary-color);
-    border-radius: 10px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease-in-out;
-}
-
-.brand-logo:hover {
-    box-shadow: 4px 4px 8px var(--box-shadow);
-}
-
-/* Nav links */
+/* Navbar Links */
 .nav-link {
     font-family: var(--font-primary);
     font-size: 32px;
@@ -84,23 +81,36 @@
     transition: all 0.3s ease-in-out;
 }
 
-.nav-link:hover {
-    color: var(--tertiary-color);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+.dropdown-item {
+    color: var(--secondary-color);
+    padding: 0.5rem 1rem;
+    text-shadow: 1px 1px 2px var(--box-shadow);
+    transition: all 0.3s ease-in-out;
 }
 
-.nav-link:active {
+/* Effets interactifs */
+.nav-link:hover, .dropdown-item:hover {
+    color: var(--tertiary-color);
+    text-shadow: 2px 2px 4px var(--box-shadowPlus);
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-color);
+}
+
+.nav-link:active, .dropdown-item:active {
     color: var(--hover-color) !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px var(--box-shadow);
     transform: scale(0.98);
 }
 
-.nav-link:focus {
+.nav-link:focus, .dropdown-item:focus, .dropdown-menu .nav-link:focus,
+.nav-item .nav-link:focus {
     color: var(--hover-color);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 1px 1px 2px var(--box-shadowPlus);
 }
 
-/* Dropdown menu */
+/* Dropdown Menu */
 .dropdown-menu {
     font-family: var(--font-secondary);
     background-color: var(--primary-color);
@@ -110,45 +120,17 @@
     transition: all 0.3s ease-in-out;
 }
 
-.dropdown-menu .nav-link:focus,
-.nav-item .nav-link:focus {
-    color: var(--hover-color);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.dropdown-item {
-    color: var(--secondary-color);
-    padding: 0.5rem 1rem;
-    text-shadow: 1px 1px 2px var(--box-shadow);
-    transition: all 0.3s ease-in-out;
-}
-
-.dropdown-item:hover {
-    background-color: var(--primary-color);
-    color: var(--tertiary-color);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-.dropdown-item:focus {
-    background-color: var(--primary-color);
-    color: var(--hover-color) !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.dropdown-item:active {
-    background-color: var(--primary-color);
-    color: var(--hover-color) !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-/* Dropdown lorsque ouvert */
 .dropdown-menu.show {
     opacity: 1;
-    transform: translateY(0); /* Effet d'ouverture */
-    animation: fadeIn 0.3s ease-out; /* Animation d'ouverture douce */
+    transform: translateY(0);
+    animation: fadeIn 0.3s ease-out;
 }
 
-/* Animation dropdown */
+.dropdown-divider {
+    border-top: 1px solid var(--secondary-color);
+}
+
+/* Dropdown Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -161,82 +143,52 @@
 }
 
 /* Search Form */
-.search-form {
+.search-input, .search-button, .search-main-button {
     font-family: var(--font-secondary);
-}
-
-/* .search-input {
-    border: 2px solid var(--hover-color);
-    border-radius: 10px 0 0 10px;
+    border: var(--focus-outline);
+    border-radius: 10px;
     padding: 8px;
-    color: var(--hover-color);
-    background-color: var(--tertiary-color);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    color: var(--primary-color);
+    background: var(--tertiary-color);
+    box-shadow: 2px 2px 5px var(--box-shadow);
     transition: all 0.3s ease-in-out;
-}
-
-.search-input::placeholder {
-    color: var(--hover-color);
 }
 
 .search-button {
-    background-color: var(--tertiary-color);
-    border: 2px solid var(--hover-color);
+    color: var(--hover-color);
+    background: var(--tertiary-color);
+    filter: brightness(1.2);
     border-radius: 0 10px 10px 0;
-    color: var(--hover-color);
-    box-shadow: 2px 2px 5px var(--box-shadow);
-    transition: all 0.3s ease-in-out;
-} */
-
-/* Effets interactifs pour le bouton de recherche */
-/* .search-button:hover {
-    background-color: var(--secondary-color);
-    color: var(--hover-color);
-    border-color: var(--hover-color);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.search-button:active {
-    color: var(--hover-color) !important;
-    background-color: var(--primary-color);
-    box-shadow: 2px 2px 5px var(--box-shadow);
-    transform: scale(0.98);
-}
-
-.search-button:focus {
-    color: var(--hover-color) !important;
-    background-color: var(--primary-color);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
 }
 
 .search-main-button {
-    background-color: var(--tertiary-color);
-    color: var(--hover-color);
-    border: 2px solid var(--hover-color);
     border-radius: 10px;
-    box-shadow: 2px 2px 5px var(--box-shadow);
-    transition: all 0.3s ease-in-out;
 }
 
-.search-main-button:hover {
-    background-color: var(--secondary-color);
+/* Effets interactifs */
+.search-input:hover, .search-button:hover, .search-main-button:hover {
+    background: var(--secondary-color);
     color: var(--hover-color);
-    border-color: var(--hover-color);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    border: var(--focus-outline);
+    box-shadow: 3px 3px 6px var(--box-shadowPlus);
 }
 
-.search-main-button:active {
+.search-input:focus {
+    color: var(--hover-color);
+    background-color: #F8F4E3;
+    border-color: var(--secondary-color);
+    box-shadow: 4px 4px 8px var(--box-shadow);
+}
+
+.search-button:focus, .search-main-button:focus {
     color: var(--hover-color) !important;
     background-color: var(--primary-color);
-    box-shadow: 2px 2px 5px var(--box-shadow);
-    transform: scale(0.98);
+    box-shadow: 4px 4px 8px var(--box-shadow);
 }
 
-.search-main-button:focus {
-    color: var(--hover-color);
-    background-color: var(--primary-color);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-} */
+.search-button:active, .search-main-button:active {
+    transform: scale(0.98);
+}
 
 /* Burger button */
 .navbar-toggler {
@@ -266,7 +218,7 @@
 
 .navbar-toggler:focus {
     color: var(--hover-color);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: 3px 3px 6px var(--box-shadowPlus);
 }
 
 .navbar-toggler-icon {
@@ -276,7 +228,7 @@
     width: 30px;
     height: 24px;
     background-image: none;
-    transition: background-color 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .navbar-toggler-icon::before,
@@ -289,7 +241,7 @@
     background-color: var(--tertiary-color);
     border-radius: 3px;
     box-shadow: 2px 2px 6px var(--box-shadow);
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .navbar-toggler:hover .navbar-toggler-icon::before,
@@ -297,56 +249,4 @@
 .navbar-toggler:hover .navbar-toggler-icon div {
     background-color: #7B9C98;
     box-shadow: 4px 4px 10px var(--box-shadow);
-}
-
-.search-input {
-    /* Dégradé pour l'arrière-plan */
-    background: linear-gradient(to right, var(--hover-color), var(--secondary-color));
-    border: none; /* Supprime les bordures */
-    border-radius: 10px 0 0 10px;
-    padding: 8px;
-    color: var(--hover-color); /* Couleur du texte */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
-}
-
-.search-input:focus {
-    outline: none;
-    background: linear-gradient(to right, var(--tertiary-color), var(--hover-color));
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.search-button {
-    /* Dégradé pour le bouton de filtre */
-    background: linear-gradient(to right, var(--tertiary-color), var(--secondary-color));
-    border: none;
-    border-radius: 0 10px 10px 0;
-    color: var(--hover-color);
-    box-shadow: 2px 2px 5px var(--box-shadow);
-    transition: all 0.3s ease-in-out;
-}
-
-.search-button:hover {
-    background: linear-gradient(to right, var(--secondary-color), var(--tertiary-color), var(--hover-color));
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.search-main-button {
-    /* Dégradé pour le bouton principal */
-    background: linear-gradient(to right, var(--hover-color), var(--tertiary-color), var(--secondary-color));
-    border: none;
-    border-radius: 10px;
-    color: var(--hover-color);
-    box-shadow: 2px 2px 5px var(--box-shadow);
-    transition: all 0.3s ease-in-out;
-}
-
-.search-main-button:hover {
-    background: linear-gradient(to right, var(--tertiary-color), var(--hover-color), var(--secondary-color));
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.search-main-button:active {
-    transform: scale(0.98);
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
