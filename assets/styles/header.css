@@ -1,0 +1,352 @@
+/** Header Styles **/
+
+.navbar {
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 6px var(--box-shadow);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.brand-name {
+    font-family: var(--font-primary);
+    font-size: 48px;
+    margin-left: 10px;
+    /* Couleur de secours pour les navigateurs sans support */
+    color: var(--hover-color);    
+    /* Dégradé de couleurs */
+    background: linear-gradient(to right, var(--hover-color), var(--secondary-color), var(--tertiary-color));
+    /* Définir la version standard et Webkit */
+    background-clip: border-box;
+    /* Version spécifique pour le texte */
+    -webkit-background-clip: text;
+    /* Couleur transparente pour afficher le dégradé */
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px var(--box-shadow);
+    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+    .navbar-brand {
+        justify-content: space-between;
+    }
+
+    .brand-name {
+        font-size: 40px;
+        margin-left: 15px;
+    }
+}
+
+/* Effets interactifs */
+.brand-name:hover {
+    /* Couleur de secours au survol */
+    color: var(--secondary-color);    
+    /* Inversion du dégradé */
+    background: linear-gradient(to right, var(--tertiary-color), var(--secondary-color), var(--hover-color));
+    /* Définir la version standard et Webkit */
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Ombre renforcée */
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.brand-name:focus {
+    outline: var(--focus-outline);
+}
+
+.brand-logo {
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.brand-logo:hover {
+    box-shadow: 4px 4px 8px var(--box-shadow);
+}
+
+/* Nav links */
+.nav-link {
+    font-family: var(--font-primary);
+    font-size: 32px;
+    color: var(--secondary-color);
+    text-decoration: none;
+    margin: 0 10px;
+    padding: 12px 16px;
+    text-shadow: 1px 1px 2px var(--box-shadow);
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+    color: var(--tertiary-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.nav-link:active {
+    color: var(--hover-color) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    transform: scale(0.98);
+}
+
+.nav-link:focus {
+    color: var(--hover-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    font-family: var(--font-secondary);
+    background-color: var(--primary-color);
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    padding: 0.5rem 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown-menu .nav-link:focus,
+.nav-item .nav-link:focus {
+    color: var(--hover-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-item {
+    color: var(--secondary-color);
+    padding: 0.5rem 1rem;
+    text-shadow: 1px 1px 2px var(--box-shadow);
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-color);
+    color: var(--tertiary-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-item:focus {
+    background-color: var(--primary-color);
+    color: var(--hover-color) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-item:active {
+    background-color: var(--primary-color);
+    color: var(--hover-color) !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Dropdown lorsque ouvert */
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0); /* Effet d'ouverture */
+    animation: fadeIn 0.3s ease-out; /* Animation d'ouverture douce */
+}
+
+/* Animation dropdown */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search Form */
+.search-form {
+    font-family: var(--font-secondary);
+}
+
+/* .search-input {
+    border: 2px solid var(--hover-color);
+    border-radius: 10px 0 0 10px;
+    padding: 8px;
+    color: var(--hover-color);
+    background-color: var(--tertiary-color);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.search-input::placeholder {
+    color: var(--hover-color);
+}
+
+.search-button {
+    background-color: var(--tertiary-color);
+    border: 2px solid var(--hover-color);
+    border-radius: 0 10px 10px 0;
+    color: var(--hover-color);
+    box-shadow: 2px 2px 5px var(--box-shadow);
+    transition: all 0.3s ease-in-out;
+} */
+
+/* Effets interactifs pour le bouton de recherche */
+/* .search-button:hover {
+    background-color: var(--secondary-color);
+    color: var(--hover-color);
+    border-color: var(--hover-color);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.search-button:active {
+    color: var(--hover-color) !important;
+    background-color: var(--primary-color);
+    box-shadow: 2px 2px 5px var(--box-shadow);
+    transform: scale(0.98);
+}
+
+.search-button:focus {
+    color: var(--hover-color) !important;
+    background-color: var(--primary-color);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.search-main-button {
+    background-color: var(--tertiary-color);
+    color: var(--hover-color);
+    border: 2px solid var(--hover-color);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px var(--box-shadow);
+    transition: all 0.3s ease-in-out;
+}
+
+.search-main-button:hover {
+    background-color: var(--secondary-color);
+    color: var(--hover-color);
+    border-color: var(--hover-color);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.search-main-button:active {
+    color: var(--hover-color) !important;
+    background-color: var(--primary-color);
+    box-shadow: 2px 2px 5px var(--box-shadow);
+    transform: scale(0.98);
+}
+
+.search-main-button:focus {
+    color: var(--hover-color);
+    background-color: var(--primary-color);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+} */
+
+/* Burger button */
+.navbar-toggler {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #7B9C98;
+    border: 2px solid var(--secondary-color);
+    box-shadow: 2px 2px 6px var(--box-shadow);
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-toggler:hover {
+    background-color: var(--secondary-color);
+    border-color: #7B9C98;
+    box-shadow: 4px 4px 10px var(--box-shadow);
+}
+
+.navbar-toggler:active {
+    color: var(--hover-color) !important;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transform: scale(0.98);
+}
+
+.navbar-toggler:focus {
+    color: var(--hover-color);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-toggler-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 24px;
+    background-image: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after,
+.navbar-toggler-icon div {
+    content: "";
+    display: block;
+    height: 4px;
+    width: 100%;
+    background-color: var(--tertiary-color);
+    border-radius: 3px;
+    box-shadow: 2px 2px 6px var(--box-shadow);
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.navbar-toggler:hover .navbar-toggler-icon::before,
+.navbar-toggler:hover .navbar-toggler-icon::after,
+.navbar-toggler:hover .navbar-toggler-icon div {
+    background-color: #7B9C98;
+    box-shadow: 4px 4px 10px var(--box-shadow);
+}
+
+.search-input {
+    /* Dégradé pour l'arrière-plan */
+    background: linear-gradient(to right, var(--hover-color), var(--secondary-color));
+    border: none; /* Supprime les bordures */
+    border-radius: 10px 0 0 10px;
+    padding: 8px;
+    color: var(--hover-color); /* Couleur du texte */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.search-input:focus {
+    outline: none;
+    background: linear-gradient(to right, var(--tertiary-color), var(--hover-color));
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.search-button {
+    /* Dégradé pour le bouton de filtre */
+    background: linear-gradient(to right, var(--tertiary-color), var(--secondary-color));
+    border: none;
+    border-radius: 0 10px 10px 0;
+    color: var(--hover-color);
+    box-shadow: 2px 2px 5px var(--box-shadow);
+    transition: all 0.3s ease-in-out;
+}
+
+.search-button:hover {
+    background: linear-gradient(to right, var(--secondary-color), var(--tertiary-color), var(--hover-color));
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.search-main-button {
+    /* Dégradé pour le bouton principal */
+    background: linear-gradient(to right, var(--hover-color), var(--tertiary-color), var(--secondary-color));
+    border: none;
+    border-radius: 10px;
+    color: var(--hover-color);
+    box-shadow: 2px 2px 5px var(--box-shadow);
+    transition: all 0.3s ease-in-out;
+}
+
+.search-main-button:hover {
+    background: linear-gradient(to right, var(--tertiary-color), var(--hover-color), var(--secondary-color));
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.search-main-button:active {
+    transform: scale(0.98);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}

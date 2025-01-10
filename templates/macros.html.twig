@@ -1,0 +1,32 @@
+{% macro nav_item(label, path, icon=null) %}
+    <li class="nav-item">
+        <a 
+            class="nav-link {{ app.request.attributes.get('_route') == path ? 'active' : '' }}" 
+            href="{{ path }}" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarToggler" 
+            aria-controls="navbarToggler" 
+            aria-expanded="false"
+        >
+            {% if icon %}
+                <i class="{{ icon }}"></i>
+            {% endif %}
+            {{ label|raw }}
+        </a>
+    </li>
+{% endmacro %}
+
+{% macro dropdown_item(label, path) %}
+    <li>
+        <a 
+            class="dropdown-item" 
+            href="{{ path }}" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarToggler" 
+            aria-controls="navbarToggler" 
+            aria-expanded="false"
+        >
+            {{ label }}
+        </a>
+    </li>
+{% endmacro %}

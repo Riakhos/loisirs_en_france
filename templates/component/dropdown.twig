@@ -1,0 +1,20 @@
+{% import 'macros.html.twig' as macros %}
+
+{# dropdown.twig #}
+<div class="dropdown">
+    <a 
+        href="#" 
+        class="nav-link dropdown-toggle" 
+        id="{{ id }}" 
+        data-bs-toggle="dropdown" 
+        aria-expanded="false"
+    >
+        {{ icon|default('<i class="bi bi-person"></i>')|raw }}
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="{{ id }}">
+        {{ macros.dropdown_item('Connexion', '#') }}
+        {{ macros.dropdown_item('Profil', '#') }}
+        <li><hr class="dropdown-divider"></li>
+        {{ macros.dropdown_item('Inscription', '#') }}
+    </ul>
+</div>
