@@ -2,6 +2,7 @@
 
 /* Variables CSS centralisées */
 :root {
+    --background-color: #F8F4E3;
     --primary-color: #2984B4;
     --secondary-color: #FFDC7E;
     --tertiary-color: #FF9B7E;
@@ -10,12 +11,13 @@
     --box-shadowPlus: rgba(0, 0, 0, 0.4);
     --font-primary: 'Cookie', cursive;
     --font-secondary: 'PT Serif', serif;
-    --focus-outline: 2px solid var(--hover-color);
+    --focus-outline-hover: 2px solid var(--hover-color);
+    --focus-outline-secondary: 2px solid var(--secondary-color);
 }
 
 /* Réinitialisation de base */
 body {
-    background-color: #F8F4E3;
+    background-color: var(--background-color);
     font-family: var(--font-secondary);
     font-size: 16px;
     line-height: 1.5;

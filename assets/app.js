@@ -8,6 +8,6 @@ import './bootstrap.js';
 import './styles/app.css';
 import './styles/header.css';
 import './styles/footer.css';
-import './styles/modals.css';
+import './styles/modals/modal_faq.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

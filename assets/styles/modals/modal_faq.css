@@ -1,0 +1,74 @@
+/** Modal FAQ Styles **/
+
+.modal-content{
+    background-color: var(--background-color);
+    font-family: var(--font-secondary);
+}
+.modal-header {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-weight: bold;    
+}
+
+.modal-title {
+    font-family: var(--font-primary);
+    font-size: 2rem;
+}
+
+.btn-close {
+    background: none;
+    color: var(--secondary-color);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.btn-close::before {
+    content: "×";
+    font-weight: bold;
+}
+
+.accordion {
+    border: var(--focus-outline-secondary);
+    border-radius: 10px;
+    --bs-accordion-bg: var(--tertiary-color);
+}
+
+.accordion-button {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    background-color: var(--hover-color);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.accordion-button::after {
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23FFDC7E' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M1.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-.9a.5.5 0 0 1-.1-.9L6.93 8.5a.5.5 0 0 1 0-.9L.5 3.9a.5.5 0 0 1-.1-.9h.9z'/%3e%3c/svg%3e");
+}
+
+.accordion-button:not(.collapsed)::after {
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23FFDC7E' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
+}
+
+.accordion-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--hover-color);
+}
+
+/* Effets Interactifs */
+.btn-close:hover {
+    color: var(--secondary-color);
+    text-decoration: none;
+    opacity: var(--bs-btn-close-hover-opacity);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-content {
+        font-size: 0.9rem;
+    }
+}

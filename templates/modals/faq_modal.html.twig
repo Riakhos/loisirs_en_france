@@ -4,89 +4,43 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="faqModalLabel">Questions Fréquentes</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body">
                 <div class="accordion" id="faqAccordion">
-                    {# FAQ Question 1 #}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Comment puis-je m'inscrire ?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Cliquez sur le bouton d'inscription et suivez les instructions !
+                    {# FAQ Questions Dynamically Populated #}
+                    {% set faqs = [
+                        {'question': 'Comment puis-je m\'inscrire ?', 'answer': 'Cliquez sur le bouton d\'inscription et suivez les instructions !'},
+                        {'question': 'Quelles activités proposez-vous ?', 'answer': 'Nous proposons des activités comme le kayak, la randonnée, le VTT, et plus encore.'},
+                        {'question': 'Y a-t-il des réductions disponibles ?', 'answer': 'Oui, des réductions sont proposées pour les réservations en groupe.'},
+                        {'question': 'Puis-je annuler ma réservation ?', 'answer': 'Oui, les réservations peuvent être annulées sous certaines conditions.'},
+                        {'question': 'Comment contacter le support ?', 'answer': 'Vous pouvez nous contacter via la section "Contact" de notre site.'},
+                        {'question': 'Où puis-je trouver des avis ?', 'answer': 'Les avis sont disponibles sur chaque page d\'activité.'}
+                    ] %}
+                    {% for faq in faqs %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ loop.index }}">
+                                <button class="accordion-button" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#collapse{{ loop.index }}" 
+                                        aria-expanded="{{ loop.first }}" 
+                                        aria-controls="collapse{{ loop.index }}">
+                                    {{ faq.question }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ loop.index }}" 
+                                class="accordion-collapse collapse {% if loop.first %}show{% endif %}" 
+                                aria-labelledby="heading{{ loop.index }}" 
+                                data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    {{ faq.answer }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {# FAQ Question 2 #}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Comment puis-je m'inscrire ?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Cliquez sur le bouton d'inscription et suivez les instructions !
-                            </div>
-                        </div>
-                    </div>
-                    {# FAQ Question 3 #}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Comment puis-je m'inscrire ?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Cliquez sur le bouton d'inscription et suivez les instructions !
-                            </div>
-                        </div>
-                    </div>
-                    {# FAQ Question 4 #}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Comment puis-je m'inscrire ?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Cliquez sur le bouton d'inscription et suivez les instructions !
-                            </div>
-                        </div>
-                    </div>
-                    {# FAQ Question 5 #}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Comment puis-je m'inscrire ?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Cliquez sur le bouton d'inscription et suivez les instructions !
-                            </div>
-                        </div>
-                    </div>
-                    {# FAQ Question 6 #}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Comment puis-je m'inscrire ?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Cliquez sur le bouton d'inscription et suivez les instructions !
-                            </div>
-                        </div>
-                    </div>
-				</div>
+                    {% endfor %}
+
+                </div>
             </div>
         </div>
     </div>

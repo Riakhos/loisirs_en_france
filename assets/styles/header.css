@@ -35,7 +35,7 @@
 }
 
 .brand-logo {
-    border: 2px solid var(--secondary-color);
+    border: var(--focus-outline-secondary);
     border-radius: 10px;
     box-shadow: 2px 2px 5px var(--box-shadow);
     transition: box-shadow 0.3s ease-in-out;
@@ -55,7 +55,7 @@
 }
 
 .brand-name:focus, .brand-logo:focus {
-    outline: var(--focus-outline);
+    outline: var(--focus-outline-hover);
 }
 
 /* Responsive adjustments */
@@ -114,7 +114,7 @@
 .dropdown-menu {
     font-family: var(--font-secondary);
     background-color: var(--primary-color);
-    border: 2px solid var(--secondary-color);
+    border: var(--focus-outline-secondary);
     border-radius: 10px;
     padding: 0.5rem 0;
     transition: all 0.3s ease-in-out;
@@ -145,13 +145,17 @@
 /* Search Form */
 .search-input, .search-button, .search-main-button {
     font-family: var(--font-secondary);
-    border: var(--focus-outline);
+    border: var(--focus-outline-hover);
     border-radius: 10px;
     padding: 8px;
     color: var(--primary-color);
     background: var(--tertiary-color);
     box-shadow: 2px 2px 5px var(--box-shadow);
     transition: all 0.3s ease-in-out;
+}
+
+.search-input::placeholder {
+    color: var(--primary-color);
 }
 
 .search-button {
@@ -169,13 +173,13 @@
 .search-input:hover, .search-button:hover, .search-main-button:hover {
     background: var(--secondary-color);
     color: var(--hover-color);
-    border: var(--focus-outline);
+    border: var(--focus-outline-hover);
     box-shadow: 3px 3px 6px var(--box-shadowPlus);
 }
 
 .search-input:focus {
     color: var(--hover-color);
-    background-color: #F8F4E3;
+    background-color: var(--background-color);
     border-color: var(--secondary-color);
     box-shadow: 4px 4px 8px var(--box-shadow);
 }
@@ -198,7 +202,7 @@
     width: 50px;
     height: 50px;
     background-color: #7B9C98;
-    border: 2px solid var(--secondary-color);
+    border: var(--focus-outline-secondary);
     box-shadow: 2px 2px 6px var(--box-shadow);
     border-radius: 10px;
     transition: all 0.3s ease-in-out;
