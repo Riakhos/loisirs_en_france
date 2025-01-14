@@ -1,0 +1,40 @@
+.modal {
+    --bs-modal-color: var(--bs-body-color);
+    --bs-modal-bg: var(--bs-body-color);
+    --bs-modal-border-color: var(--secondary-color);
+    --bs-modal-box-shadow: var(--box-shadow);
+    --bs-modal-header-border-color: var(--secondary-color);
+    --bs-modal-footer-bg: var(--bs-body-color);
+    --bs-modal-footer-border-color: var(--secondary-color);
+}
+
+.modal-content {
+    background-color: var(--background-color);
+}
+
+.modal-header {
+    background-color: var(--bs-body-color);
+}
+
+.btn-close {
+    --bs-btn-close-color: var(--secondary-color);
+    --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FFDC7E'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+}
+
+.accordion {
+    --bs-accordion-color: var(--hover-color);
+    --bs-accordion-bg: var(--bs-body-color);
+    --bs-accordion-border-color: var(--hover-color);
+    --bs-accordion-border-width: 2px;
+    --bs-accordion-btn-color: var(--bs-body-color);
+    --bs-accordion-btn-bg: var(--secondary-color);
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%232984B4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%232984B4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    --bs-accordion-active-color: var(--bs-body-color);
+    --bs-accordion-active-bg: var(--tertiary-color);
+}
+
+.accordion-button {
+    font-size: 1.5rem;
+}

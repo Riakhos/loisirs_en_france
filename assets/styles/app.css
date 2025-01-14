@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=PT+Serif&family=Cookie&display=swap');
-
-/* Variables CSS centralisées */
+/* Variables SCSS centralisées */
 :root {
+    
     --background-color: #F8F4E3;
     --primary-color: #2984B4;
     --secondary-color: #FFDC7E;
@@ -9,30 +8,45 @@
     --hover-color: #73B8DD;
     --box-shadow: rgba(0, 0, 0, 0.3);
     --box-shadowPlus: rgba(0, 0, 0, 0.4);
-    --font-primary: 'Cookie', cursive;
-    --font-secondary: 'PT Serif', serif;
-    --focus-outline-hover: 2px solid var(--hover-color);
-    --focus-outline-secondary: 2px solid var(--secondary-color);
+    --bs-font-dancing-script: 'Dancing Script', serif;
+    --bs-font-pt-serif: 'PT Serif', serif;
+    --bs-body-bg: var(--background-color);
+    --bs-body-color: var(--primary-color);
+    --bs-tertiary-bg-rgb:  41,132,180; 
+}
+
+.bg-primaryBlue {
+    background-color: var(--primary-color);
+}
+
+.color-primary-custom {
+    color: var(--primary-color);
+}
+
+.border-secondary-custom {
+    border: 2px solid var(--secondary-color);
 }
 
 /* Réinitialisation de base */
 body {
-    background-color: var(--background-color);
-    font-family: var(--font-secondary);
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-    padding: 0;
+    font-family: var(--bs-font-pt-serif);
+    padding-top: var(--bs-navbar-height, 70px)
 }
 
-/* Utilitaire global pour ombre et transitions */
-.shadow-hover {
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
+.custom-shadow {
+    text-shadow: 2px 2px 4px var(--bs-box-shadow);
 }
 
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
+.custom-shadow-hover {
+    text-shadow: 3px 3px 6px var(--bs-box-shadow-lg);
 }
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--bs-font-dancing-script);
+    color: var(--secondary-color);
+}
+
+/* a {
+    color: var(--secondary-color);
+    text-decoration: none;
+} */

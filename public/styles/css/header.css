@@ -1,0 +1,121 @@
+/** Navbar **/
+.navbar {
+    --bs-navbar-active-color: #73B8DD;
+    --bs-navbar-color: var(--secondary-color);
+    --bs-navbar-hover-color: var(--tertiary-color);
+    --bs-navbar-disabled-color: rgba(var(--bs-emphasis-color-rgb), 0.3);
+    --bs-navbar-active-color: var(--hover-color);
+    --bs-navbar-brand-color:  var(--secondary-color);
+    --bs-navbar-brand-hover-color: var(--tertiary-color);
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FFDC7E' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    --bs-navbar-toggler-border-color: var(--secondary-color);
+    --bs-navbar-toggler-border-radius: 10px;
+}
+
+/* Navbar Brand */
+.brand-logo {
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+}
+
+.brand-name {
+    color: var(--tertiary-color); 
+    background: linear-gradient(to right, var(--hover-color), var(--secondary-color), var(--tertiary-color));
+    background-clip: border-box;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/*? Effets interactifs */
+.brand-name:hover {
+    color: var(--secondary-color); 
+    background: linear-gradient(to right, var(--tertiary-color), var(--secondary-color), var(--hover-color));
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-name:hover, .brand-logo:hover {
+    text-shadow: 4px 4px 8px var(--box-shadowPlus);
+}
+
+/* Burger Button */
+.navbar-toggler {
+    --bs-navbar-toggler-padding-y: 0.5rem;
+    --bs-navbar-toggler-padding-x: 0.5rem;
+    padding: var(--bs-navbar-toggler-padding-y) var(--bs-navbar-toggler-padding-x);
+    background-color: #7B9C98;
+    --bs-border-width: 2px;
+    border: var(--bs-border-width) solid var(--bs-navbar-toggler-border-color);
+}
+
+/*? Effets interactifs */
+.navbar-toggler:hover {
+    background-color: var(--secondary-color);--bs-navbar-toggler-border-color: var(--hover-color);
+    box-shadow: 4px 4px 10px var(--box-shadow);
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2373B8DD' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-toggler:focus {
+    background-color: var(--hover-color);
+    box-shadow: 3px 3px 6px var(--box-shadowPlus);
+}
+
+.navbar-toggler:focus:hover {
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%232984B4' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    --bs-navbar-toggler-border-color: var(--primary-color);
+    border: var(--bs-border-width) solid var(--bs-navbar-toggler-border-color);
+}
+
+/* Navbar Links */
+.nav-link {
+    font-family: var(--bs-font-dancing-script);
+}
+
+/*? Effets interactifs */
+.nav-link:focus, .nav-link:active {
+    color: var(--hover-color);
+    text-shadow: 1px 1px 2px var(--box-shadow);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    --bs-dropdown-bg: var(--bs-body-color);
+    --bs-dropdown-border-color: var(--secondary-color);
+    --bs-dropdown-divider-bg: var(--secondary-color);
+    --bs-dropdown-box-shadow: var(--box-shadow);
+    --bs-dropdown-link-color: var(--secondary-color);
+    --bs-dropdown-link-hover-color: var(--tertiary-color);
+    --bs-dropdown-link-hover-bg: none;
+    --bs-dropdown-link-active-color: var(--hover-color);
+    --bs-dropdown-link-active-bg: none;
+}
+
+/* Search Form */
+.form-control {
+    background-color: var(--tertiary-color);
+    border: var(--bs-border-width) solid var(--hover-color);
+}
+
+.form-control::placeholder {
+    color: var(--primary-color);
+}
+
+.btn {
+    --bs-btn-bg: var(--tertiary-color);
+    --bs-btn-border-color: var(--hover-color);
+    --bs-btn-hover-border-color: var(--hover-color);
+    --bs-btn-hover-color: var(--primary-color);
+    --bs-btn-hover-bg: transparent;
+    --bs-btn-active-color: var(--hover-color);
+}
+
+/*? Effets interactifs */
+.form-control:hover, .btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.form-control:focus, .btn:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.1rem var(--hover-color);
+}
