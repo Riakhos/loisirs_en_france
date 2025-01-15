@@ -1,5 +1,5 @@
 {# Modal Carte d’invitation Anniversaire #}
-<div class="modal fade" id="invitationModal" tabindex="-1" aria-labelledby="invitationModalLabel" aria-hidden="true">
+{# <div class="modal fade" id="invitationModal" tabindex="-1" aria-labelledby="invitationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,4 +11,309 @@
             </div>
         </div>
     </div>
+</div> #}
+
+<div class="modal fade" id="invitationModal" tabindex="-1" aria-labelledby="invitationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="invitationModalLabel">Créer une Carte d’Invitation d’Anniversaire</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Créez et personnalisez votre carte d'invitation en quelques minutes pour un anniversaire mémorable avec Loisirs en France !</p>
+                
+                <form name="personalize_birthday_card" method="post" action="/fr/carte-invitation-anniversaire">
+                    <div class="row g-3">
+                        {# Prénom #}
+                        <div class="bg-primaryBlue border-secondary-custom p-3 mb-3 col-md-6">
+                            <label for="personalize_birthday_card_firstName" class="form-label color-secondary-custom required">Prénom</label>
+                            <input type="text" id="personalize_birthday_card_firstName" name="personalize_birthday_card[firstName]" class="form-control" required="required"
+                            placeholder="Veuillez entrer votre prénom">
+                        </div>
+                        {# Âge #}
+                        <div class="bg-primaryBlue border-secondary-custom p-3 mb-3 col-md-6">
+                            <label for="personalize_birthday_card_howOld" class="form-label color-secondary-custom">Âge</label>
+                            <input type="number" id="personalize_birthday_card_howOld" name="personalize_birthday_card[howOld]" class="form-control" required
+                            placeholder="Veuillez indiquer votre âge">
+                        </div>
+                        {# Thème #}
+                        <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                            <label for="personalize_birthday_card_theme" class="form-label color-secondary-custom">Thème de l'anniversaire</label>
+                            <input type="text" id="personalize_birthday_card_theme" name="personalize_birthday_card[theme]" class="form-control" required placeholder="Veuillez indiquer un thème">
+                        </div>
+                        {# Date et Heure #}
+                        <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                            <label for="personalize_birthday_card_when" class="form-label color-secondary-custom">Jour et heure du rendez-vous</label>
+                            <input type="datetime-local" id="personalize_birthday_card_when" name="personalize_birthday_card[when]" class="form-control" required>
+                        </div>
+                        {# Adresse #}
+                        <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                            <label for="personalize_birthday_card_where" class="form-label color-secondary-custom">Adresse et note</label>
+                            <textarea id="personalize_birthday_card_where" name="personalize_birthday_card[where]" class="form-control" rows="3" required placeholder="Veuillez indiquer votre adresse et vos notes"></textarea>
+                        </div>
+                        {# Téléphone #}
+                        <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                            <label for="personalize_birthday_card_phone" class="form-label color-secondary-custom">Téléphone</label>
+                            <input type="tel" id="personalize_birthday_card_phone" name="personalize_birthday_card[phone]" class="form-control" required placeholder="Veuillez indiquer votre numéro de téléphone">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-primaryBlue border-secondary-custom text-center p-3 mb-3 d-flex justify-content-center">
+                        <div style="max-width: 520px; font-size: 70%;">
+                            <div class="w-100 d-flex justify-content-center">
+                                <div class="position-relative">
+                                    <img src="{{ asset ('img/carte-invitation.png') }}" class="w-100" style="max-width: 100%; height: auto;" alt="INVIT">
+                                    <div class="position-absolute text-center w-100" style="top: 30%;">
+                                        <div class="font-weight-bold fs-5 fs-sm-4 fs-md-3 fs-lg-1 px-2 px-sm-4 px-md-5">
+                                            Viens fêter mes <span class="personalize_birthday_card_howOld">42</span> ans lors de mon anniversaire
+                                        </div>
+                                    </div> 
+                                    .
+                                    <div class="position-absolute text-center w-100" style="top: 45%;">
+                                        <div class="color-tertiary-custom font-weight-bold" style="font-size: 160%;">
+                                            <span class="personalize_birthday_card_theme">Soirée déguisée</span>
+                                        </div>
+                                    </div>
+                                    <div class="position-absolute text-center w-100" style="top: 52%;">
+                                        <div class="font-weight-bold" style="font-size: 160%;">
+                                            <span class="personalize_birthday_card_when">28/01/2025 15h30</span>
+                                        </div>
+                                    </div>
+                                    <div class="position-absolute text-center w-100" style="top: 60%;">
+                                        <div class="personalize_birthday_card_where" style="font-size: 125%;">138 avenue Jean Jaurès<br>95100 Argenteuil</div>
+                                    </div>
+                                    <div class="position-absolute text-center w-100" style="bottom: 23%;">
+                                        <div style="font-size: 125%;">
+                                            Donne ta réponse au :
+                                            <span class="personalize_birthday_card_phone">06.03.16.53.51</span>
+                                        </div>
+                                    </div>
+                                    <div class="position-absolute text-center w-100" style="bottom: 17%;">
+                                        <div class="color-tertiary-custom font-weight-bold" style="font-size: 160%;">
+                                            <span class="personalize_birthday_card_firstName">Richard</span>
+                                        </div>
+                                    </div>
+                                    <div class="position-absolute text-center w-100" style="bottom: 8.5%;">
+                                        <div>Organisé avec</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-primaryBlue border-secondary-custom text-center p-3 mb-3">
+                        <button type="submit" id="personalize_birthday_card_submit" class="btn btn-primary color-primary-custom">Télécharger mon carton d’invitation</button>
+                    </div>
+                </form>
+
+                <h3 class="mt-5">Conseils pour une invitation réussie</h3>
+                <ul>
+                    <li>Indiquez clairement toutes les informations importantes (date, heure, lieu, thème).</li>
+                    <li>Personnalisez le design en fonction du thème pour captiver les invités.</li>
+                    <li>Optez pour une touche humoristique ou personnelle pour rendre l'invitation mémorable.</li>
+                </ul>
+
+                <p class="mt-3">Avec Loisirs en France, organisez des anniversaires uniques et mémorables grâce à des activités adaptées à tous les âges et thèmes. Profitez de nos options variées pour faire de cette journée un souvenir inoubliable !</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+{# <div class="fb-container mb-6">
+<div class="flex flex-center flex-col text-center mt-sm-4">
+    <img src="https://res.cloudinary.com/funbooker/image/upload/v1618908436/website/crayonnes/pour_une_invit_qui_carton.png" alt="pou une invit qui cartonne" width="200px">
+    <h1 class="mb-4">Imprimer mon carton en ligne</h1>
+    <p>Remplissez votre carton en 2 minutes, téléchargez, le tour est joué !</p>
+</div>
+
+<form name="personalize_birthday_card" method="post" action="/fr/carte-invitation-anniversaire">
+<div class="flex flex-center flex-md-col">
+    <div class="card m-3">
+        <div class="p-4">
+            <div class="flex">
+                <div class="mr-4">
+                    <div class="form-floating">
+                        <input type="text" id="personalize_birthday_card_firstName" name="personalize_birthday_card[firstName]" required="required">
+                        <label for="personalize_birthday_card_firstName" class="required">Prénom</label>
+                        
+                    </div>
+                </div>
+                <div>
+                    <div class="form-floating">
+                        <input type="text" id="personalize_birthday_card_howOld" name="personalize_birthday_card[howOld]" required="required">
+                        <label for="personalize_birthday_card_howOld" class="required">Age</label>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="form-floating">
+                    <input type="text" id="personalize_birthday_card_theme" name="personalize_birthday_card[theme]" required="required">
+                    <label for="personalize_birthday_card_theme" class="required">Thème</label>
+                    
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="form-floating">
+                    <input type="text" id="personalize_birthday_card_when" name="personalize_birthday_card[when]" required="required">
+                    <label for="personalize_birthday_card_when" class="required">Jour et heure du RDV</label>
+                    
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="form-floating">
+                    <textarea id="personalize_birthday_card_where" name="personalize_birthday_card[where]" required="required" rows="3"></textarea>
+                    <label for="personalize_birthday_card_where" class="required">Adresse et petite note</label>
+                    
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="form-floating">
+                    <input type="text" id="personalize_birthday_card_phone" name="personalize_birthday_card[phone]" required="required">
+                    <label for="personalize_birthday_card_phone" class="required">Téléphone RSVP</label>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card m-3 m-sm-0 p-sm-0">
+        <div class="p-3 py-4 p-sm-1">
+            <div style="max-width: 520px; font-size: 70%;">
+                
+<div class="w-100">
+<div class="position-relative">
+<img src="https://res.cloudinary.com/funbooker/image/upload/v1618900850/website/crayonnes/INVIT.jpg" class="w-100" alt="INVIT">
+
+<div class="position-absolute text-center w-100" style="top: 45%;">
+<div class="text-primary font-weight-bold" style="font-size: 160%;">
+                Viens fêter mes <span class="personalize_birthday_card_howOld">9</span> ans lors de mon anniversaire
+</div>
+</div>
+
+<div class="position-absolute text-center w-100" style="top: 51%;">
+<div class="text-primary font-weight-bold" style="font-size: 160%;">
+“<span class="personalize_birthday_card_theme">Harry Potter</span>“
+</div>
+</div>
+
+<div class="position-absolute text-center w-100" style="top: 57%;">
+<div class="font-weight-bold" style="font-size: 160%;">
+<span class="personalize_birthday_card_when">
+    Le 30 juin à 14h30
+</span>
+</div>
+</div>
+
+<div class="position-absolute text-center w-100" style="top: 63%;">
+<div class="personalize_birthday_card_where" style="font-size: 125%;">
+10 rue Demesmaker, à paris<br>
+Au fond de la cour 3ème étage droite
+</div>
+</div>
+
+<div class="position-absolute text-center w-100" style="bottom: 20%;">
+<div style="font-size: 125%;">
+Donne ta réponse au :
+<span class="personalize_birthday_card_phone">06 70 86 68 07</span>
+</div>
+</div>
+
+<div class="position-absolute text-center w-100" style="bottom: 14%;">
+<div class="text-primary font-weight-bold" style="font-size: 160%;">
+<span class="personalize_birthday_card_firstName">
+    Alice
+</span>
+</div>
+</div>
+
+<div class="position-absolute text-center w-100" style="bottom: 8%;">
+<div>Organisé avec</div>
+</div>
+</div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flex flex-center mt-3">
+      <button type="submit" id="personalize_birthday_card_submit" name="personalize_birthday_card[submit]" validator="phone" class="fb-btn fb-btn--primary py-3 py-sm-2 text-white">Télécharger mon carton d’invitation</button>
+</div>
+<input type="hidden" id="personalize_birthday_card__token" name="personalize_birthday_card[_token]" autocomplete="off" value="108a00e4cc5bd.jOFQcj8v4Ia7RxCCqcG8bdtKIywZx9xoGaqlWmKmd0I.7plgFUd5l82PFl3EzrLJVel5V3pIjo0SV9ydLQDkNXfmmwBHDmiuzvALcw"></form>
+<h2>
+    Quelques idées pour créer le plus beau carton d’invitation pour un anniversaire enfant
+</h2>
+<p>
+    Votre progéniture va bientôt souffler ses bougies ? Il·elle est passioné·e par l’univers des princesses, des chevaliers, des pirates, des monstres ou des dinosaures ? Organisez une petite fête sur son thème préféré et invitez tous ses copains et copines ! Cela sera l’occasion pour lui·elle de se sociabiliser avec ses camarades de classe en dehors du cadre scolaire. Votre petit.e pourra nouer des liens en profondeur qui participeront à son épanouissement personnel et stimuleront sa confiance en soi ! En pleine ère du digital, distribuer de <strong>jolies cartes d’invitation en papier</strong> possède un double avantage : elles se transmettent facilement (pas besoin de connaître l’adresse e-mail ou le téléphone) et suscitent l’envie et l’attention de leurs destinataires. Découvrez les différentes manières de confectionner votre carton d’invitation pour un <a href="/fr/category/anniversaire-enfant">anniversaire enfant</a> !
+</p>
+<h3>Les informations essentielles à préciser sur les cartons d’invitation</h3>
+<p>
+    Fêter un anniversaire demande un sens rigoureux de la planification. Au-delà de la personnalisation et de l'aspect esthétique de votre carte, il est primordial de fournir des informations précises, qui renseigneront les convives sur les détails clés de l’évènement. En effet, chaque carte d’anniversaire à imprimer doit préciser :
+    </p><ul class="pl-sm-0">
+        <li>Le prénom de votre enfant</li>
+        <li>Le <strong>jour de la fête</strong></li>
+        <li>
+            L’<strong>heure de début</strong> (et éventuellement de fin)
+        </li>
+        <li>
+            L’<strong>adresse</strong> de votre domicile ou du·de la professionnel·lle si l’anniversaire se déroule dans un lieu extérieur
+        </li>
+        <li>
+            Votre <strong>numéro de téléphone</strong> pour que les parents puissent confirmer la présence de leur enfant
+        </li>
+        <li>
+            Communiquer l’accès (arrêt de bus, de métro, de tramway, routes à emprunter, etc) aidera les invités à s’y rendre plus facilement.
+        </li>
+    </ul>
+<p></p>
+<h3>Mettre en avant le thème de la fête pour marquer les esprits</h3>
+<p>
+Choisir un <a href="/fr/category/anniversaire-enfant">anniversaire à thème</a> est un atout de taille : les loisirs rigolos et les animations originales donneront envie aux petits de se joindre à vous ! Indiquer ce thème sur un carton d’invitation pour un anniversaire enfant permet aux amis de prévoir des costumes et des accessoires lorsque la fête est déguisée. De nombreux univers magiques et enfantins existent afin d’enchanter ce moment : anniversaire princesse, fée, pirate, super-héros, licorne, Pokémon, la Reine des Neiges, les Tortues Ninja, etc. Des activités en rapport avec le thème pourront ensuite ponctuer la journée :
+</p><ul class="pl-sm-0">
+    <li>
+        Une chasse au trésor pour retrouver la couronne de la reine, Pikachu capturé par la Team Rocket, des bijoux dérobés par des corsaires...
+    </li>
+    <li>
+        Des défis entre Batman, Superman, Spiderman, Wonder Woman et Catwoman
+    </li>
+    <li>
+        Des quiz sur des dessins animés
+    </li>
+</ul>
+<p></p>
+
+<h3>Des exemples de texte </h3>
+<p>
+Pour l’anniversaire de votre enfant, prévoyez une invitation personnalisée à l’attention de ses amis, en toute simplicité ou avec un ton humoristique. Si vous êtes à court d’imagination, voici quelques phrases d’accroche qui donneront un avant-goût de cette journée spéciale :
+</p><ul class="pl-sm-0">
+    <li>
+        <i>« Viens faire la fête chez moi le [jour/mois] ! Au programme : [animations], un délicieux gâteau, de la musique et plein d’autres surprises… »</i></li>
+    <li>
+        <i>« Je t’invite à mon goûter d’anniversaire [thème] le [jour/mois] : n’oublie pas d’apporter ton plus joli déguisement ! »</i></li>
+    <li>
+        <i>« L’âge de raison arrive mais je suis toujours aussi espiègle ! Venez fêter mes 7 ans le [jour/mois] »</i></li>
+    <li>
+        <i>« Le [jour/mois], je t’invite à venir t’amuser avec moi et à chanter joyeux anniversaire dans toutes les langues ! »</i>
+    </li>
+</ul>
+    Pour un texte d’invitation encore plus personnel, vous pouvez préciser le nom de chaque enfant auquel le message s’adresse.
+<p></p>
+
+<h3>Comment réaliser des invitations personnalisées ?</h3>
+
+<h4>Créer une carte avec son enfant : le do it yourself</h4>
+<p>
+    Faire soi-même son carton d’invitation pour un anniversaire enfant permet de partager une activité manuelle avec ses petits et de les entraîner de manière ludique à découper, à coller, à colorier, à écrire, etc. Plus ils participeront à l’élaboration de la carte, plus la fierté et le plaisir de l’offrir sera grand ! Si les enfants sont créatifs mais encore jeunes, optez pour une version recto-verso : mentionnez les informations importantes au recto et donnez-leur la possibilité de laisser libre cours à leur imagination et à leur fantaisie sur le verso ! Ils vont adorer ! <strong>Les gommettes, les paillettes et les coloriages</strong> sont un moyen de customiser et d’égayer l’invitation de fête d’anniversaire et les enveloppes. Vous pouvez également ajouter une photo ou une image en rapport avec l’animation de la journée…
+</p>
+
+<h4>Choisir un modèle de cartes d’anniversaire : la rapidité</h4>
+<p>
+    Pour vos anniversaires organisés avec Funbooker (anniversaire pirate, Disney, danse, magie, etc) nous avons conçu une belle carte d’invitation gratuite : <strong>les informations sur l’activité ou le thème sont personnalisables en quelques clics</strong> ! Le design festif est composé de dessins de ballons, d’un gâteau d’anniversaire et de bonbons. Téléchargez, imprimez et le tour est joué !
+</p>
+
+<p>
+    Avant de confectionner ou d’imprimer le carton d’invitation pour un anniversaire enfant, tournez-vous vers une papeterie mettant en vente du papier recyclé afin de limiter l’impact environnemental. Vous pourrez ensuite envoyer une invitation par voie postale ou laisser votre progéniture la remettre en main propre à l’école !
+</p>
+</div> #}
+

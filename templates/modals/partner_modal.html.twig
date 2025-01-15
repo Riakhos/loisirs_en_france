@@ -1,13 +1,67 @@
 {# Modal Devenir Partenaire #}
 <div class="modal fade" id="partnerModal" tabindex="-1" aria-labelledby="partnerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="partnerModalLabel">Devenir Partenaire</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Des informations pour devenir partenaire avec Loisirs en France...</p>
+                <p>
+                    Devenir partenaire avec <strong>Loisirs en France</strong>, c'est l'opportunité de promouvoir votre établissement auprès d'une large communauté d'amateurs de loisirs. 
+                    Pour rejoindre notre réseau de partenaires, suivez ces étapes simples :
+                </p>
+                <ul>
+                    <li>Remplissez le formulaire en fournissant vos informations personnelles et celles de votre établissement.</li>
+                    <li>Précisez ce que vous proposez : une description claire de vos services, vos atouts, et ce qui vous rend unique.</li>
+                    <li>Assurez-vous de renseigner une adresse email valide et un numéro de téléphone pour que nous puissions vous recontacter rapidement.</li>
+                    <li>Soumettez votre demande et attendez la confirmation de notre équipe.</li>
+                </ul>
+                <p>
+                    Une fois votre demande acceptée, nous vous accompagnerons dans la mise en avant de vos activités pour maximiser votre visibilité. Ensemble, faisons découvrir vos talents et vos services à nos utilisateurs !
+                </p>
+            </div>
+            <div class="modal-body">
+                <form>
+                {# <form method="POST" action="{{ path('partner') }}"> #}
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="name" class="form-label color-secondary-custom">Nom <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Veuillez entrer votre nom" required>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="firstName" class="form-label color-secondary-custom">Prénom <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Veuillez entrer votre prénom" required>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="email" class="form-label color-secondary-custom">Adresse Mail <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Veuillez entrer votre adresse mail" required>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="tel" class="form-label color-secondary-custom">Téléphone </label>
+                    <input type="tel" class="form-control" id="tel" name="tel" placeholder="Veuillez entrer votre numéro de téléphone" required>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="companyName" class="form-label color-secondary-custom">Nom de votre l'établissement <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Veuillez entrer votre nom d'établissement" required>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="webSite" class="form-label color-secondary-custom">Nom de votre site web <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="webSite" name="webSite" placeholder="Veuillez entrer votre site web" required>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="description" class="form-label color-secondary-custom">Décrivez ce que vous proposez en quelques mots <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" name="description" rows="5" placeholder="Décrivez en quelques lignes votre activité, le programme que vous proposez, vos petits +. N'hésitez pas à nous en dire un peu plus sur vous, votre histoire, votre passion, votre expertise." maxlength="100" required></textarea>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <label for="captcha" class="form-check-label color-secondary-custom">
+                        <input type="checkbox" id="captcha" name="captcha" class="form-check-input" required>
+                        Vérifier que vous êtes bien un humain.
+                    </label>
+                </div>
+                <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
+                    <button type="submit" class="btn btn-primary w-100 color-primary-custom">Envoyer</button>
+                </div>
+                </form>
             </div>
         </div>
     </div>
