@@ -1,0 +1,63 @@
+{# Modal Carte d’invitation Anniversaire #}
+<div class="modal fade" id="invitationModal" tabindex="-1" aria-labelledby="invitationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">                
+                {# Form #}
+                <form id="birthdayCardForm" name="personalize_birthday_card" method="POST" enctype="multipart/form-data">                    
+                    {# Display Form #}
+                    <div class="bg-primaryBlue border-secondary-custom text-center p-3 mb-3 d-flex justify-content-center">
+                        <div style="max-width: 520px; font-size: 70%;">
+                            <div class="w-100 d-flex justify-content-center">
+                                <div class="position-relative">
+                                    <img src="img/carte-invitation.png" class="w-100" style="max-width: 100%; height: auto;" alt="INVIT">
+                                    {# Display Form Âge #}
+                                    <div class="position-absolute text-center w-100" style="top: 30%;">
+                                        <div class="px-4" style="font-size: 160%;">
+                                            Viens fêter mes 
+                                            <span id="preview_howOld" class="personalize_birthday_card_howOld">42 </span>
+                                            ans lors de mon anniversaire
+                                        </div>
+                                    </div>
+                                    {# Display Form Thème #}
+                                    <div class="position-absolute text-center w-100" style="top: 45%;">
+                                        <div class="color-tertiary-custom" style="font-size: 160%;">
+                                            <span id="preview_theme" class="personalize_birthday_card_theme">Soirée déguisée</span>
+                                        </div>
+                                    </div>
+                                    {# Display Form Date et Heure #}
+                                    <div class="position-absolute text-center w-100" style="top: 52%;">
+                                        <div class="color-tertiary-custom" style="font-size: 160%;">
+                                            <span id="preview_when" class="personalize_birthday_card_when">28/01/2025 15h30</span>
+                                        </div>
+                                    </div>
+                                    {# Display Form Adresse #}
+                                    <div class="position-absolute text-center w-100" style="top: 60%;">
+                                        <div id="preview_where" class="personalize_birthday_card_where" style="font-size: 125%;">
+                                            138 avenue Jean Jaurès
+                                            <br>
+                                            95100 Argenteuil
+                                        </div>
+                                    </div>
+                                    {# Display Form Téléphone #}
+                                    <div class="position-absolute text-center w-100" style="bottom: 23%;">
+                                        <div class="px-3" style="font-size: 125%;">
+                                            Donne ta réponse au :
+                                            <span id="preview_phone" class="personalize_birthday_card_phone">06.03.16.53.51</span>
+                                        </div>
+                                    </div>
+                                    {# Display Form Prénom #}
+                                    <div class="position-absolute text-center w-100" style="bottom: 17%;">
+                                        <div class="color-tertiary-custom" style="font-size: 160%;">
+                                            <span id="preview_firstName" class="personalize_birthday_card_firstName">Richard</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

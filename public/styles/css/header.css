@@ -119,3 +119,7 @@
     border-color: var(--primary-color);
     box-shadow: 0 0 0 0.1rem var(--hover-color);
 }
+
+.btn:focus-visible {
+    color: var(--hover-color);
+}

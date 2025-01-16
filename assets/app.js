@@ -1,4 +1,6 @@
 import './bootstrap.js';
+// import './js/generate-invitation-pdf.js'
+import './js/birthday-card.js'
 /*
  * Welcome to your app's main JavaScript file!
  *
