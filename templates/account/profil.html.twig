@@ -90,7 +90,8 @@
                 </div>
             </form>
         </div>
-        {# <div class="flex flex-sm-col mb-3 flex-sm-column-reverse">
+        
+        <div class="flex flex-sm-col mb-3 flex-sm-column-reverse">
             
             <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100" style="width: 415px;">
                 <div class="p-4 flex">
@@ -161,6 +162,8 @@
                     </div>
                 </div>
             </div>
-        </div> #}
+        </div>
+        <a href="{{ path('app_logout') }}">Me déconnecter</a>
+        <a href="{{ path('app_account_modify_pwd') }}">Modifier mon mot de passe</a>
     </div>
 {% endblock %}
