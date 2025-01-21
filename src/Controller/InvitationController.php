@@ -12,7 +12,7 @@ class InvitationController extends AbstractController
     #[Route('/invitation', name: 'app_invitation')]
     public function index(): Response
     {
-        return $this->render('invitation/index.html.twig', [
+        return $this->render('invitation/invitation.html.twig', [
             'controller_name' => 'InvitationController',
         ]);
     }
