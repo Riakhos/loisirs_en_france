@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil utilisateur{% endblock %}
+
+{% block body %}
+    <ul class="nav nav-tabs bg-primaryBlue p-3">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_account') }}">Tableau de bord</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_account_reservation') }}">Réservations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{ path('app_account_profil') }}">Mon profil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_account_message') }}">Messages</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_account_notice') }}">Avis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_account_basket') }}">Mon panier</a>
+        </li>
+    </ul>
+    <div class="container my-5 w-auto d-flex justify-content-center align-items-center min-vh-100">
+        <div class="toast d-flex justify-content-center align-items-center">
+            <form class="row p-3 g-3">
+                <h1>Mes informations personnelles</h1>
+                <div class="col-md-6">
+                    <label for="firstname" class="form-label">Prénom</label>
+                    <input type="text" class="form-control" id="firstname">
+                </div>
+                <div class="col-md-6">
+                    <label for="lastname" class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="lastname">
+                </div>
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Téléphone</label>
+                    <input type="text" class="form-control" id="phone">
+                </div>
+                <div class="col-6">
+                    <label for="birthdayDate" class="form-label">Date de naissance</label>
+                    <div class="row">
+                        {# Sélection du jour #}
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <select id="birthdayDay" class="form-select">
+                                <option selected>Jour</option>
+                                {% for day in 1..31 %}
+                                    <option value="{{ day }}">{{ day }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {# Sélection du mois #}
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <select id="birthdayMonth" class="form-select">
+                                <option selected>Mois</option>
+                                {% for month in [
+                                    'Janvier', 'février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                                    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+                                ] %}
+                                    <option value="{{ loop.index0 }}">{{ month }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {# Sélection de l'année #}
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <select id="birthdayYear" class="form-select">
+                            <option selected>Années</option>
+                                {% set current_year = "now"|date("Y") %}
+                                {% for year in current_year..(current_year-100) %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="email" class="form-label">Mail*</label>
+                    <input name="email" class="form-control" type="mail" placeholder=" ">
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="gridCheck">
+                        <label class="form-check-label" for="gridCheck">Vérifié</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+        {# <div class="flex flex-sm-col mb-3 flex-sm-column-reverse">
+            
+            <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100" style="width: 415px;">
+                <div class="p-4 flex">
+                    <div class="cursor-pointer">
+                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="https://res.cloudinary.com/funbooker/image/upload/dpr_3.0,f_auto,h_80,q_auto,w_80/v1/https://lh3.googleusercontent.com/a/ACg8ocJNTKrHw3q-loWlTrU1z7_MXMru4jEl9t0HU6XgY3FzHYjSKg=s96-c"></div>
+                        <div class="ml-4 flex flex-col content-center">
+                            <p class="mb-2 mb-2  font-weight-bold">
+                                Richard Bonnegent
+                            </p>
+                            <p class="mb-2">
+                                richard.bonnegent@gmail.com
+                            </p>
+                            <p class="m-0"></p>
+                        </div>
+                    </div>
+                    <hr class="m-0 border">
+                        <div class="pb-4 px-4 flex flex-col">
+                            <ul class="list-none p-0 m-0">
+                                <li class="mt-4">
+                                    <a class="text-decoration-none cursor-pointer">
+                                        <span class="text-primary border-primary  mb-4 cursor-pointer">
+                                            <span class="link-chevron">
+                                                Modifier mon profil
+                                            </span>
+                                            <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="mt-4">
+                                    <a class="text-decoration-none cursor-pointer">
+                                        <span class="false  mb-4 cursor-pointer">
+                                            <span class="link-chevron">
+                                                Notifications
+                                            </span>
+                                            <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="mt-4">
+                                    <a class="text-decoration-none cursor-pointer">
+                                        <span class="false  mb-4 cursor-pointer">
+                                            <span class="link-chevron">
+                                                Sécurité
+                                            </span>
+                                            <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-none-min-md flex items-center my-4">
+                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="https://res.cloudinary.com/funbooker/image/upload/dpr_3.0,f_auto,h_80,q_auto,w_80/v1/https://lh3.googleusercontent.com/a/ACg8ocJNTKrHw3q-loWlTrU1z7_MXMru4jEl9t0HU6XgY3FzHYjSKg=s96-c">
+                            <div class="select-input w-100 ml-4">
+                                <select>
+                                    <option value="/profil-utilisateur/editer-a-propos-de-moi">
+                                        Modifier mon profil
+                                    </option>
+                                    <option value="/profil-utilisateur/notifications">
+                                        Notifications
+                                    </option>
+                                    <option value="/profil-utilisateur/securite">
+                                        Sécurité
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> #}
+    </div>
+{% endblock %}

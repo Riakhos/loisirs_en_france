@@ -9,9 +9,49 @@ use Symfony\Component\Routing\Attribute\Route;
 class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
-    public function index(): Response
+    public function account(): Response
     {
         return $this->render('account/account.html.twig', [
+            'controller_name' => 'AccountController',
+        ]);
+    }
+    
+    #[Route('/compte/reservation', name: 'app_account_reservation')]
+    public function reservation(): Response
+    {
+        return $this->render('account/reservation.html.twig', [
+            'controller_name' => 'AccountController',
+        ]);
+    }
+    
+    #[Route('/compte/profil', name: 'app_account_profil')]
+    public function profil(): Response
+    {
+        return $this->render('account/profil.html.twig', [
+            'controller_name' => 'AccountController',
+        ]);
+    }
+    
+    #[Route('/compte/message', name: 'app_account_message')]
+    public function message(): Response
+    {
+        return $this->render('account/message.html.twig', [
+            'controller_name' => 'AccountController',
+        ]);
+    }
+    
+    #[Route('/compte/avis', name: 'app_account_notice')]
+    public function notice(): Response
+    {
+        return $this->render('account/avis.html.twig', [
+            'controller_name' => 'AccountController',
+        ]);
+    }
+    
+    #[Route('/compte/panier', name: 'app_account_basket')]
+    public function basket(): Response
+    {
+        return $this->render('account/panier.html.twig', [
             'controller_name' => 'AccountController',
         ]);
     }
