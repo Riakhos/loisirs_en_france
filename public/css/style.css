@@ -119,6 +119,7 @@
 
 /* Dropdown Menu */
 .dropdown-menu {
+    display: none;
     --bs-dropdown-bg: var(--bs-body-color);
     --bs-dropdown-border-color: var(--secondary-color);
     --bs-dropdown-divider-bg: var(--secondary-color);
@@ -128,6 +129,10 @@
     --bs-dropdown-link-hover-bg: none;
     --bs-dropdown-link-active-color: var(--hover-color);
     --bs-dropdown-link-active-bg: none;
+}
+
+.dropdown-menu.show {
+    display: block !important;
 }
 
 /* Search Form */

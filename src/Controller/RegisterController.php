@@ -26,6 +26,12 @@ class RegisterController extends AbstractController
             // Tu enregistres les datas en BDD
             $entityManagerInterface->persist($user);
             $entityManagerInterface->flush();
+            
+            $this->addFlash(
+                'success',
+                'Votre compte est correctement créé, veuillez-vous connecter.'
+            );
+            return $this->redirectToRoute('app_login');
         
         }
         
