@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Activity;
 use App\Entity\Category;
+use App\Entity\Subcategory;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -47,6 +48,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Catégories', 'fas fa-list', Category::class);
+        yield MenuItem::linkToCrud('Sous-Catégories', 'fas fa-list', Subcategory::class);
         yield MenuItem::linkToCrud('Activités', 'fas fa-list', Activity::class);
     }
 }
