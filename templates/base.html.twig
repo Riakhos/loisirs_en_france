@@ -18,9 +18,6 @@
         {% block stylesheets %}
         {% endblock %}
 
-        {# Include des macros Twig #}
-        {# {% import 'macros.html.twig' as macros %} #}
-
         {% block javascripts %}
             {% block importmap %}
                 {{ importmap('app') }}
@@ -48,10 +45,19 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         {# Navbar Links #}
                         <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-                            {# Nav Items #}
-                            <li class="nav-item">
-                                <a class="nav-link fs-2" href="#">Activités</a>
+                            {# Nav Item Dropdown #}
+                            <li class="nav-item dropdown">
+                                {# Dropdown Toggle #}
+                                <a class="nav-link dropdown-toggle fs-2" href="{{ '/categorie/{slug}' }}" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Menu activité">Activités</a>
+                                {# Dropdown Menu #}
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {# Dynamically Generate Menu Items #}
+                                    {% for category in categories %}
+                                        <li><a class="dropdown-item" href="/categorie/{{ category.slug }}">{{ category.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
                             </li>
+                            {# Nav Items #}
                             <li class="nav-item">
                                 <a class="nav-link fs-2" href="#">Blog</a>
                             </li>
@@ -263,14 +269,17 @@
         {% include 'modals/reviews_modal.html.twig' %}
         {% include 'modals/contact_modal.html.twig' %}
 
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <script> document.addEventListener('DOMContentLoaded', function () {
-            var dropdownToggles = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-            dropdownToggles.forEach(function (dropdown) {
-                dropdown.addEventListener('click', function (e) {
-                    e.stopPropagation(); // Évite les comportements inattendus
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('.dropdown-toggle').forEach((dropdown) => {
+                    new bootstrap.Dropdown(dropdown);
                 });
             });
-        });</script>
+        </script>
+        
     </body>
 </html>

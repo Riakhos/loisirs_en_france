@@ -8,8 +8,5 @@ import './js/birthday-card.js'
  * which should already be in your base.html.twig.
  */
 import './styles/app.css';
-// import './styles/header.css';
-// import './styles/footer.css';
-// import './styles/modals/modal_faq.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

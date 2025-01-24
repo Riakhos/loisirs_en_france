@@ -1,23 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Loisirs en France!{% endblock %}
+{% block title %}Categorie {{ category.slug }}{% endblock %}
 
 {% block body %}
-    <div class="container my-5 w-auto p-3">
+    <div class="container my-5 w-auto border-secondary-custom bg-primaryBlue p-3">
+        <h1>{{ category.name }}</h1>
+        
+        <p class="color-secondary-custom">{{ category.description|striptags }}</p>
+        
         <ul class="row list-unstyled">
-            {% for category in categories %}
-                <li class="col-6 col-md-3 mb-4 text-center">
-                    <a href="/categorie/{{ category.slug }}" class="text-decoration-none">
+            {% for subcategories in category.subcategories %}
+                <li class="col-6 col-md-2 mb-4 text-center">
+                    <a href="#" class="text-decoration-none">
                         <div class="card border-secondary-custom shadow-sm text-center h-100">
                             <div class="fixed-square">
-                                <img src="/uploads/{{ category.image }}" 
+                                <img src="/uploads/{{ subcategories.image }}"
                                     class="figure-img img-fluid rounded border-secondary-custom" 
                                     alt="{{ category.name }}" 
                                     style="object-fit: cover; width: 100%; height: 100%;"
                                     loading="lazy">
                             </div>
                             <div class="card-body position-absolute bottom-0 start-0 w-100 text-center py-2">
-                                <h1>{{ category.name }}</h1>
+                                <h2 class="color-secondary-custom">{{ subcategories.name }}</h2>
                             </div>
                         </div>
                     </a>
