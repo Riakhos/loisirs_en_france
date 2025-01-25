@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Categorie {{ category.slug }}{% endblock %}
+{% block title %}{{ category.slug }}{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
@@ -18,14 +18,19 @@
                         <!-- Slides -->
                         <div class="carousel-inner" data-bs-interval="10000">
                             {% for subcategories in category.subcategories %}
-                                <div class="carousel-item {% if loop.first %}active{% endif %}" data-subcategories-name="{{ subcategories.name }}">
-                                    <a href="#">
+                                <div 
+                                    class="carousel-item {% if loop.first %}active{% endif %}"
+                                    data-subcategories-name="{{ subcategories.name }}"
+                                    data-subcategories-slug="{{ subcategories.slug }}"
+                                    data-category-slug="{{ category.slug }}"
+                                >
+                                    <a href="/{{ category.slug }}/{{ subcategories.slug }}">
                                         <img src="/uploads/{{ subcategories.image }}"
                                             class="figure-img img-fluid rounded border-secondary-custom" 
                                             alt="{{ subcategories.name }}" 
                                             style="object-fit: cover; width: 100%; height: 400px;"
                                             loading="lazy">
-                                        <div class="carousel-caption">
+                                        <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
                                             <h2 class="color-secondary-custom">{{ subcategories.name }}</h2>
                                         </div>
                                     </a>
@@ -70,12 +75,11 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center align-items-center">
-                    <a id="subcategoryButton" href="#" class="btn btn-primary mt-2">
-                        {% for subcategories in category.subcategories %}
-                            {% if loop.first %}
-                                {{ subcategories.name }}
-                            {% endif %}
-                        {% endfor %}
+                    {# Bouton mis à jour dynamiquement #}
+                    <a id="subcategoryButton" href="/{{ category.slug }}/{{ category.subcategories|first.slug }}" class="btn mt-2">
+                        {% if category.subcategories|length > 0 %}
+                            {{ category.subcategories|first.name }}
+                        {% endif %}
                     </a>
                 </div>
             </div>
@@ -119,14 +123,21 @@
                     // Trouver le slide actif après le changement
                     const activeSlide = event.relatedTarget;
 
-                    // Récupérer le nom de la sous-catégorie depuis l'attribut data-subcategory-name
-                    const subcategoryName = activeSlide.getAttribute('data-subcategories-name');
+                    if (activeSlide) {
+                        // Récupérer le nom de la sous-catégorie depuis l'attribut data-subcategories-name
+                        const subcategoryName = activeSlide.getAttribute('data-subcategories-name');
+                        const subcategorySlug = activeSlide.getAttribute('data-subcategories-slug');
+                        const categorySlug = activeSlide.getAttribute('data-category-slug'); // Ajouté pour plus de flexibilité
 
-                    // Mettre à jour le texte du bouton
-                    subcategoryButton.textContent = subcategoryName;
+                        // Vérifier si les informations sont valides
+                        if (subcategoryName && subcategorySlug) {
+                        // Mettre à jour dynamiquement le texte et le lien du bouton
+                        subcategoryButton.textContent = subcategoryName;
+                        subcategoryButton.setAttribute('href', `/${categorySlug}/${subcategorySlug}`);
+                        }
+                    }
                 });
             }
         });
     </script>
-
 {% endblock %}

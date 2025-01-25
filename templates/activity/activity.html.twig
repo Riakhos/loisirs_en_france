@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ activity.name }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card w-auto border-secondary-custom bg-primaryBlue m-2 p-3" style="max-width: 1000px;">
+            <div class="row g-0">            
+                <div class="col-md-6">
+                    <div id="carouselActivity" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
+                        <!-- Indicateurs -->
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="1" class="active" aria-current="true" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="2" class="active" aria-current="true" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="3" class="active" aria-current="true" aria-label="Slide 4"></button>
+                        </div>
+
+                        <!-- Slides -->
+                        <div class="carousel-inner" data-bs-interval="10000">
+                            <div class="carousel-item active" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                                <a href="#">
+                                    <img src="/uploads/{{ activity.image }}"
+                                        class="figure-img img-fluid rounded border-secondary-custom" 
+                                        alt="{{ activity.name }}" 
+                                        style="object-fit: cover; width: 100%; height: 400px;"
+                                        loading="lazy">
+                                    <div class="carousel-caption">
+                                        <h2 class="color-secondary-custom">{{ subcategory.name }}</h2>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="carousel-item" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                                <a href="#">
+                                    <img src="/uploads/{{ activity.image1 }}"
+                                        class="figure-img img-fluid rounded border-secondary-custom" 
+                                        alt="{{ activity.name }}" 
+                                        style="object-fit: cover; width: 100%; height: 400px;"
+                                        loading="lazy">
+                                    <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                        <h2 class="color-secondary-custom">{{ subcategory.name }}</h2>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="carousel-item" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                                <a href="#">
+                                    <img src="/uploads/{{ activity.image2 }}"
+                                        class="figure-img img-fluid rounded border-secondary-custom" 
+                                        alt="{{ activity.name }}" 
+                                        style="object-fit: cover; width: 100%; height: 400px;"
+                                        loading="lazy">
+                                    <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                        <h2 class="color-secondary-custom">{{ subcategory.name }}</h2>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="carousel-item" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                                <a href="#">
+                                    <img src="/uploads/{{ activity.image3 }}"
+                                        class="figure-img img-fluid rounded border-secondary-custom" 
+                                        alt="{{ activity.name }}" 
+                                        style="object-fit: cover; width: 100%; height: 400px;"
+                                        loading="lazy">
+                                    <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                        <h2 class="color-secondary-custom">{{ subcategory.name }}</h2>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Boutons de navigation -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselActivity" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselActivity" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h1 class="card-title color-secondary-custom">{{ activity.name }}</h1>
+                        <div>
+                            {# Description #}
+                            <p 
+                                id="subcategoryDescription" 
+                                class="card-text color-secondary-custom text-truncate" 
+                                style="max-height: 3em; overflow: hidden;">
+                                {{ activity.description|striptags }}
+                            </p>
+                            {# Lien "Voir Plus" visible uniquement sur les écrans sm #}
+                            <a
+                                id="toggleDescription"
+                                href="#"
+                                class="link text-decoration-none">
+                                Voir Plus...
+                            </a>
+                        </div>
+                        <h3 class="card-title color-secondary-custom mt-4">{{ category.name }}</h3>
+                        <p class="card-text color-secondary-custom">Lieu de l'activité + icon localisation</p>
+                        <p class="card-text color-secondary-custom">Partenaire</p>
+                        <p class="card-text color-secondary-custom">Avis et AddAvis</p>
+                        <p class="card-text color-secondary-custom">Note et AddNote</p>
+                        <p class="card-text color-secondary-custom">Tag</p>
+                        <p class="card-text color-secondary-custom">{{ activity.priceWt }} €</p>
+                        <div class="btn-group d-flex justify-content-center align-items-center mt-4" role="group" aria-label="Basic outlined example">
+                            <button href="#"  type="button" class="btn">Ajouter au panier</button>
+                            <button href="#"  type="button" class="btn">Réserver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const description = document.getElementById('subcategoryDescription');
+            const toggleBtn = document.getElementById('toggleDescription');
+
+            if (description && toggleBtn) { // Vérifier si les éléments existent
+                let isExpanded = false;
+
+                toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // Afficher/masquer
+                    if (isExpanded) {
+                        description.classList.add('text-truncate');
+                        description.style.maxHeight = '3em';
+                        toggleBtn.innerText = 'Voir Plus...';
+                    } else {
+                        description.classList.remove('text-truncate');
+                        description.style.maxHeight = 'none';
+                        toggleBtn.innerText = '...Voir Moins';
+                    }
+                    isExpanded = !isExpanded;
+                });
+            }
+        });
+    </script>
+{% endblock %}

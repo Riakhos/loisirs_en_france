@@ -37,6 +37,10 @@
     border-radius:10px;
 }
 
+.border-radius {
+    border-radius:10px;
+}
+
 /* Réinitialisation de base */
 body {
     font-family: var(--bs-font-pt-serif);

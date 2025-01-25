@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ subcategory.name }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card w-auto border-secondary-custom bg-primaryBlue m-2 p-3" style="max-width: 1000px;">
+            <div class="row g-0">            
+                <div class="col-md-6">
+                    <div id="carouselActivities" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
+                        <!-- Indicateurs -->
+                        <div class="carousel-indicators">
+                            {% for activity in subcategory.activity %}
+                                <button type="button" data-bs-target="#carouselActivities" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %}" aria-current="{% if loop.first %}true{% endif %}" aria-label="Slide {{ loop.index }}"></button>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Slides -->
+                        <div class="carousel-inner" data-bs-interval="10000">
+                            {% for activity in subcategory.activity %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                                    <a href="#">
+                                        <img src="/uploads/{{ activity.image }}"
+                                            class="figure-img img-fluid rounded border-secondary-custom" 
+                                            alt="{{ activity.name }}" 
+                                            style="object-fit: cover; width: 100%; height: 400px;"
+                                            loading="lazy">
+                                        <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                            <h2 class="color-secondary-custom">{{ activity.name }}</h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Boutons de navigation -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselActivities" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselActivities" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h1 class="card-title color-secondary-custom">{{ subcategory.name }}</h1>
+                        <div>
+                            {# Description #}
+                            <p 
+                                id="subcategoryDescription" 
+                                class="card-text color-secondary-custom text-truncate" 
+                                style="max-height: 3em; overflow: hidden;">
+                                {{ subcategory.description|striptags }}
+                            </p>
+                            {# Lien "Voir Plus" visible uniquement sur les écrans sm #}
+                            <a
+                                id="toggleDescription"
+                                href="#" 
+                                class="link text-decoration-none">
+                                Voir Plus...
+                            </a>
+                        </div>
+                        {% for activity in subcategory.activity %}
+                            <h3 class="card-title color-secondary-custom mt-4">{{ activity.name }}</h3>
+                            <p class="card-text color-secondary-custom">Lieu de l'activité + icon localisation</p>
+                            <p class="card-text color-secondary-custom">Partenaire</p>
+                            <p class="card-text color-secondary-custom">{{ activity.price }} €</p>
+                            <div class="btn-group d-flex justify-content-center align-items-center mt-4" role="group" aria-label="Basic outlined example">
+                                <button href="#"  type="button" class="btn">Ajouter au panier</button>
+                                <button href="#"  type="button" class="btn">Réserver</button>
+                            </div>
+                        {% endfor %}
+                        <div class="d-flex justify-content-center align-items-center mt-3">
+                            {# Bouton mis à jour dynamiquement #}
+                            <a id="activityButton" href="/{{ category.slug }}/{{ subcategory.slug }}/{{ subcategory.activity|first.slug }}" class="btn mt-2">
+                                {% if subcategory.activity|length > 0 %}
+                                    {{ subcategory.activity|first.name }}
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const description = document.getElementById('subcategoryDescription');
+            const toggleBtn = document.getElementById('toggleDescription');
+
+            if (description && toggleBtn) { // Vérifier si les éléments existent
+                let isExpanded = false;
+
+                toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // Afficher/masquer
+                    if (isExpanded) {
+                        description.classList.add('text-truncate');
+                        description.style.maxHeight = '3em';
+                        toggleBtn.innerText = 'Voir Plus...';
+                    } else {
+                        description.classList.remove('text-truncate');
+                        description.style.maxHeight = 'none';
+                        toggleBtn.innerText = '...Voir Moins';
+                    }
+                    isExpanded = !isExpanded;
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('carouselActivities');
+            const subcategoryButton = document.getElementById('activityButton');
+
+            if (carousel && activityButton) {
+                carousel.addEventListener('slide.bs.carousel', (event) => {
+                    // Trouver le slide actif après le changement
+                    const activeSlide = event.relatedTarget;
+
+                    // Récupérer le nom de la sous-catégorie depuis l'attribut data-subcategories-name
+                    const subcategoryName = activeSlide.getAttribute('data-activity-name');
+                    const subcategorySlug = activeSlide.getAttribute('data-activity-slug');
+
+                    // Mettre à jour le texte du bouton
+                    activityButton.textContent = subcategoryName;
+                    activityButton.setAttribute('href', `/${categorySlug}/${subcategorySlug}/${activitySlug}`);
+                });
+            }
+        });
+    </script>
+{% endblock %}
