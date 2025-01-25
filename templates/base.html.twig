@@ -48,12 +48,12 @@
                             {# Nav Item Dropdown #}
                             <li class="nav-item dropdown">
                                 {# Dropdown Toggle #}
-                                <a class="nav-link dropdown-toggle fs-2" href="{{ '/categorie/{slug}' }}" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Menu activité">Activités</a>
+                                <a class="nav-link dropdown-toggle fs-2" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Menu activité">Activités</a>
                                 {# Dropdown Menu #}
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     {# Dynamically Generate Menu Items #}
                                     {% for category in categories %}
-                                        <li><a class="dropdown-item" href="/categorie/{{ category.slug }}">{{ category.name }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_category', { slug : category.slug } ) }}">{{ category.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -280,6 +280,5 @@
                 });
             });
         </script>
-        
     </body>
 </html>

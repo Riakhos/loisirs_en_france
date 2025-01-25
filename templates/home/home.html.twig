@@ -7,7 +7,7 @@
         <ul class="row list-unstyled">
             {% for category in categories %}
                 <li class="col-6 col-md-3 mb-4 text-center">
-                    <a href="/{{ category.slug }}" class="text-decoration-none">
+                    <a href="{{ path('app_category', { slug : category.slug } ) }}" class="text-decoration-none">
                         <div class="card border-secondary-custom shadow-sm text-center h-100">
                             <div class="fixed-square">
                                 <img src="/uploads/{{ category.image }}" 

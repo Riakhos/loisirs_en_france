@@ -5,21 +5,31 @@
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
         <div class="card w-auto border-secondary-custom bg-primaryBlue m-2 p-3" style="max-width: 1000px;">
-            <div class="row g-0">            
+            <div class="row g-0">
+                <small class="card-header color-secondary-custom" style="border-bottom: none;">
+                    <i>
+                        <a href="{{ path('app_category', { slug : activity.category.slug } ) }}" class=" text-decoration-none color-secondary-custom">{{ activity.category.name }}
+                        </a> > 
+                        <a href="{{ path('app_subcategory', { categorySlug: activity.category.slug, subcategorySlug: activity.subcategory.slug }) }}" class=" text-decoration-none color-secondary-custom">{{ activity.subcategory.name }}
+                        </a> > {{ activity.name }}
+                    </i>
+                </small>
                 <div class="col-md-6">
                     <div id="carouselActivity" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
                         <!-- Indicateurs -->
                         <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="1" class="active" aria-current="true" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="2" class="active" aria-current="true" aria-label="Slide 3"></button>
-                            <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="3" class="active" aria-current="true" aria-label="Slide 4"></button>
+                            {% for i in 0..3 %}
+                                <button type="button" data-bs-target="#carouselActivity" data-bs-slide-to="{{ i }}" class="{% if i == 0 %}active{% endif %}" aria-label="Slide {{ i + 1 }}"></button>
+                            {% endfor %}
                         </div>
-
-                        <!-- Slides -->
+                        <!-- Slides -->                        
                         <div class="carousel-inner" data-bs-interval="10000">
-                            <div class="carousel-item active" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
-                                <a href="#">
+                            <div
+                                class="carousel-item active"
+                                data-activity-name="{{ activity.name }}"
+                                data-activity-slug="{{ activity.slug }}"
+                            >
+                                <a href="{{ path('app_subcategory', { categorySlug: activity.category.slug, subcategorySlug: activity.subcategory.slug }) }}">
                                     <img src="/uploads/{{ activity.image }}"
                                         class="figure-img img-fluid rounded border-secondary-custom" 
                                         alt="{{ activity.name }}" 
@@ -30,7 +40,11 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="carousel-item" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                            <div 
+                                class="carousel-item" 
+                                data-activity-name="{{ activity.name }}" 
+                                data-activity-slug="{{ activity.slug }}"
+                            >
                                 <a href="#">
                                     <img src="/uploads/{{ activity.image1 }}"
                                         class="figure-img img-fluid rounded border-secondary-custom" 
@@ -42,7 +56,11 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="carousel-item" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                            <div 
+                                class="carousel-item" 
+                                data-activity-name="{{ activity.name }}" 
+                                data-activity-slug="{{ activity.slug }}"
+                            >
                                 <a href="#">
                                     <img src="/uploads/{{ activity.image2 }}"
                                         class="figure-img img-fluid rounded border-secondary-custom" 
@@ -54,7 +72,11 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="carousel-item" data-activity-name="{{ activity.name }}" data-activity-slug="{{ activity.slug }}">
+                            <div 
+                                class="carousel-item" 
+                                data-activity-name="{{ activity.name }}" 
+                                data-activity-slug="{{ activity.slug }}"
+                            >
                                 <a href="#">
                                     <img src="/uploads/{{ activity.image3 }}"
                                         class="figure-img img-fluid rounded border-secondary-custom" 
@@ -67,8 +89,7 @@
                                 </a>
                             </div>
                         </div>
-
-                        <!-- Boutons de navigation -->
+                        {# Boutons de navigation #}
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselActivity" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
@@ -83,20 +104,37 @@
                     <div class="card-body">
                         <h1 class="card-title color-secondary-custom">{{ activity.name }}</h1>
                         <div>
-                            {# Description #}
-                            <p 
-                                id="subcategoryDescription" 
-                                class="card-text color-secondary-custom text-truncate" 
-                                style="max-height: 3em; overflow: hidden;">
-                                {{ activity.description|striptags }}
-                            </p>
-                            {# Lien "Voir Plus" visible uniquement sur les écrans sm #}
-                            <a
-                                id="toggleDescription"
-                                href="#"
-                                class="link text-decoration-none">
-                                Voir Plus...
-                            </a>
+                            {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}
+                            <p class="d-sm-block d-md-none">
+                                <a 
+                                    class="link text-decoration-none" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseActivityDescription" 
+                                    aria-expanded="false" 
+                                    aria-controls="collapseActivityDescription"
+                                    id="toggleActivityDescriptionButton">
+                                    Voir Plus...
+                                </a>
+                            </p>                        
+                            {# Conteneur pour la description avec collapse horizontal seulement pour sm et plus petits #}
+                            <div class="d-sm-block d-md-none">
+                                <div 
+                                    class="collapse" 
+                                    id="collapseActivityDescription">
+                                    <div 
+                                        class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                        {{ activity.description|striptags }}
+                                    </div>
+                                </div>
+                            </div>
+                            {# La description est toujours visible sur md et plus grands #}
+                            <div class="d-none d-md-block">
+                                <div 
+                                    class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                    {{ activity.description|striptags }}
+                                </div>
+                            </div>
                         </div>
                         <h3 class="card-title color-secondary-custom mt-4">{{ category.name }}</h3>
                         <p class="card-text color-secondary-custom">Lieu de l'activité + icon localisation</p>
@@ -105,40 +143,30 @@
                         <p class="card-text color-secondary-custom">Note et AddNote</p>
                         <p class="card-text color-secondary-custom">Tag</p>
                         <p class="card-text color-secondary-custom">{{ activity.priceWt }} €</p>
-                        <div class="btn-group d-flex justify-content-center align-items-center mt-4" role="group" aria-label="Basic outlined example">
-                            <button href="#"  type="button" class="btn">Ajouter au panier</button>
-                            <button href="#"  type="button" class="btn">Réserver</button>
-                        </div>
                     </div>
+                </div>
+                <div class="card-footer btn-group d-flex justify-content-center align-items-center mt-4" role="group" aria-label="Basic outlined example" style="border-top: none;">
+                    <button href="#"  type="button" class="btn">Ajouter au panier</button>
+                    <button href="#"  type="button" class="btn">Réserver</button>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
+        // Script pour basculer le texte "Voir Plus" et "Voir Moins"
         document.addEventListener('DOMContentLoaded', () => {
-            const description = document.getElementById('subcategoryDescription');
-            const toggleBtn = document.getElementById('toggleDescription');
+            const toggleBtn = document.getElementById('toggleActivityDescriptionButton');
+            const collapseElement = document.getElementById('collapseActivityDescription');
+    
+            // Mettre à jour le texte lors de l'ouverture
+            collapseElement.addEventListener('shown.bs.collapse', () => {
+                toggleBtn.textContent = 'Voir Moins';
+            });
 
-            if (description && toggleBtn) { // Vérifier si les éléments existent
-                let isExpanded = false;
-
-                toggleBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-
-                    // Afficher/masquer
-                    if (isExpanded) {
-                        description.classList.add('text-truncate');
-                        description.style.maxHeight = '3em';
-                        toggleBtn.innerText = 'Voir Plus...';
-                    } else {
-                        description.classList.remove('text-truncate');
-                        description.style.maxHeight = 'none';
-                        toggleBtn.innerText = '...Voir Moins';
-                    }
-                    isExpanded = !isExpanded;
-                });
-            }
+            // Mettre à jour le texte lors de la fermeture
+            collapseElement.addEventListener('hidden.bs.collapse', () => {
+                toggleBtn.textContent = 'Voir Plus...';
+            });
         });
     </script>
 {% endblock %}

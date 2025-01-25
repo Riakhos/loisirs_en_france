@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class SubcategoryController extends AbstractController
 {
     #[Route('/{categorySlug}/{subcategorySlug}', name: 'app_subcategory')]
-    public function index(string $categorySlug, CategoryRepository$categoryRepository, string $subcategorySlug, SubcategoryRepository $subcategoryRepository): Response
+    public function subcategory(string $categorySlug, CategoryRepository$categoryRepository, string $subcategorySlug, SubcategoryRepository $subcategoryRepository): Response
     {
         // Trouver la catégorie par son slug
         $category = $categoryRepository->findOneBy(['slug' => $categorySlug]);
