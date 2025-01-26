@@ -104,7 +104,7 @@
                             <h3 class="card-title color-secondary-custom mt-4">{{ activity.name }}</h3>
                             <p class="card-text color-secondary-custom">Lieu de l'activité + icon localisation</p>
                             <p class="card-text color-secondary-custom">Partenaire</p>
-                            <p class="card-text color-secondary-custom">{{ activity.priceWt }} €</p>
+                            <p class="card-text color-secondary-custom">{{ activity.priceWt|price }}</p>
                         {% endfor %}
                     </div>
                 </div>
