@@ -31,11 +31,34 @@ class SubcategoryCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $required =true;
+        
+        if ($pageName == 'edit') {
+            $required = false;
+        }
+        
         return [
-            TextField::new('name')->setLabel('Nom')->setHelp('Nom de la sous-catégorie'),
-            SlugField::new('slug')->setLabel('URL')->setTargetFieldName('name')->setHelp('URL de votre sous-catégorie générée automatiquement'),
-            TextEditorField::new('description')->setLabel('Description')->setHelp('Description de la sous-categorie'),
-            ImageField::new('image')->setLabel('Image')->setHelp('Image de votre activité en 600*600px')->setUploadDir('/public/uploads')->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')->setBasePath('/uploads'),
+            TextField::new('name')
+                ->setLabel('Nom')
+                ->setHelp('Nom de la sous-catégorie')
+            ,
+            SlugField::new('slug')
+                ->setLabel('URL')
+                ->setTargetFieldName('name')
+                ->setHelp('URL de votre sous-catégorie générée automatiquement')
+            ,
+            TextEditorField::new('description')
+                ->setLabel('Description')
+                ->setHelp('Description de la sous-categorie')
+            ,
+            ImageField::new('image')
+                ->setLabel('Image')
+                ->setHelp('Image de votre activité en 600*600px')
+                ->setUploadDir('/public/uploads')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setBasePath('/uploads')
+                ->setRequired($required)
+            ,
             AssociationField::new('category', 'Catégories associées'),
         ];
     }

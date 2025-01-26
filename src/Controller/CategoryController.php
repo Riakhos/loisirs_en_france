@@ -17,6 +17,7 @@ class CategoryController extends AbstractController
 
         if (!$category) {
             throw $this->createNotFoundException("La catégorie demandée n'existe pas.");
+            return $this->redirectToRoute('app_home');
         }
         
         return $this->render('category/category.html.twig', [

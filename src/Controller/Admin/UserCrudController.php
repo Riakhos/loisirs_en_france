@@ -30,11 +30,24 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             // IdField::new('id'),
-            TextField::new('email')->setLabel('Mail')->onlyOnIndex(),
-            TextField::new('firstname')->setLabel('Prénom'),
-            TextField::new('lastname')->setLabel('Nom'),
-            TextField::new('birthdayDate')->setLabel('Date de naissance')->onlyOnIndex(),
-            TextField::new('phone')->setLabel('Téléphone')->onlyOnIndex(),
+            TextField::new('email')
+                ->setLabel('Mail')
+                ->onlyOnIndex()
+            ,
+            TextField::new('firstname')
+                ->setLabel('Prénom')
+            ,
+            TextField::new('lastname')
+                ->setLabel('Nom')
+            ,
+            TextField::new('birthdayDate')
+                ->setLabel('Date de naissance')
+                ->onlyOnIndex()
+            ,
+            TextField::new('phone')
+                ->setLabel('Téléphone')
+                ->onlyOnIndex()
+            ,
             // TextEditorField::new('description'),
         ];
     }

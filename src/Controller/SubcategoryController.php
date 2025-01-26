@@ -19,6 +19,7 @@ class SubcategoryController extends AbstractController
 
         if (!$category) {
             throw $this->createNotFoundException('Category not found.');
+            return $this->redirectToRoute('app_home');
         }
 
         // Trouver la sous-catégorie par son slug
@@ -26,6 +27,7 @@ class SubcategoryController extends AbstractController
 
         if (!$subcategory) {
             throw $this->createNotFoundException('Subcategory not found.');
+            return $this->redirectToRoute('app_home');
         }
         
         return $this->render('subcategory/subcategory.html.twig', [

@@ -30,11 +30,34 @@ class CategoryCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $required =true;
+        
+        if ($pageName == 'edit') {
+            $required = false;
+        }
+        
         return [
-            TextField::new('name')->setLabel('Titre')->setHelp('Titre de la catégorie'),
-            SlugField::new('slug')->setLabel('URL')->setTargetFieldName('name')->setHelp('URL de votre catégorie générée automatiquement'),
-            ImageField::new('image')->setLabel('Image')->setHelp('Image de votre activité en 600*600px')->setUploadDir('/public/uploads')->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')->setBasePath('/uploads'),
-            TextEditorField::new('description')->setLabel('Description')->setHelp('Description de la categorie'),
+            TextField::new('name')
+                ->setLabel('Titre')
+                ->setHelp('Titre de la catégorie')
+            ,
+            SlugField::new('slug')
+                ->setLabel('URL')
+                ->setTargetFieldName('name')
+                ->setHelp('URL de votre catégorie générée automatiquement')
+            ,
+            ImageField::new('image')
+                ->setLabel('Image')
+                ->setHelp('Image de votre activité en 600*600px')
+                ->setUploadDir('/public/uploads')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setBasePath('/uploads')
+                ->setRequired($required)
+            ,
+            TextEditorField::new('description')
+                ->setLabel('Description')
+                ->setHelp('Description de la categorie')
+            ,
         ];
     }
 }
