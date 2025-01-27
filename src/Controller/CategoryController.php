@@ -15,11 +15,13 @@ class CategoryController extends AbstractController
         
         $category = $categoryRepository->findOneBySlug($slug);
 
+        // Si la catégorie n'existe pas, redirigez vers la page d'accueil ou affichez une erreur
         if (!$category) {
-            throw $this->createNotFoundException("La catégorie demandée n'existe pas.");
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('error', "La catégorie demandée n'existe pas."); // Message flash
+            return $this->redirectToRoute('app_home'); // Redirection vers la page d'accueil
         }
-        
+
+        // Si la catégorie existe, afficher la page correspondante
         return $this->render('category/category.html.twig', [
             'controller_name' => 'CategoryController',
             'category' => $category,

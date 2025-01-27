@@ -35,8 +35,9 @@
                                     class="carousel-item {% if loop.first %}active{% endif %}" 
                                     data-activity-name="{{ activity.name }}" 
                                     data-activity-slug="{{ activity.slug }}"
+                                    data-activity-id="{{ activity.id }}"
                                 >
-                                    <a href="{{ path('app_activity', { categorySlug: subcategory.category.slug, subcategorySlug: subcategory.slug, activitySlug: activity.slug} ) }}">
+                                    <a href="{{ path('app_activity', { slug: activity.slug} ) }}">
                                         <img 
                                             src="/uploads/{{ activity.image }}"
                                             class="figure-img img-fluid rounded border-secondary-custom" 
@@ -109,7 +110,7 @@
                     </div>
                 </div>
                 <div class="card-footer btn-group d-flex justify-content-center align-items-center mt-4" role="group" aria-label="Basic outlined example" style="border-top: none;">
-                    <button href="#"  type="button" class="btn">Ajouter au panier</button>
+                    <a id="addToCartButton"  type="button" class="btn">Ajouter au panier</a>
                     <button href="#"  type="button" class="btn">Réserver</button>
                 </div>
             </div>
@@ -129,6 +130,38 @@
             // Mettre à jour le texte lors de la fermeture
             collapseElement.addEventListener('hidden.bs.collapse', () => {
                 toggleBtn.textContent = 'Voir Plus...';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('carouselActivities');
+            const addToCartButton = document.getElementById('addToCartButton');
+
+            // Fonction pour mettre à jour l'ID de l'activité
+            function updateActivityId() {
+                const activeItem = carousel.querySelector('.carousel-item.active');
+                const activityId = activeItem ? activeItem.getAttribute('data-activity-id') : null;
+                if (activityId) {
+                    addToCartButton.setAttribute('href', `/cart/add/${activityId}`);  // Changez l'URL en fonction de votre route
+                } else {
+                    // Désactive le bouton si aucun ID n'est trouvé
+                    addToCartButton.removeAttribute('href');
+                }
+            }
+
+            // Mettre à jour l'ID de l'activité lorsque le carrousel change
+            carousel.addEventListener('slid.bs.carousel', updateActivityId);
+
+            // Initialiser l'ID de l'activité lorsque la page charge
+            updateActivityId();
+
+            // Gérer l'événement de clic sur le bouton
+            addToCartButton.addEventListener('click', (event) => {
+                const href = addToCartButton.getAttribute('href');
+                if (!href) {
+                    event.preventDefault(); // Empêche la redirection si l'ID n'est pas défini
+                    alert("Veuillez sélectionner une activité avant de l'ajouter au panier.");
+                }
             });
         });
     </script>

@@ -31,7 +31,7 @@
                                     data-subcategories-slug="{{ subcategories.slug }}"
                                     data-category-slug="{{ category.slug }}"
                                 >
-                                    <a href="{{ path('app_subcategory', { categorySlug: subcategories.category.slug, subcategorySlug: subcategories.slug }) }}">
+                                    <a href="{{ path('app_subcategory', { slug: subcategories.slug }) }}">
                                         <img 
                                             src="/uploads/{{ subcategories.image }}"
                                             class="figure-img img-fluid rounded border-secondary-custom" 

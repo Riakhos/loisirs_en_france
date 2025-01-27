@@ -52,14 +52,6 @@ class AccountController extends AbstractController
         ]);
     }
     
-    #[Route('/compte/panier', name: 'app_account_basket')]
-    public function basket(): Response
-    {
-        return $this->render('account/panier.html.twig', [
-            'controller_name' => 'AccountController',
-        ]);
-    }
-    
     #[Route('/compte/modifier-mot-de-passe', name: 'app_account_modify_pwd')]
     public function password(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, EntityManagerInterface $entityManagerInterface): Response
     {

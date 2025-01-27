@@ -107,7 +107,7 @@
                             </li>
                             {# Nav Item #}
                             <li class="nav-item">
-                                <a class="nav-link fs-2" href="{{ path('app_account_basket') }}"><i class="bi bi-bag me-2" alt="Icône panier" width="32" height="32"></i></a>
+                                <a class="nav-link fs-2" href="{{ path('app_cart') }}"><i class="bi bi-bag me-2" alt="Icône panier" width="32" height="32"></i></a>
                             </li>
                         </ul>        
                         {# Search Form #}
@@ -123,7 +123,7 @@
             </nav>
         </header>
             {# AddFlash #}
-            <div class="container">
+            <div class="container pt-5">
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
                         <div class="alert mt-4 alert-{{ label }}">

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier utilisateur{% endblock %}
+{% block title %}Mon panier!{% endblock %}
 
 {% block body %}
     <ul class="nav nav-tabs bg-primaryBlue p-3">
@@ -20,11 +20,18 @@
             <a class="nav-link" href="{{ path('app_account_notice') }}">Avis</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ path('app_account_basket') }}">Mon panier</a>
+            <a class="nav-link active" aria-current="page" href="{{ path('app_cart') }}">Mon panier</a>
         </li>
     </ul>
     <div class="container my-5 w-auto d-flex justify-content-center align-items-center min-vh-100">
         <div class="toast d-flex justify-content-center align-items-center">
+            <div class="col-md-8">
+                Liste de mes activités
+                {{ dump(cart) }}
+            </div>
+            <div class="col-md-4">
+                Récap de mon panier (prix, bouton commander)
+            </div>
         </div>        
     </div>
 {% endblock %}
