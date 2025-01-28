@@ -142,7 +142,7 @@
                 const activeItem = carousel.querySelector('.carousel-item.active');
                 const activityId = activeItem ? activeItem.getAttribute('data-activity-id') : null;
                 if (activityId) {
-                    addToCartButton.setAttribute('href', `/cart/add/${activityId}`);  // Changez l'URL en fonction de votre route
+                    addToCartButton.setAttribute('href', `/cart/add/${activityId}` );  // Changez l'URL en fonction de votre route
                 } else {
                     // Désactive le bouton si aucun ID n'est trouvé
                     addToCartButton.removeAttribute('href');

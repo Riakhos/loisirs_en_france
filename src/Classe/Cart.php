@@ -6,52 +6,90 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class Cart
 {
+	/**
+	 * __construct
+		* *Constructeur de la classe Cart
+		* *Injecte le service RequestStack pour accéder à la session
+	 *
+	 * @param RequestStack $requestStack
+	 */
 	public function __construct(private RequestStack $requestStack) 
 	{
-        // L'accès à la session dans le constructeur est *NON* recommandé, car elle pourrait ne pas être encore accessible ou entraîner des effets secondaires indésirables
+        // L'accès direct à la session dans le constructeur est déconseillé car la session pourrait ne pas être encore initialisée.
         // $this->session = $requestStack->getSession();
     }
 	
+	/**
+	 * add
+		 * *Fonction permettant l'ajout d'une activité au panier
+	 *
+	 * @param mixed $activity
+		 * *L'objet représentant l'activité à ajouter.
+     * @return void
+	 */
 	public function add($activity)
 	{
-		// Appeler la session de symfony
+		// Récupération de la session
 		$session = $this->requestStack->getSession();
 		
-		// Récupérer le panier actuel (ou initialiser un tableau vide)
+		// Récupération du panier actuel ou initialisation
         $cart = $session->get('cart', []);
 		
-		// Vérifier si l'activité' existe déjà dans le panier
+		// ID unique de l'activité
         $activityId = $activity->getId();
+
+		// Vérification si l'activité est déjà dans le panier
         if (isset($cart[$activityId])) {
-            // Augmenter la quantité si l'activité' est déjà dans le panier
+            //* Incrémentation de la quantité
             $cart[$activityId]['qty']++;
         } else {
-            // Ajouter l'activité' avec une quantité de 1
+            //* Ajout d'une nouvelle activité avec une quantité initiale de 1
             $cart[$activityId] = [
                 'object' => $activity,
                 'qty' => 1
             ];
         }
 		
-		// Enregistrer le panier mis à jour dans la session
+		// Mise à jour du panier dans la session
         $session->set('cart', $cart);
 	}
 	
+	/**
+	 * getCart
+		 * *Retourne le contenu du panier
+	 *
+	 * @return mixed
+		 * *Le panier (tableau associatif) ou null s'il est vide
+	 */
 	public function getCart()
 	{
 		return $this->requestStack->getSession()->get('cart');
 	}
 	
+	/**
+	 * remove
+		 * *Supprime entièrement le panier de la session
+	 *
+	 * @return void
+	 */
 	public function remove()
 	{
 		return $this->requestStack->getSession()->remove('cart');
 	}
 
+	/**
+	 * getSubtotal
+		 * *Calcule le sous-total HT du panier (sans TVA) 
+	 *
+	 * @return float
+		 * *Le montant total H.T
+	 */
 	public function getSubtotal(): float
     {
         $subtotal = 0;
         $cart = $this->getCart() ?? [];
 
+		// Parcours des éléments du panier pour calculer le total H.T
         foreach ($cart as $item) {
             $subtotal += $item['object']->getPrice() * $item['qty'];
         }
@@ -59,6 +97,13 @@ class Cart
         return $subtotal;
     }
 
+	/**
+	 * getTvaDetails
+		 * *Retourne les détails de la TVA par taux
+	 *
+	 * @return array
+		 * *Tableau associatif contenant le taux de TVA en clé et le montant de TVA correspondant en valeur
+	 */
 	public function getTvaDetails(): array
 	{
 		$cart = $this->getCart() ?? [];
@@ -66,14 +111,14 @@ class Cart
 
 		foreach ($cart as $item) {
 			$activity = $item['object'];
-			$priceHt = $activity->getPrice();
-			$tvaRate = $activity->getTva(); // Taux de TVA
-			$quantity = $item['qty'];
+			$priceHt = $activity->getPrice(); //* Prix HT de l'activité
+			$tvaRate = $activity->getTva();  //* Taux de TVA
+			$quantity = $item['qty'];        //* Quantité dans le panier
 
-			// Calcul de la TVA pour cet article
+			// Calcul du montant de TVA pour l'article
 			$tvaAmount = ($priceHt * $tvaRate / 100) * $quantity;
 
-			// Ajouter au tableau des TVA regroupées
+			// Ajout au tableau regroupant les montants par taux de TVA
 			if (!isset($tvaDetails[$tvaRate])) {
 				$tvaDetails[$tvaRate] = 0;
 			}
@@ -84,10 +129,17 @@ class Cart
 	}
 
 
+	/**
+	 * getTva
+		 * *Calcule le montant total de la TVA pour le panier
+	 *
+	 * @return float
+		 * *Le montant total de la TVA
+	 */
     public function getTva(): float
 	{
 		$tvaDetails = $this->getTvaDetails();
-		return array_sum($tvaDetails);
+		return array_sum($tvaDetails);; //* Somme des montants de TVA
 	}
 
     public function getTotal(): float
@@ -95,16 +147,52 @@ class Cart
         return $this->getSubtotal() + $this->getTva();
     }
 
+	/**
+	 * decrease
+	 	 * *Diminue la quantité d'une activité dans le panier
+     	 * *Si la quantité atteint 1, l'activité est supprimée
+	 *
+	 * @param int $id
+		 * *L'identifiant de l'activité à diminuer
+	 * @return void
+	 */
 	public function decrease($id)
     {
-        $cart = $this->requestStack->getSession()->get('cart');
+		// Récupération du panier
+        $cart = $this->getCart();
 
+		// Vérification si l'activité existe dans le panier
         if ($cart[$id]['qty'] > 1) {
+			// Réduction de la quantité
             $cart[$id]['qty'] = $cart[$id]['qty'] - 1;
         } else {
+			// Suppression de l'activité si la quantité atteint 1
             unset($cart[$id]);
         }
 
+		// Mise à jour du panier dans la session
         $this->requestStack->getSession()->set('cart', $cart);
+    }
+
+	/**
+     * fullQuantity
+     	* *Fonction retournant le nombre total d'activité dans le panier
+     *
+     * @return mixed
+     */
+    public function fullQuantity()
+    {
+        $cart = $this->getCart();
+        $quantity = 0;
+        
+        if (!isset($cart)) {
+            return $quantity;
+        }
+        
+        foreach ($cart as $activity) {
+            $quantity = $quantity + $activity['qty'];
+        }
+        
+        return $quantity;
     }
 }

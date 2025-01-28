@@ -64,7 +64,7 @@
                             {# Nav Item Dropdown #}
                             <li class="nav-item dropdown">
                                 {# Dropdown Toggle #}
-                                <a class="nav-link dropdown-toggle fs-2" href="#" role="button" id="contactDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu contact">Contact</a>                                
+                                <a class="nav-link dropdown-toggle fs-2" href="#" role="button" id="contactDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu contact">Contact</a>
                                 {# Dropdown Menu #}
                                 <ul class="dropdown-menu" aria-labelledby="contactDropdown">
                                     {# Dropdown Menu Item #}
@@ -107,7 +107,13 @@
                             </li>
                             {# Nav Item #}
                             <li class="nav-item">
-                                <a class="nav-link fs-2" href="{{ path('app_cart') }}"><i class="bi bi-bag me-2" alt="Icône panier" width="32" height="32"></i></a>
+                                <a class="nav-link fs-2 position-relative" href="{{ path('app_cart') }}">
+                                    <i class="bi bi-bag me-2" alt="Icône panier" style="font-size: 1.5rem;"></i>
+                                    {% if fullCartQuantity > 0 %}
+                                        <span class="badge badge-sm p-1 position-absolute top-1 start-80 translate-middle">{{ fullCartQuantity }}</span>
+                                        <span class="visually-hidden">Nouvelle quantité dans le panier</span>
+                                    {% endif %}
+                                </a>
                             </li>
                         </ul>        
                         {# Search Form #}

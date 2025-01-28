@@ -108,3 +108,19 @@ h1, h2, h3, h4, h5, h6 {
 .carousel-indicators [data-bs-target] {
     background-color: #FFDC7E;
 }
+
+.badge {
+    --bs-badge-color: var(--secondary-color);
+}
+
+.badge-sm {
+    --bs-badge-font-size: 0.6em !important;
+    --bs-badge-padding-x: 0.4em !important;
+    --bs-badge-padding-y: 0.2em !important;
+}
+
+.badge-lg {
+    --bs-badge-font-size: 1em !important;
+    --bs-badge-padding-x: 0.8em !important;
+    --bs-badge-padding-y: 0.4em !important;
+}
