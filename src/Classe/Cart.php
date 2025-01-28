@@ -36,10 +36,62 @@ class Cart
 		// Enregistrer le panier mis à jour dans la session
         $session->set('cart', $cart);
 	}
-
 	
 	public function getCart()
 	{
 		return $this->requestStack->getSession()->get('cart');
 	}
+	
+	public function remove()
+	{
+		return $this->requestStack->getSession()->remove('cart');
+	}
+
+	public function getSubtotal(): float
+    {
+        $subtotal = 0;
+        $cart = $this->getCart() ?? [];
+
+        foreach ($cart as $item) {
+            $subtotal += $item['object']->getPrice() * $item['qty'];
+        }
+
+        return $subtotal;
+    }
+
+	public function getTvaDetails(): array
+	{
+		$cart = $this->getCart() ?? [];
+		$tvaDetails = [];
+
+		foreach ($cart as $item) {
+			$activity = $item['object'];
+			$priceHt = $activity->getPrice();
+			$tvaRate = $activity->getTva(); // Taux de TVA
+			$quantity = $item['qty'];
+
+			// Calcul de la TVA pour cet article
+			$tvaAmount = ($priceHt * $tvaRate / 100) * $quantity;
+
+			// Ajouter au tableau des TVA regroupées
+			if (!isset($tvaDetails[$tvaRate])) {
+				$tvaDetails[$tvaRate] = 0;
+			}
+			$tvaDetails[$tvaRate] += $tvaAmount;
+		}
+
+		return $tvaDetails;
+	}
+
+
+    public function getTva(): float
+	{
+		$tvaDetails = $this->getTvaDetails();
+		return array_sum($tvaDetails);
+	}
+
+    public function getTotal(): float
+    {
+        return $this->getSubtotal() + $this->getTva();
+    }
 }

@@ -20,6 +20,10 @@
     background-color: var(--primary-color);
 }
 
+.bg-background {
+    background-color: var(--background-color);
+}
+
 .color-primary-custom {
     color: var(--primary-color);
 }
