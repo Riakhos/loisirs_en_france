@@ -7,6 +7,7 @@ use App\Repository\ActivityRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends AbstractController
 {
@@ -29,7 +30,7 @@ class CartController extends AbstractController
     }
     
     #[Route('/cart/add/{id}', name: 'app_cart_add')]
-    public function add(int $id, Cart $cart, ActivityRepository $activityRepository): Response
+    public function add(int $id, Cart $cart, ActivityRepository $activityRepository, Request $request): Response
     {
         $activity = $activityRepository->findOneById($id);
         
@@ -37,12 +38,23 @@ class CartController extends AbstractController
 
         $this->addFlash(
             'success',
-            'L\'activité a été correctement ajouté à votre panier.'
+            'L\'activité a été correctement ajoutée à votre panier.'
         );
         
-        return $this->redirectToRoute('app_activity', [
-            'slug' => $activity->getSlug()
-        ]);
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    #[Route('/cart/decrease/{id}', name: 'app_cart_decrease')]
+    public function decrease($id, Cart $cart): Response
+    {
+        $cart->decrease($id);
+
+        $this->addFlash(
+            'success',
+            'Activité correctement supprimée de votre panier.'
+        );
+        
+        return $this->redirectToRoute('app_cart');
     }
 
     #[Route('/cart/remove', name: 'app_cart_remove')]

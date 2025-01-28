@@ -94,4 +94,17 @@ class Cart
     {
         return $this->getSubtotal() + $this->getTva();
     }
+
+	public function decrease($id)
+    {
+        $cart = $this->requestStack->getSession()->get('cart');
+
+        if ($cart[$id]['qty'] > 1) {
+            $cart[$id]['qty'] = $cart[$id]['qty'] - 1;
+        } else {
+            unset($cart[$id]);
+        }
+
+        $this->requestStack->getSession()->set('cart', $cart);
+    }
 }
