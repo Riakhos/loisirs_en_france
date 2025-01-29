@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Category;
 
 use App\Repository\SubcategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +21,7 @@ class SubcategoryController extends AbstractController
             return $this->redirectToRoute('app_home'); // Redirection vers la page d'accueil
         }
         
-        return $this->render('subcategory/subcategory.html.twig', [
+        return $this->render('category/subcategory.html.twig', [
             'controller_name' => 'SubcategoryController',
             'subcategory' => $subcategory,
         ]);

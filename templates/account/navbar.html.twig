@@ -1,0 +1,53 @@
+{# Barre de navigation #}
+<div class="container">
+	{# Navigation Horizontale (visible seulement en desktop et large écrans) #}
+	<ul class="nav nav-tabs bg-primaryBlue shadow-sm p-3 rounded d-none d-sm-flex">
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('app_account') }}">Tableau de bord</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('app_account_reservation') }}">Réservations</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('app_account_profil') }}">Mon profil</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('app_account_message') }}">Messages</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('app_account_notice') }}">Avis</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link active" href="#" id="toggleSidebar">Mon panier</a>
+		</li>
+	</ul>
+	{# Lien "Mon panier" qui va ouvrir/fermer le menu vertical en petit écran #}
+	<ul class="nav nav-tabs bg-primaryBlue shadow-sm p-3 rounded d-block d-sm-none">
+		<li class="nav-item dropdown">
+			{# Dropdown Toggle #}
+			<a class="nav-link active dropdown-toggle fs-2" href="#"  role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu navigation">Mon panier</a>
+			{# Dropdown Menu #}
+			<ul class="nav flex-column dropdown-menu" aria-labelledby="navigationDropdown">
+				{# Dropdown Menu Item #}
+				<li class="nav-item">
+					<a class="nav-link dropdown-item" href="{{ path('app_account') }}">Tableau de bord</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link dropdown-item" href="{{ path('app_account_reservation') }}">Réservations</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link dropdown-item" href="{{ path('app_account_profil') }}">Mon profil</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link dropdown-item" href="{{ path('app_account_message') }}">Messages</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link dropdown-item" href="{{ path('app_account_notice') }}">Avis</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active dropdown-item" href="{{ path('app_cart') }}">Mon panier</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\RegisterUserType;
@@ -35,7 +35,7 @@ class RegisterController extends AbstractController
         
         }
         
-        return $this->render('register/register.html.twig', [
+        return $this->render('login/register.html.twig', [
             'controller_name' => 'RegisterController',
             'registerForm' => $form->createView()
         ]);

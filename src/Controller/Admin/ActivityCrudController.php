@@ -16,11 +16,22 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class ActivityCrudController extends AbstractCrudController
 {
+    /**
+     * getEntityFqcn
+     *
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return Activity::class;
     }
 
+    /**
+     * configureCrud
+     *
+     * @param Crud $crud
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -31,6 +42,12 @@ class ActivityCrudController extends AbstractCrudController
         ;
     }
     
+    /**
+     * configureFields
+     *
+     * @param string $pageName
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         $required =true;

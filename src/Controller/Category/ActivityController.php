@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Category;
 
 use App\Repository\ActivityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +21,7 @@ class ActivityController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
         
-        return $this->render('activity/activity.html.twig', [
+        return $this->render('category/activity.html.twig', [
             'controller_name' => 'ActivityController',
             'activity' => $activity,
         ]);
