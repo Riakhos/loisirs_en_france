@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActivityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -46,6 +48,17 @@ class Activity
 
     #[ORM\ManyToOne(inversedBy: 'activity')]
     private ?Subcategory $subcategory = null;
+
+    /**
+     * @var Collection<int, Trend>
+     */
+    #[ORM\OneToMany(targetEntity: Trend::class, mappedBy: 'activity')]
+    private Collection $trends;
+
+    public function __construct()
+    {
+        $this->trends = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -187,6 +200,36 @@ class Activity
     public function setSubcategory(?Subcategory $subcategory): static
     {
         $this->subcategory = $subcategory;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trend>
+     */
+    public function getTrends(): Collection
+    {
+        return $this->trends;
+    }
+
+    public function addTrend(Trend $trend): static
+    {
+        if (!$this->trends->contains($trend)) {
+            $this->trends->add($trend);
+            $trend->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrend(Trend $trend): static
+    {
+        if ($this->trends->removeElement($trend)) {
+            // set the owning side to null (unless already changed)
+            if ($trend->getActivity() === $this) {
+                $trend->setActivity(null);
+            }
+        }
 
         return $this;
     }

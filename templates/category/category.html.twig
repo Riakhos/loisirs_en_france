@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.slug }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card w-auto border-secondary-custom bg-primaryBlue m-2 p-3" style="max-width: 1000px;">
+            <div class="row g-0">            
+                <div class="col-md-6">
+                    <div id="carouselSubcategories" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
+                        <!-- Indicateurs -->
+                        <div class="carousel-indicators">
+                            {% for subcategories in category.subcategories %}
+                                <button 
+                                    type="button" 
+                                    data-bs-target="#carouselSubcategories" 
+                                    data-bs-slide-to="{{ loop.index0 }}" 
+                                    class="{% if loop.first %}active{% endif %}" 
+                                    aria-current="{% if loop.first %}true{% endif %}" 
+                                    aria-label="Slide {{ loop.index }}"
+                                ></button>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Slides -->
+                        <div class="carousel-inner" data-bs-interval="10000">
+                            {% for subcategories in category.subcategories %}
+                                <div 
+                                    class="carousel-item {% if loop.first %}active{% endif %}"
+                                    data-subcategories-name="{{ subcategories.name }}"
+                                    data-subcategories-slug="{{ subcategories.slug }}"
+                                    data-category-slug="{{ category.slug }}"
+                                >
+                                    <a href="{{ path('app_subcategory', { slug: subcategories.slug }) }}">
+                                        <img 
+                                            src="/uploads/{{ subcategories.image }}"
+                                            class="figure-img img-fluid rounded border-secondary-custom" 
+                                            alt="{{ subcategories.name }}" 
+                                            style="object-fit: cover; width: 100%; height: 400px;"
+                                            loading="lazy"
+                                        >
+                                        <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                            <h2 class="color-secondary-custom">{{ subcategories.name }}</h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Boutons de navigation -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselSubcategories" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselSubcategories" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h1 class="card-title color-secondary-custom">{{ category.name }}</h1>
+                        <div>
+                            {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}
+                            <p class="d-sm-block d-md-none">
+                                <a 
+                                    class="link text-decoration-none" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseCategoryDescription" 
+                                    aria-expanded="false" 
+                                    aria-controls="collapseCategoryDescription"
+                                    id="toggleCategoryDescriptionButton">
+                                    Voir Plus...
+                                </a>
+                            </p>
+                        
+                            {# Conteneur pour la description avec collapse horizontal seulement pour sm et plus petits #}
+                            <div class="d-sm-block d-md-none">
+                                <div 
+                                    class="collapse" 
+                                    id="collapseCategoryDescription">
+                                    <div 
+                                        class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                        {{ category.description|striptags }}
+                                    </div>
+                                </div>
+                            </div>
+                            {# La description est toujours visible sur md et plus grands #}
+                            <div class="d-none d-md-block">
+                                <div 
+                                    class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                    {{ category.description|striptags }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Script pour basculer le texte "Voir Plus" et "Voir Moins"
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('toggleCategoryDescriptionButton');
+            const collapseElement = document.getElementById('collapseCategoryDescription');
+    
+            // Mettre à jour le texte lors de l'ouverture
+            collapseElement.addEventListener('shown.bs.collapse', () => {
+                toggleBtn.textContent = 'Voir Moins';
+            });
+
+            // Mettre à jour le texte lors de la fermeture
+            collapseElement.addEventListener('hidden.bs.collapse', () => {
+                toggleBtn.textContent = 'Voir Plus...';
+            });
+        });
+    </script>
+{% endblock %}

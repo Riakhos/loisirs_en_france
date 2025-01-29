@@ -37,9 +37,16 @@ class Subcategory
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    /**
+     * @var Collection<int, Trend>
+     */
+    #[ORM\OneToMany(targetEntity: Trend::class, mappedBy: 'subcategory')]
+    private Collection $trends;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
+        $this->trends = new ArrayCollection();
     }
 
     public function __toString()
@@ -136,6 +143,36 @@ class Subcategory
             // set the owning side to null (unless already changed)
             if ($activity->getSubcategory() === $this) {
                 $activity->setSubcategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trend>
+     */
+    public function getTrends(): Collection
+    {
+        return $this->trends;
+    }
+
+    public function addTrend(Trend $trend): static
+    {
+        if (!$this->trends->contains($trend)) {
+            $this->trends->add($trend);
+            $trend->setSubcategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrend(Trend $trend): static
+    {
+        if ($this->trends->removeElement($trend)) {
+            // set the owning side to null (unless already changed)
+            if ($trend->getSubcategory() === $this) {
+                $trend->setSubcategory(null);
             }
         }
 
