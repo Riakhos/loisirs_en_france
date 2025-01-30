@@ -2,10 +2,15 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
+use App\Entity\Event;
+use App\Entity\Offer;
+use App\Entity\Trend;
 use App\Entity\Activity;
 use App\Entity\Category;
+use App\Entity\Exclusive;
+use App\Entity\Eventstrend;
 use App\Entity\Subcategory;
-use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -50,5 +55,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Catégories', 'fas fa-list', Category::class);
         yield MenuItem::linkToCrud('Sous-Catégories', 'fas fa-list', Subcategory::class);
         yield MenuItem::linkToCrud('Activités', 'fas fa-list', Activity::class);
+        yield MenuItem::linkToCrud('Eventstrends', 'fas fa-list', Eventstrend::class);
+        yield MenuItem::linkToCrud('Trends', 'fas fa-list', Trend::class);
+        yield MenuItem::linkToCrud('Events', 'fas fa-list', Event::class);
+        yield MenuItem::linkToCrud('Exclusives', 'fas fa-list', Exclusive::class);
+        yield MenuItem::linkToCrud('Offers', 'fas fa-list', Offer::class);
     }
 }

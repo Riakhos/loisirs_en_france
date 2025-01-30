@@ -43,10 +43,24 @@ class Subcategory
     #[ORM\OneToMany(targetEntity: Trend::class, mappedBy: 'subcategory')]
     private Collection $trends;
 
+    /**
+     * @var Collection<int, Exclusive>
+     */
+    #[ORM\OneToMany(targetEntity: Exclusive::class, mappedBy: 'subcategory')]
+    private Collection $exclusives;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'subcategory')]
+    private Collection $events;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
         $this->trends = new ArrayCollection();
+        $this->exclusives = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString()
@@ -173,6 +187,66 @@ class Subcategory
             // set the owning side to null (unless already changed)
             if ($trend->getSubcategory() === $this) {
                 $trend->setSubcategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exclusive>
+     */
+    public function getExclusives(): Collection
+    {
+        return $this->exclusives;
+    }
+
+    public function addExclusife(Exclusive $exclusife): static
+    {
+        if (!$this->exclusives->contains($exclusife)) {
+            $this->exclusives->add($exclusife);
+            $exclusife->setSubcategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExclusife(Exclusive $exclusife): static
+    {
+        if ($this->exclusives->removeElement($exclusife)) {
+            // set the owning side to null (unless already changed)
+            if ($exclusife->getSubcategory() === $this) {
+                $exclusife->setSubcategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setSubcategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getSubcategory() === $this) {
+                $event->setSubcategory(null);
             }
         }
 

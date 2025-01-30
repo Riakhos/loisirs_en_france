@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\TrendRepository;
+use App\Repository\ExclusiveRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TrendRepository::class)]
-class Trend
+#[ORM\Entity(repositoryClass: ExclusiveRepository::class)]
+class Exclusive
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,22 +20,28 @@ class Trend
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $date = null;
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'trends')]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateStart = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateStop = null;
+
+    #[ORM\ManyToOne(inversedBy: 'exclusives')]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'trends')]
+    #[ORM\ManyToOne(inversedBy: 'exclusives')]
     private ?Subcategory $subcategory = null;
 
-    #[ORM\ManyToOne(inversedBy: 'trends')]
+    #[ORM\ManyToOne(inversedBy: 'exclusives')]
     private ?Activity $activity = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'trend')]
+    #[ORM\ManyToOne(inversedBy: 'exclusive')]
     private ?Eventstrend $eventstrend = null;
 
     public function getId(): ?int
@@ -67,19 +73,38 @@ class Trend
         return $this;
     }
 
-    public function __construct()
+    public function getDescription(): ?string
     {
-        $this->date = new \DateTimeImmutable();
+        return $this->description;
     }
 
-    public function getDate(): ?\DateTimeImmutable
+    public function setDescription(string $description): static
     {
-        return $this->date;
+        $this->description = $description;
+
+        return $this;
     }
 
-    public function setDate(\DateTimeImmutable $date): static
+    public function getDateStart(): ?\DateTimeInterface
     {
-        $this->date = $date;
+        return $this->dateStart;
+    }
+
+    public function setDateStart(\DateTimeInterface $dateStart): static
+    {
+        $this->dateStart = $dateStart;
+
+        return $this;
+    }
+
+    public function getDateStop(): ?\DateTimeInterface
+    {
+        return $this->dateStop;
+    }
+
+    public function setDateStop(\DateTimeInterface $dateStop): static
+    {
+        $this->dateStop = $dateStop;
 
         return $this;
     }

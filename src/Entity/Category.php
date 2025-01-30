@@ -46,11 +46,32 @@ class Category
     #[ORM\OneToMany(targetEntity: Trend::class, mappedBy: 'category')]
     private Collection $trends;
 
+    /**
+     * @var Collection<int, Exclusive>
+     */
+    #[ORM\OneToMany(targetEntity: Exclusive::class, mappedBy: 'category')]
+    private Collection $exclusives;
+
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'category')]
+    private Collection $offers;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'category')]
+    private Collection $events;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
         $this->subcategories = new ArrayCollection();
         $this->trends = new ArrayCollection();
+        $this->exclusives = new ArrayCollection();
+        $this->offers = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString()
@@ -195,6 +216,96 @@ class Category
             // set the owning side to null (unless already changed)
             if ($trend->getCategory() === $this) {
                 $trend->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exclusive>
+     */
+    public function getExclusives(): Collection
+    {
+        return $this->exclusives;
+    }
+
+    public function addExclusife(Exclusive $exclusife): static
+    {
+        if (!$this->exclusives->contains($exclusife)) {
+            $this->exclusives->add($exclusife);
+            $exclusife->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExclusife(Exclusive $exclusife): static
+    {
+        if ($this->exclusives->removeElement($exclusife)) {
+            // set the owning side to null (unless already changed)
+            if ($exclusife->getCategory() === $this) {
+                $exclusife->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Offer>
+     */
+    public function getOffers(): Collection
+    {
+        return $this->offers;
+    }
+
+    public function addOffer(Offer $offer): static
+    {
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+            $offer->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): static
+    {
+        if ($this->offers->removeElement($offer)) {
+            // set the owning side to null (unless already changed)
+            if ($offer->getCategory() === $this) {
+                $offer->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getCategory() === $this) {
+                $event->setCategory(null);
             }
         }
 
