@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ subcategory.name }}{% endblock %}
+{% block title %}{{ controller_name }}{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
@@ -8,18 +8,18 @@
             <div class="row g-0">
                 <small class="card-header color-secondary-custom" style="border-bottom: none;">
                     <i>
-                        <a href="{{ path('app_category', { slug : subcategory.category.slug } ) }}" class=" text-decoration-none color-secondary-custom">{{ subcategory.category.name }}
-                        </a> > {{ subcategory.name }}
+                        <a href="{{ path('app_eventstrend', { slug : event.eventstrend.slug } ) }}" class=" text-decoration-none color-secondary-custom">{{ event.eventstrend.name }}
+                        </a> > {{ event.name }}
                     </i>
                 </small>
                 <div class="col-md-6">
-                    <div id="carouselActivities" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
+                    <div id="carouselActivity" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
                         {# Indicateurs #}
                         <div class="carousel-indicators">
-                            {% for activity in subcategory.activity %}
+                            {% for activity in event.activity %}
                                 <button 
                                     type="button" 
-                                    data-bs-target="#carouselActivities" 
+                                    data-bs-target="#carouselActivity" 
                                     data-bs-slide-to="{{ loop.index0 }}" 
                                     class="{% if loop.first %}active{% endif %}" 
                                     aria-current="{% if loop.first %}true{% endif %}" 
@@ -29,35 +29,33 @@
                         </div>
                         {# Slides #}
                         <div class="carousel-inner" data-bs-interval="10000">
-                            {% for activity in subcategory.activity %}
-                                <div 
-                                    class="carousel-item {% if loop.first %}active{% endif %}" 
-                                    data-activity-name="{{ activity.name }}" 
-                                    data-activity-slug="{{ activity.slug }}"
-                                    data-activity-id="{{ activity.id }}"
-                                >
-                                    <a href="{{ path('app_activity', { slug: activity.slug} ) }}">
-                                        <img 
-                                            src="/uploads/{{ activity.image }}"
-                                            class="figure-img img-fluid rounded border-secondary-custom" 
-                                            alt="{{ activity.name }}" 
-                                            style="object-fit: cover; width: 100%; height: 400px;"
-                                            loading="lazy"
-                                        >
-                                        <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
-                                            <h2 class="color-secondary-custom">{{ activity.name }}</h2>
-                                        </div>
-                                    </a>
-                                </div>
-                            {% endfor %}
+                            <div 
+                                class="carousel-item active"
+                                data-activity-name="{{ offer.activity.name }}"
+                                data-activity-slug="{{ offer.activity.slug }}"
+                                data-activity-id="{{ offer.activity.id }}"
+                            >
+                                <a href="{{ path('app_activity', { slug: offer.activity.slug }) }}">
+                                    <img 
+                                        src="/uploads/{{ offer.activity.image }}"
+                                        class="figure-img img-fluid rounded border-secondary-custom" 
+                                        alt="{{ offer.activity.name }}" 
+                                        style="object-fit: cover; width: 100%; height: 400px;"
+                                        loading="lazy"
+                                    >
+                                    <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                        <h2 class="color-secondary-custom">{{ offer.activity.name }}</h2>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
 
                         {# Boutons de navigation #}
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselActivities" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselActivity" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselActivities" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselActivity" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
@@ -65,7 +63,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card-body">
-                        <h1 class="card-title color-secondary-custom">{{ subcategory.name }}</h1>
+                        <h1 class="card-title color-secondary-custom">{{ offer.name }}</h1>
                         <div>
                             {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}
                             <p class="d-sm-block d-md-none">
@@ -73,22 +71,21 @@
                                     class="link text-decoration-none" 
                                     type="button" 
                                     data-bs-toggle="collapse" 
-                                    data-bs-target="#collapseSubcategoryDescription" 
+                                    data-bs-target="#collapseActivityDescription" 
                                     aria-expanded="false" 
-                                    aria-controls="collapseSubcategoryDescription"
-                                    id="toggleSubcategoryDescriptionButton">
+                                    aria-controls="collapseActivityDescription"
+                                    id="toggleActivityDescriptionButton">
                                     Voir Plus...
                                 </a>
                             </p>
-                        
                             {# Conteneur pour la description avec collapse horizontal seulement pour sm et plus petits #}
                             <div class="d-sm-block d-md-none">
                                 <div 
                                     class="collapse" 
-                                    id="collapseSubcategoryDescription">
+                                    id="collapseActivityDescription">
                                     <div 
                                         class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
-                                        {{ subcategory.description|striptags }}
+                                        {{ offer.description|striptags }}
                                     </div>
                                 </div>
                             </div>
@@ -96,16 +93,10 @@
                             <div class="d-none d-md-block">
                                 <div 
                                     class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
-                                    {{ subcategory.description|striptags }}
+                                    {{ offer.description|striptags }}
                                 </div>
                             </div>
                         </div>
-                        {% for activity in subcategory.activity %}
-                            <h3 class="card-title color-secondary-custom mt-4">{{ activity.name }}</h3>
-                            <p class="card-text color-secondary-custom">Lieu de l'activité + icon localisation</p>
-                            <p class="card-text color-secondary-custom">Partenaire</p>
-                            <p class="card-text color-secondary-custom">{{ activity.priceWt|price }}</p>
-                        {% endfor %}
                     </div>
                 </div>
                 <div class="card-footer btn-group d-flex justify-content-center align-items-center mt-4" role="group" aria-label="Basic outlined example" style="border-top: none;">
@@ -118,9 +109,9 @@
     <script>
         // Script pour basculer le texte "Voir Plus" et "Voir Moins"
         document.addEventListener('DOMContentLoaded', () => {
-            const toggleBtn = document.getElementById('toggleSubcategoryDescriptionButton');
-            const collapseElement = document.getElementById('collapseSubcategoryDescription');
-    
+            const toggleBtn = document.getElementById('toggleActivityDescriptionButton');
+            const collapseElement = document.getElementById('collapseActivityDescription');
+
             // Mettre à jour le texte lors de l'ouverture
             collapseElement.addEventListener('shown.bs.collapse', () => {
                 toggleBtn.textContent = 'Voir Moins';
@@ -133,7 +124,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            const carousel = document.getElementById('carouselActivities');
+            const carousel = document.getElementById('carouselActivity');
             const addToCartButton = document.getElementById('addToCartButton');
 
             // Fonction pour mettre à jour l'ID de l'activité

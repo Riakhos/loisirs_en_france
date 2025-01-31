@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Activity;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -37,8 +37,6 @@ class ActivityCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Activité')
             ->setEntityLabelInPlural('Activités')
-            // ->setDateFormat('...')
-            // ...
         ;
     }
     
@@ -57,19 +55,24 @@ class ActivityCrudController extends AbstractCrudController
         }
         
         return [
+            FormField::addPanel('Informations principales'),
             TextField::new('name')
                 ->setLabel('Titre')
                 ->setHelp('Titre de l\'activité')
+                ->setColumns(6)
             ,
             SlugField::new('slug')
                 ->setLabel('URL')
                 ->setTargetFieldName('name')
                 ->setHelp('URL de votre activité générée automatiquement')
+                ->setColumns(6)
             ,
+            FormField::addPanel('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp('Description de la sous-categorie')
             ,
+            FormField::addPanel('Images de l\'activité'),
             ImageField::new('image')
                 ->setLabel('Image principale')
                 ->setHelp('Image principale de votre activité en 600*600px')
@@ -77,6 +80,7 @@ class ActivityCrudController extends AbstractCrudController
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
+                ->setColumns(3)
             ,
             ImageField::new('image1')
                 ->setLabel('Image secondaire')
@@ -85,7 +89,8 @@ class ActivityCrudController extends AbstractCrudController
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
-            ,            
+                ->setColumns(3)
+            ,
             ImageField::new('image2')
                 ->setLabel('Image secondaire')
                 ->setHelp('Image secondaire de votre activité en 600*600px')
@@ -93,7 +98,8 @@ class ActivityCrudController extends AbstractCrudController
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
-            ,                       
+                ->setColumns(3)
+            ,
             ImageField::new('image3')
                 ->setLabel('Image secondaire')
                 ->setHelp('Image secondaire de votre activité en 600*600px')
@@ -101,10 +107,13 @@ class ActivityCrudController extends AbstractCrudController
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
-            ,                       
+                ->setColumns(3)
+            ,
+            FormField::addPanel('Tarification'),
             NumberField::new('price')
                 ->setLabel('Prix H.T')
                 ->setHelp('Prix H.T de l\activité sans le sigle Euro')
+                ->setColumns(6)
             ,
             ChoiceField::new('tva')
                 ->setLabel('Taux de TVA')
@@ -113,9 +122,11 @@ class ActivityCrudController extends AbstractCrudController
                     '10%' => '10',
                     '20%' => '20'
                 ])
+                ->setColumns(6)
             ,
-            AssociationField::new('category', 'Catégories associées'),
-            AssociationField::new('subcategory', 'Sous-Catégories associées'),
+            FormField::addPanel('Associations'),
+            AssociationField::new('category', 'Catégories associées')->setColumns(6),
+            AssociationField::new('subcategory', 'Sous-Catégories associées')->setColumns(6)
         ];
     }
 }

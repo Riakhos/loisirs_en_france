@@ -17,8 +17,8 @@ class SubcategoryController extends AbstractController
 
         // Si la sous-catégorie n'existe pas, redirigez vers la page d'accueil ou affichez une erreur
         if (!$subcategory) {
-            $this->addFlash('error', "La sous-catégorie demandée n'existe pas."); // Message flash
-            return $this->redirectToRoute('app_home'); // Redirection vers la page d'accueil
+            $this->addFlash('error', "La sous-catégorie demandée n'existe pas.");
+            return $this->redirectToRoute('app_home');
         }
         
         return $this->render('category/subcategory.html.twig', [

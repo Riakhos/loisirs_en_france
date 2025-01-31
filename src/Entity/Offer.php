@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\OfferRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OfferRepository;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
@@ -19,7 +20,7 @@ class Offer
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -30,9 +31,6 @@ class Offer
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
-
-    #[ORM\ManyToOne(inversedBy: 'offers')]
-    private ?category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'offer')]
     private ?Eventstrend $eventstrend = null;
@@ -110,18 +108,6 @@ class Offer
     public function setImage(string $image): static
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getCategory(): ?category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?category $category): static
-    {
-        $this->category = $category;
 
         return $this;
     }

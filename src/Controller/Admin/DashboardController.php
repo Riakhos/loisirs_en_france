@@ -8,6 +8,7 @@ use App\Entity\Offer;
 use App\Entity\Trend;
 use App\Entity\Activity;
 use App\Entity\Category;
+use App\Entity\Subtrend;
 use App\Entity\Exclusive;
 use App\Entity\Eventstrend;
 use App\Entity\Subcategory;
@@ -51,14 +52,23 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-list', User::class);
-        yield MenuItem::linkToCrud('Catégories', 'fas fa-list', Category::class);
-        yield MenuItem::linkToCrud('Sous-Catégories', 'fas fa-list', Subcategory::class);
-        yield MenuItem::linkToCrud('Activités', 'fas fa-list', Activity::class);
-        yield MenuItem::linkToCrud('Eventstrends', 'fas fa-list', Eventstrend::class);
-        yield MenuItem::linkToCrud('Trends', 'fas fa-list', Trend::class);
-        yield MenuItem::linkToCrud('Events', 'fas fa-list', Event::class);
-        yield MenuItem::linkToCrud('Exclusives', 'fas fa-list', Exclusive::class);
-        yield MenuItem::linkToCrud('Offers', 'fas fa-list', Offer::class);
+        
+        // 📌 Catégories et sous-sections
+        yield MenuItem::subMenu('Loisirs', 'fas fa-folder')->setSubItems([
+            MenuItem::linkToCrud('Catégories', 'fas fa-list', Category::class),
+            MenuItem::linkToCrud('Sous-Catégories', 'fas fa-list', Subcategory::class),
+            MenuItem::linkToCrud('Activités', 'fas fa-list', Activity::class),
+        ]);
+
+        // 📌 Évènements Tendances et sous-sections
+        yield MenuItem::subMenu('Tendances', 'fas fa-star')->setSubItems([
+            MenuItem::linkToCrud('Évènements Tendances', 'fas fa-list', Eventstrend::class),
+            MenuItem::linkToCrud('Activités Tendances', 'fas fa-fire', Trend::class),
+            MenuItem::linkToCrud('Évènements Spéciaux', 'fas fa-calendar', Event::class),
+            MenuItem::linkToCrud('Offres Exclusives', 'fas fa-gift', Exclusive::class),
+            MenuItem::linkToCrud('Offres Spéciales', 'fas fa-tags', Offer::class),
+        ]);
     }
 }

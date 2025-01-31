@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Subcategory;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -24,8 +24,6 @@ class SubcategoryCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Sous-Catégorie')
             ->setEntityLabelInPlural('Sous-Catégories')
-            // ->setDateFormat('...')
-            // ...
         ;
     }
 
@@ -38,19 +36,24 @@ class SubcategoryCrudController extends AbstractCrudController
         }
         
         return [
+            FormField::addPanel('Informations principales'),
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setHelp('Nom de la sous-catégorie')
+                ->setColumns(6)
             ,
             SlugField::new('slug')
                 ->setLabel('URL')
                 ->setTargetFieldName('name')
                 ->setHelp('URL de votre sous-catégorie générée automatiquement')
+                ->setColumns(6)
             ,
+            FormField::addPanel('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp('Description de la sous-categorie')
             ,
+            FormField::addPanel('Image de la sous-catégorie'),
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp('Image de votre activité en 600*600px')
@@ -59,6 +62,7 @@ class SubcategoryCrudController extends AbstractCrudController
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
+            FormField::addPanel('Associations'),
             AssociationField::new('category', 'Catégories associées'),
         ];
     }

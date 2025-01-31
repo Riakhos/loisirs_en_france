@@ -8,7 +8,7 @@
             <div class="row g-0">            
                 <div class="col-md-6">
                     <div id="carouselSubcategories" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
-                        <!-- Indicateurs -->
+                        {# Indicateurs #}
                         <div class="carousel-indicators">
                             {% for subcategories in category.subcategories %}
                                 <button 
@@ -21,8 +21,7 @@
                                 ></button>
                             {% endfor %}
                         </div>
-
-                        <!-- Slides -->
+                        {# Slides #}
                         <div class="carousel-inner" data-bs-interval="10000">
                             {% for subcategories in category.subcategories %}
                                 <div 
@@ -46,8 +45,7 @@
                                 </div>
                             {% endfor %}
                         </div>
-
-                        <!-- Boutons de navigation -->
+                        {# Boutons de navigation #}
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselSubcategories" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>

@@ -10,9 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class CategoryController extends AbstractController
 {
     #[Route('/categorie/{slug}', name: 'app_category')]
-    public function category($slug, CategoryRepository $categoryRepository): Response
+    public function category(string $slug, CategoryRepository $categoryRepository): Response
     {
-        
         $category = $categoryRepository->findOneBySlug($slug);
 
         // Si la catégorie n'existe pas, redirigez vers la page d'accueil ou affichez une erreur
@@ -23,7 +22,7 @@ class CategoryController extends AbstractController
 
         // Si la catégorie existe, afficher la page correspondante
         return $this->render('category/category.html.twig', [
-            'controller_name' => 'CategoryController',
+            'controller_name' => 'Catégories',
             'category' => $category,
         ]);
     }

@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -23,8 +23,7 @@ class CategoryCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Catégorie')
             ->setEntityLabelInPlural('Catégories')
-            // ->setDateFormat('...')
-            // ...
+            ->setPageTitle('index', 'Gestion des Catégories, Sous-Catégories et Activités');
         ;
     }
 
@@ -37,15 +36,19 @@ class CategoryCrudController extends AbstractCrudController
         }
         
         return [
+            FormField::addPanel('Informations principales'),
             TextField::new('name')
                 ->setLabel('Titre')
                 ->setHelp('Titre de la catégorie')
+                ->setColumns(6)
             ,
             SlugField::new('slug')
                 ->setLabel('URL')
                 ->setTargetFieldName('name')
                 ->setHelp('URL de votre catégorie générée automatiquement')
+                ->setColumns(6)
             ,
+            FormField::addPanel('Image de la catégorie'),
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp('Image de votre activité en 600*600px')
@@ -54,10 +57,10 @@ class CategoryCrudController extends AbstractCrudController
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
+            FormField::addPanel('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp('Description de la categorie')
-            ,
         ];
     }
 }

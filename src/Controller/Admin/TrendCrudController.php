@@ -4,8 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Trend;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -23,10 +23,9 @@ class TrendCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Trend')
-            ->setEntityLabelInPlural('Trends')
+            ->setEntityLabelInSingular('Activité Tendance')
+            ->setEntityLabelInPlural('Activités Tendances')
             ->setDateFormat('dd/MM/yyyy')
-            // ...
         ;
     }
 
@@ -48,15 +47,19 @@ class TrendCrudController extends AbstractCrudController
     }
         
         return [
+            FormField::addPanel('Informations principales'),
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setHelp('Nom de l\'activité tendance')
+                ->setColumns(4)
             ,
             SlugField::new('slug')
                 ->setLabel('URL')
                 ->setTargetFieldName('name')
                 ->setHelp('URL de votre activité tendance générée automatiquement')
+                ->setColumns(6)
             ,
+            FormField::addPanel('Image de l\'activité tendance'),
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp('Image de votre activité tendance en 600*600px')
@@ -65,10 +68,19 @@ class TrendCrudController extends AbstractCrudController
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
-            AssociationField::new('category', 'Catégories associées'),
-            AssociationField::new('subcategory', 'Sous-Catégories associées'),
-            AssociationField::new('activity', 'Activités associées'),
-            $dateField,
+            FormField::addPanel('Description'),
+            TextEditorField::new('description')
+                ->setLabel('Description')
+                ->setHelp("Description de l\'évènement spécial")
+            ,
+            FormField::addPanel('Associations'),
+            AssociationField::new('eventstrend', 'Évènements Tendances associées')
+                ->setColumns(6)
+            ,
+            AssociationField::new('activity', 'Activités')
+                ->setColumns(6)
+            ,
+            $dateField
         ];
     }
 }

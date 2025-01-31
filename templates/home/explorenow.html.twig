@@ -1,0 +1,69 @@
+{# Card Explorez Maintenant #}
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="row">
+        <div class="card mb-3 bg-primaryBlue border-secondary-custom">
+            <div class="row align-items-center">
+                <div class="col-md-6 d-flex justify-content-center p-3">
+                    <div id="carouselActivity" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
+                        {# Indicateurs #}
+                        <div class="carousel-indicators">
+                            {% for trend in trends %}
+                                <button 
+                                    type="button" 
+                                    data-bs-target="#carouselActivity" 
+                                    data-bs-slide-to="{{ loop.index0 }}" 
+                                    class="{% if loop.first %}active{% endif %}" 
+                                    aria-current="{% if loop.first %}true{% endif %}" 
+                                    aria-label="Afficher l'activité {{ trend.activity.name }}"
+                                ></button>
+                            {% endfor %}
+                        </div>
+                        {# Slides #}
+                        <div class="carousel-inner" data-bs-interval="10000">
+                            {% for trend in trends %}
+                                <div 
+                                    class="carousel-item {% if loop.first %}active{% endif %}"
+                                    data-activity-name="{{ trend.activity.name }}"
+                                    data-activity-slug="{{ trend.activity.slug }}"
+                                    data-trend-slug="{{ trend.slug }}"
+                                >
+                                    <a href="{{ path('app_activity', { slug: trend.activity.slug }) }}" aria-label="Voir l'activité {{ trend.activity.name }}">
+                                        <img 
+                                            src="/uploads/{{ trend.activity.image }}"
+                                            class="figure-img img-fluid rounded border-secondary-custom" alt="Image de l'activité {{ trend.activity.name }}" 
+                                            style="object-fit: cover; width: 100%; height: 400px;"
+                                            loading="lazy"
+                                        >
+                                        <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                            <h2 class="color-secondary-custom">{{ trend.activity.name }}</h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {# Boutons de navigation #}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselActivity" data-bs-slide="prev" aria-label="Image précédente">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Précédent</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselActivity" data-bs-slide="next" aria-label="Image suivante">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Suivant</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <div class="card-body text-center">
+                        <h1 class="card-title color-secondary-custom">Explorez Maintenant</h1>
+                        <p class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom mt-5">
+                        <strong>"Ne manquez pas les activités qui font vibrer la planète ! Rejoignez la fête et vivez des moments incroyables."</strong>
+                        Plongez dans des expériences uniques qui vous feront découvrir de nouvelles passions et créer des souvenirs inoubliables. Que vous soyez à la recherche d'aventure, de découvertes culturelles ou simplement de fun, ces activités vous promettent des instants magiques. Rejoignez-nous pour vivre la fête et partager des moments exceptionnels qui resteront gravés dans votre mémoire !
+                        
+                        
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,7 +20,7 @@ class Exclusive
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -30,12 +30,6 @@ class Exclusive
     private ?\DateTimeInterface $dateStop = null;
 
     #[ORM\ManyToOne(inversedBy: 'exclusives')]
-    private ?Category $category = null;
-
-    #[ORM\ManyToOne(inversedBy: 'exclusives')]
-    private ?Subcategory $subcategory = null;
-
-    #[ORM\ManyToOne(inversedBy: 'exclusives')]
     private ?Activity $activity = null;
 
     #[ORM\Column(length: 255)]
@@ -43,6 +37,12 @@ class Exclusive
 
     #[ORM\ManyToOne(inversedBy: 'exclusive')]
     private ?Eventstrend $eventstrend = null;
+
+    #[ORM\Column]
+    private ?float $price = null;
+
+    #[ORM\Column]
+    private ?float $tva = null;
 
     public function getId(): ?int
     {
@@ -109,30 +109,6 @@ class Exclusive
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getSubcategory(): ?Subcategory
-    {
-        return $this->subcategory;
-    }
-
-    public function setSubcategory(?Subcategory $subcategory): static
-    {
-        $this->subcategory = $subcategory;
-
-        return $this;
-    }
-
     public function getActivity(): ?Activity
     {
         return $this->activity;
@@ -165,6 +141,30 @@ class Exclusive
     public function setEventstrend(?Eventstrend $eventstrend): static
     {
         $this->eventstrend = $eventstrend;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getTva(): ?float
+    {
+        return $this->tva;
+    }
+
+    public function setTva(float $tva): static
+    {
+        $this->tva = $tva;
 
         return $this;
     }

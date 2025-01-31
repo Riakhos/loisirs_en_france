@@ -22,13 +22,7 @@ class Trend
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
-
-    #[ORM\ManyToOne(inversedBy: 'trends')]
-    private ?Category $category = null;
-
-    #[ORM\ManyToOne(inversedBy: 'trends')]
-    private ?Subcategory $subcategory = null;
-
+    
     #[ORM\ManyToOne(inversedBy: 'trends')]
     private ?Activity $activity = null;
 
@@ -37,6 +31,9 @@ class Trend
 
     #[ORM\ManyToOne(inversedBy: 'trend')]
     private ?Eventstrend $eventstrend = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
 
     public function getId(): ?int
     {
@@ -83,31 +80,7 @@ class Trend
 
         return $this;
     }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getSubcategory(): ?Subcategory
-    {
-        return $this->subcategory;
-    }
-
-    public function setSubcategory(?Subcategory $subcategory): static
-    {
-        $this->subcategory = $subcategory;
-
-        return $this;
-    }
-
+    
     public function getActivity(): ?Activity
     {
         return $this->activity;
@@ -140,6 +113,18 @@ class Trend
     public function setEventstrend(?Eventstrend $eventstrend): static
     {
         $this->eventstrend = $eventstrend;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

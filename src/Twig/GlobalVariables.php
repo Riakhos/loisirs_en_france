@@ -3,14 +3,22 @@
 namespace App\Twig;
 
 use App\Classe\Cart;
+use App\Repository\ActivityRepository;
 use Twig\Extension\GlobalsInterface;
 use Twig\Extension\AbstractExtension;
 use App\Repository\CategoryRepository;
+use App\Repository\EventstrendRepository;
+use App\Repository\SubcategoryRepository;
+use App\Repository\TrendRepository;
 
 class GlobalVariables extends AbstractExtension implements GlobalsInterface
 {
 	private CategoryRepository $categoryRepository;
+	private SubcategoryRepository $subcategoryRepository;
+	private ActivityRepository $activityRepository;
 	private Cart $cart;
+	private EventstrendRepository $eventstrendRepository;
+	private TrendRepository $trendRepository;
 
 	/**
 	 * __construct
@@ -22,10 +30,14 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	 * @param Cart $cart
 	 	* *Le service de gestion du panier
 	 */
-	public function __construct(CategoryRepository $categoryRepository, Cart $cart)
+	public function __construct(CategoryRepository $categoryRepository, SubcategoryRepository $subcategoryRepository,ActivityRepository $activityRepository, Cart $cart, EventstrendRepository $eventstrendRepository, TrendRepository $trendRepository)
 	{
 		$this->categoryRepository = $categoryRepository;
+		$this->subcategoryRepository = $subcategoryRepository;
+		$this->activityRepository = $activityRepository;
+		$this->eventstrendRepository = $eventstrendRepository;
 		$this->cart = $cart;
+		$this->trendRepository = $trendRepository;
 	}
 
 	/**
@@ -42,7 +54,11 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	{
 		return [
 			'categories' => $this->categoryRepository->findAll(),
+			'subcategories' => $this->subcategoryRepository->findAll(),
+			'activities' => $this->activityRepository->findAll(),
+			'eventstrends' => $this->eventstrendRepository->findAll(),
 			'fullCartQuantity' => $this->cart->fullQuantity(),
+			'trends' => $this->trendRepository->findAll(),
 		];
 	}
 }

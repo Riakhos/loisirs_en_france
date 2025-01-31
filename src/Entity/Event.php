@@ -32,23 +32,23 @@ class Event
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateStop = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
-
-    #[ORM\ManyToOne(inversedBy: 'events')]
-    private ?Category $category = null;
-
-    #[ORM\ManyToOne(inversedBy: 'events')]
-    private ?Subcategory $subcategory = null;
-
-    #[ORM\ManyToOne(inversedBy: 'events')]
-    private ?Activity $activity = null;
-
+    
     #[ORM\ManyToOne(inversedBy: 'event')]
     private ?Eventstrend $eventstrend = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image1 = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image2 = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image3 = null;
 
     public function getId(): ?int
     {
@@ -151,42 +151,6 @@ class Event
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getSubcategory(): ?Subcategory
-    {
-        return $this->subcategory;
-    }
-
-    public function setSubcategory(?Subcategory $subcategory): static
-    {
-        $this->subcategory = $subcategory;
-
-        return $this;
-    }
-
-    public function getActivity(): ?Activity
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(?Activity $activity): static
-    {
-        $this->activity = $activity;
-
-        return $this;
-    }
-
     public function getEventstrend(): ?Eventstrend
     {
         return $this->eventstrend;
@@ -195,6 +159,42 @@ class Event
     public function setEventstrend(?Eventstrend $eventstrend): static
     {
         $this->eventstrend = $eventstrend;
+
+        return $this;
+    }
+
+    public function getImage1(): ?string
+    {
+        return $this->image1;
+    }
+
+    public function setImage1(string $image1): static
+    {
+        $this->image1 = $image1;
+
+        return $this;
+    }
+
+    public function getImage2(): ?string
+    {
+        return $this->image2;
+    }
+
+    public function setImage2(string $image2): static
+    {
+        $this->image2 = $image2;
+
+        return $this;
+    }
+
+    public function getImage3(): ?string
+    {
+        return $this->image3;
+    }
+
+    public function setImage3(string $image3): static
+    {
+        $this->image3 = $image3;
 
         return $this;
     }
