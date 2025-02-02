@@ -22,7 +22,7 @@ class CategoryController extends AbstractController
 
         // Si la catégorie existe, afficher la page correspondante
         return $this->render('category/category.html.twig', [
-            'controller_name' => 'Catégories',
+            'controller_name' => 'Catégorie',
             'category' => $category,
         ]);
     }

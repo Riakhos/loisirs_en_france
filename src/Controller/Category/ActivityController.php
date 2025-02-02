@@ -22,7 +22,7 @@ class ActivityController extends AbstractController
         }
         
         return $this->render('category/activity.html.twig', [
-            'controller_name' => 'ActivityController',
+            'controller_name' => 'Activité',
             'activity' => $activity,
         ]);
     }

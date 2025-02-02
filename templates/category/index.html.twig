@@ -1,16 +1,17 @@
 {# Categorie Figure #}
-<div class="container w-auto p-3">
+<div class="container w-auto">
 	<ul class="row list-unstyled">
 		{% for category in categories %}
 			<li class="col-6 col-md-3 mb-4 text-center">
-				<a href="{{ path('app_category', { slug : category.slug } ) }}" class="text-decoration-none">
+				<a href="{{ path('app_category', { slug : category.slug } ) }}" class="text-decoration-none" aria-label="Voir la catégorie {{ category.name }}">
 					<div class="card border-secondary-custom shadow-sm text-center h-100">
 						<div class="fixed-square">
 							<img src="/uploads/{{ category.image }}" 
 								class="figure-img img-fluid rounded border-secondary-custom" 
 								alt="{{ category.name }}" 
-								style="object-fit: cover; width: 100%; height: 100%;"
-								loading="lazy">
+								aria-hidden="true" 
+								loading="lazy" 
+								style="object-fit: cover; width: 100%; height: 100%;">
 						</div>
 						<div class="card-body border-secondary-custom position-absolute bottom-0 start-0 w-100 text-center py-2" style="background: rgba(0, 0, 0, 0.6);">
 							<h1 class="fs-2">{{ category.name }}</h1>

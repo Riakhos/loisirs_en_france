@@ -1,17 +1,28 @@
 {# Modal Tous les avis de Loisirs en France #}
 <div class="modal fade" id="reviewsModal" tabindex="-1" aria-labelledby="reviewsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">        
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="reviewsModalLabel">Tous les avis de Loisirs en France</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h2 class="modal-title" id="reviewsModalLabel" aria-live="polite">Tous les avis de Loisirs en France</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body">
-                <p>Voici les avis laissés par nos clients...</p>
+                <p>Voici les avis laissés par nos clients :</p>
+                <div class="list-group">
+                    {# {% for review in reviews %}
+                        <div class="list-group-item">
+                            <h5 class="mb-1">{{ review.name }}</h5>
+                            <p class="mb-1">{{ review.content }}</p>
+                            <small>{{ review.date|date('d/m/Y') }}</small>
+                        </div>
+                    {% else %}
+                        <p>Aucun avis disponible pour le moment.</p>
+                    {% endfor %} #}
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Fermer">Fermer</button>
+                <button type="button" class="btn btn-primary" aria-label="Envoyer un avis">Envoyer un avis</button>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon panier!{% endblock %}
+{% block title %}{{ controller_name }}{% endblock %}
 
 {% block body %}
     {# Barre de navigation #}
@@ -18,11 +18,14 @@
                                 <img 
                                     src="/uploads/{{ activity.object.image }}" 
                                     class="img-fluid rounded-start h-100 object-fit-cover" 
-                                    alt="{{ activity.object.name }}">
+                                    alt="Image de {{ activity.object.name }}"
+                                    loading="lazy"
+                                    width="200" height="150"
+                                >
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title fw-bold">{{ activity.object.name }}</h5>
+                                    <h2 class="card-title fw-bold">{{ activity.object.name }}</h2>
                                     <p class="card-text">
                                         <span>Prix unitaire :</span> 
                                         <strong>{{ activity.object.priceWt|price }}</strong>
@@ -35,8 +38,9 @@
                                             href="{{ path('app_cart_decrease', { id: activity.object.id } ) }}" 
                                             class="btn  shadow-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
                                             style="width: 20px; height: 20px;"
+                                            aria-label="Diminuer la quantité de {{ activity.object.name }}"
                                         >
-                                            <i class="bi bi-dash-lg color-primary-custom" style="font-size: 1rem;"></i>
+                                            <i class="bi bi-dash-lg color-primary-custom" aria-hidden="true" style="font-size: 1rem;"></i>
                                         </a>
                                         
                                         {# Badge pour afficher la quantité #}
@@ -49,8 +53,9 @@
                                             href="{{ path('app_cart_add', { id: activity.object.id } ) }}" 
                                             class="btn  shadow-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
                                             style="width: 20px; height: 20px;"
+                                            aria-label="Augmenter la quantité de {{ activity.object.name }}"
                                         >
-                                            <i class="bi bi-plus-lg color-primary-custom" style="font-size: 1rem;"></i>
+                                            <i class="bi bi-plus-lg color-primary-custom" aria-hidden="true" style="font-size: 1rem;"></i>
                                         </a>
                                     </p>
 
@@ -69,10 +74,12 @@
             {% if cart|length > 0 %}
                 {# Récapitulatif du panier #}
                 <div class="col-md-4">
-                    <div class="card shadow-sm border-1 p-3 sticky-top">
+                    <div class="card shadow-sm border-1 p-3 sticky-top" role="complementary" aria-labelledby="recapitulatif-title">
                         <div class="row">
-                            <h4 class="col-md-10 text-center color-primary-custom">Récapitulatif</h4>
-                            <a href="{{ path('app_cart_remove') }}" class="col-md-2" role"button"><i class="bi bi-trash color-primary-custom"></i></a>
+                            <h3 id="recapitulatif-title" class="col-md-10 text-center color-primary-custom">Récapitulatif</h3>
+                            <a href="{{ path('app_cart_remove') }}" class="col-md-2" aria-label="Vider le panier">
+                                <i class="bi bi-trash color-primary-custom" aria-hidden="true"></i>
+                            </a>
                         </div>
                         <hr>
                         <p class="d-flex justify-content-between">
@@ -96,7 +103,7 @@
                             <span>Total :</span> 
                             <strong class="text-success">{{ total|price }}</strong>
                         </p>
-                        <a href="#" class="btn btn-primary btn-block mt-3">Réserver</a>
+                        <a href="#" class="btn btn-primary btn-block mt-3" aria-label="Réserver l'activité">Réserver</a>
                     </div>
                 </div>
             {% endif %}

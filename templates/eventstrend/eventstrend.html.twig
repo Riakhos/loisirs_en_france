@@ -15,13 +15,13 @@
                 {% for relation in relations %}
                     {% if relation.items|length > 0 %}
                         <div class="col-md-6">
-                            <div id="carouselEventstrend" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
-                                {# Indicateurs #}
+                            <div id="carouselEventstrend" class="carousel slide card-img-top" data-bs-ride="carousel">
+                                {# Indicateurs du carousel #}
                                 <div class="carousel-indicators">
                                     {% for item in relation.items %}
                                         <button 
                                             type="button" 
-                                            data-bs-target="#carouselItem" 
+                                            data-bs-target="#carouselEventstrend" 
                                             data-bs-slide-to="{{ loop.index0 }}" 
                                             class="{% if loop.first %}active{% endif %}" 
                                             aria-current="{% if loop.first %}true{% endif %}" 
@@ -29,7 +29,7 @@
                                         ></button>
                                     {% endfor %}
                                 </div>
-                                {# Slides #}
+                                {# Slides du carousel #}
                                 <div class="carousel-inner" data-bs-interval="10000">
                                     {% for item in relation.items %}
                                         <div 
@@ -38,7 +38,7 @@
                                             data-item-slug="{{ item.slug }}"
                                             data-eventstrend-slug="{{ eventstrend.slug }}"
                                         >
-                                                <a href="{{ path(relation.route, { slug: item.slug }) }}">
+                                                <a href="{{ path(relation.route, { slug: item.slug }) }}" class="text-decoration-none">
                                                 <img 
                                                     src="/uploads/{{ item.image }}"
                                                     class="figure-img img-fluid rounded border-secondary-custom" 
@@ -54,18 +54,18 @@
                                     {% endfor %}
                                 </div>
                                 {# Boutons de navigation #}
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselItem" data-bs-slide="prev">
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselEventstrend" data-bs-slide="prev" aria-label="Image précédente">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
+                                    <span class="visually-hidden">Précédent</span>
                                 </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselItem" data-bs-slide="next">
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselEventstrend" data-bs-slide="next" aria-label="Image suivante">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
+                                    <span class="visually-hidden">Suivant</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card-body">
+                        <div class="col-md-6 d-flex justify-content-between align-items-center ">
+                            <div class="card-body text-center">
                                 <h1 class="card-title color-secondary-custom">{{ eventstrend.name }}</h1>
                                 <div>
                                     {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}
@@ -74,10 +74,11 @@
                                             class="link text-decoration-none" 
                                             type="button" 
                                             data-bs-toggle="collapse" 
-                                            data-bs-target="#collapseEventstrendDescription" 
+                                            data-bs-target="#collapseDescription" 
                                             aria-expanded="false" 
-                                            aria-controls="collapseEventstrendDescription"
-                                            id="toggleEventstrendDescriptionButton">
+                                            aria-controls="collapseDescription"
+                                            id="toggleDescriptionButton"
+                                            aria-label="Voir plus de la description">
                                             Voir Plus...
                                         </a>
                                     </p>
@@ -85,7 +86,7 @@
                                     <div class="d-sm-block d-md-none">
                                         <div 
                                             class="collapse" 
-                                            id="collapseEventstrendDescription">
+                                            id="collapseDescription">
                                             <div 
                                                 class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
                                                 {{ eventstrend.description|striptags }}
@@ -107,21 +108,4 @@
             </div>
         </div>
     </div>
-    <script>
-        // Script pour basculer le texte "Voir Plus" et "Voir Moins"
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggleBtn = document.getElementById('toggleEventstrendDescriptionButton');
-            const collapseElement = document.getElementById('collapseEventstrendDescription');
-    
-            // Mettre à jour le texte lors de l'ouverture
-            collapseElement.addEventListener('shown.bs.collapse', () => {
-                toggleBtn.textContent = 'Voir Moins';
-            });
-
-            // Mettre à jour le texte lors de la fermeture
-            collapseElement.addEventListener('hidden.bs.collapse', () => {
-                toggleBtn.textContent = 'Voir Plus...';
-            });
-        });
-    </script>
 {% endblock %}

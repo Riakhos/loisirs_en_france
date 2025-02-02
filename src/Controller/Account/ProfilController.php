@@ -12,7 +12,7 @@ class ProfilController extends AbstractController
     public function profil(): Response
     {
         return $this->render('account/profil.html.twig', [
-            'controller_name' => 'ProfilController',
+            'controller_name' => 'Votre Profil',
         ]);
     }
 }

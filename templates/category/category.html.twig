@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ category.slug }}{% endblock %}
+{% block title %}{{ controller.name }}{{ category.slug }}{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
         <div class="card w-auto border-secondary-custom bg-primaryBlue m-2 p-3" style="max-width: 1000px;">
-            <div class="row g-0">            
+            <div class="row g-0">
                 <div class="col-md-6">
-                    <div id="carouselSubcategories" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
-                        {# Indicateurs #}
+                    <div id="carouselSubcategories" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel" aria-live="polite" aria-label="Carrousel des sous-catégories">
+                        {# Indicateurs du carrousel #}
                         <div class="carousel-indicators">
                             {% for subcategories in category.subcategories %}
                                 <button 
@@ -21,7 +21,7 @@
                                 ></button>
                             {% endfor %}
                         </div>
-                        {# Slides #}
+                        {# Slides du carrousel #}
                         <div class="carousel-inner" data-bs-interval="10000">
                             {% for subcategories in category.subcategories %}
                                 <div 
@@ -30,11 +30,11 @@
                                     data-subcategories-slug="{{ subcategories.slug }}"
                                     data-category-slug="{{ category.slug }}"
                                 >
-                                    <a href="{{ path('app_subcategory', { slug: subcategories.slug }) }}">
+                                    <a href="{{ path('app_subcategory', { slug: subcategories.slug }) }}" aria-label="Voir la sous-catégorie {{ subcategories.name }}">
                                         <img 
                                             src="/uploads/{{ subcategories.image }}"
                                             class="figure-img img-fluid rounded border-secondary-custom" 
-                                            alt="{{ subcategories.name }}" 
+                                            alt="Image de la sous-catégorie {{ subcategories.name }}" 
                                             style="object-fit: cover; width: 100%; height: 400px;"
                                             loading="lazy"
                                         >
@@ -46,13 +46,13 @@
                             {% endfor %}
                         </div>
                         {# Boutons de navigation #}
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselSubcategories" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselSubcategories" data-bs-slide="prev" aria-label="Carrousel Précédent">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
+                            <span class="visually-hidden">Précédent</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselSubcategories" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselSubcategories" data-bs-slide="next" aria-label="Carrousel Suivant">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
+                            <span class="visually-hidden">Suivant</span>
                         </button>
                     </div>
                 </div>
@@ -66,19 +66,19 @@
                                     class="link text-decoration-none" 
                                     type="button" 
                                     data-bs-toggle="collapse" 
-                                    data-bs-target="#collapseCategoryDescription" 
+                                    data-bs-target="#collapseDescription" 
                                     aria-expanded="false" 
-                                    aria-controls="collapseCategoryDescription"
-                                    id="toggleCategoryDescriptionButton">
+                                    aria-controls="collapseDescription"
+                                    id="toggleDescriptionButton"
+                                    aria-label="Voir plus de la description">
                                     Voir Plus...
                                 </a>
                             </p>
-                        
                             {# Conteneur pour la description avec collapse horizontal seulement pour sm et plus petits #}
                             <div class="d-sm-block d-md-none">
                                 <div 
                                     class="collapse" 
-                                    id="collapseCategoryDescription">
+                                    id="collapseDescription">
                                     <div 
                                         class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
                                         {{ category.description|striptags }}
@@ -98,21 +98,4 @@
             </div>
         </div>
     </div>
-    <script>
-        // Script pour basculer le texte "Voir Plus" et "Voir Moins"
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggleBtn = document.getElementById('toggleCategoryDescriptionButton');
-            const collapseElement = document.getElementById('collapseCategoryDescription');
-    
-            // Mettre à jour le texte lors de l'ouverture
-            collapseElement.addEventListener('shown.bs.collapse', () => {
-                toggleBtn.textContent = 'Voir Moins';
-            });
-
-            // Mettre à jour le texte lors de la fermeture
-            collapseElement.addEventListener('hidden.bs.collapse', () => {
-                toggleBtn.textContent = 'Voir Plus...';
-            });
-        });
-    </script>
 {% endblock %}

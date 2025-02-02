@@ -3,8 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Offer;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use Symfony\Component\Validator\Constraints\Count;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -29,6 +31,17 @@ class OfferCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Offres Spéciales')
             ->setDateFormat('dd/MM/yyyy')
         ;
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Offer) {
+            if ($entityInstance->getActivity()->count() > 3) {
+                throw new \Exception("Vous ne pouvez associer que trois activités maximum.");
+            }
+        }
+
+        parent::persistEntity($entityManager, $entityInstance);
     }
 
     public function configureFields(string $pageName): iterable
@@ -77,13 +90,36 @@ class OfferCrudController extends AbstractCrudController
                 ->setHelp("TVA de l'offre spéciale")
                 ->setColumns(6)
             ,
+            FormField::addPanel('Associations'),
+            AssociationField::new('eventstrend', 'Évènements Tendances associées')
+                ->setColumns(6)
+            ,
+            // On utilise un champ personnalisé pour sélectionner 3 activités
+            AssociationField::new('activity', 'Activité associée')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'multiple' => true,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('a')
+                            ->orderBy('a.name', 'ASC');
+                    },
+                ])
+                ->setHelp('Sélectionnez jusqu\'à 3 activités.')
+                ->setFormTypeOption('choice_label', 'name')
+                ->setFormTypeOption('attr', ['data-limit' => 3])
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('constraints', [
+                    new Count(
+                        max: 3,
+                        maxMessage: "Vous ne pouvez sélectionner que trois activités maximum."
+                    )
+                ])
+                ->setColumns(6)
+            ,
             FormField::addPanel('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
-                ->setHelp("Description de l'offre spéciale")
-            ,
-            FormField::addPanel('Associations'),
-            AssociationField::new('eventstrend', 'Évènements Tendances associées')
+                ->setHelp("Description de l'offre spéciale")  
         ];
     }
 }

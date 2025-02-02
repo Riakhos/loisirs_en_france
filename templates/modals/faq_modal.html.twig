@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="faqModalLabel">Questions Fréquentes</h2>
+                <h2 class="modal-title" id="faqModalLabel" aria-live="polite">Questions Fréquentes</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body">
@@ -25,7 +25,8 @@
                                         data-bs-toggle="collapse" 
                                         data-bs-target="#collapse{{ loop.index }}" 
                                         aria-expanded="{{ loop.first }}" 
-                                        aria-controls="collapse{{ loop.index }}">
+                                        aria-controls="collapse{{ loop.index }}"
+                                        aria-label="Cliquez pour afficher la réponse à la question : {{ faq.question }}">
                                     {{ faq.question }}
                                 </button>
                             </h2>

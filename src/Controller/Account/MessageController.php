@@ -12,7 +12,7 @@ class MessageController extends AbstractController
     public function message(): Response
     {
         return $this->render('account/message.html.twig', [
-            'controller_name' => 'MessageController',
+            'controller_name' => 'Vos Messages',
         ]);
     }    
 }

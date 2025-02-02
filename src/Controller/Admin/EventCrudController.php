@@ -115,13 +115,13 @@ class EventCrudController extends AbstractCrudController
                 ->setHelp("Date de la fin de l\'évènement spécial")
                 ->setColumns(6)
             ,
+            FormField::addPanel('Associations'),
+            AssociationField::new('eventstrend', 'Évènements Tendances associées')
+            ,
             FormField::addPanel('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp("Description de l\'évènement spécial")
-            ,
-            FormField::addPanel('Associations'),
-            AssociationField::new('eventstrend', 'Évènements Tendances associées')
         ];
     }
 }

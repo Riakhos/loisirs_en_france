@@ -2,6 +2,7 @@
 
 namespace App\Classe;
 
+// use App\Entity\Offer;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Cart
@@ -195,4 +196,39 @@ class Cart
         
         return $quantity;
     }
+
+	/**
+	 * addOffer
+	 	* *Fonction permettant l'ajout d'une offre spéciale au panier
+	 *
+	 * @param [type] $offer
+		 * *L'objet représentant l'offre spéciale à ajouter.
+	 * @return void
+	 */
+	public function addOffer($offer)
+	{
+		// Récupération de la session
+		$session = $this->requestStack->getSession();
+		
+		// Récupération du panier actuel ou initialisation
+        $cart = $session->get('cart', []);
+		
+		// ID unique de l'offre spéciale
+		$offerId = $offer->getId();
+
+		// Vérification si l'offre spéciale est déjà dans le panier
+        if (isset($cart[$offerId])) {
+            //* Incrémentation de la quantité
+            $cart[$offerId]['qty']++;
+        } else {
+            //* Ajout d'une nouvelle offre spéciale avec une quantité initiale de 1
+            $cart[$offerId] = [
+                'object' => $offer,
+                'qty' => 1
+            ];
+        }
+		
+		// Mise à jour du panier dans la session
+        $session->set('cart', $cart);
+	}
 }

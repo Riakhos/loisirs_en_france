@@ -29,9 +29,6 @@ class Exclusive
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateStop = null;
 
-    #[ORM\ManyToOne(inversedBy: 'exclusives')]
-    private ?Activity $activity = null;
-
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
@@ -105,18 +102,6 @@ class Exclusive
     public function setDateStop(\DateTimeInterface $dateStop): static
     {
         $this->dateStop = $dateStop;
-
-        return $this;
-    }
-
-    public function getActivity(): ?Activity
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(?Activity $activity): static
-    {
-        $this->activity = $activity;
 
         return $this;
     }

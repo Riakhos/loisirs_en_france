@@ -68,11 +68,6 @@ class TrendCrudController extends AbstractCrudController
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
-            FormField::addPanel('Description'),
-            TextEditorField::new('description')
-                ->setLabel('Description')
-                ->setHelp("Description de l\'évènement spécial")
-            ,
             FormField::addPanel('Associations'),
             AssociationField::new('eventstrend', 'Évènements Tendances associées')
                 ->setColumns(6)
@@ -80,7 +75,14 @@ class TrendCrudController extends AbstractCrudController
             AssociationField::new('activity', 'Activités')
                 ->setColumns(6)
             ,
+            FormField::addPanel('Description'),
+            TextEditorField::new('description')
+                ->setLabel('Description')
+                ->setHelp("Description de l\'évènement spécial")
+                ->setColumns(6)
+            ,
             $dateField
+                ->setColumns(6)
         ];
     }
 }

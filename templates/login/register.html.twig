@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue parmi nous!{% endblock %}
+{% block title %}{{ controller_name }}{% endblock %}
 
 {% block body %}
-    {# <script src="https://accounts.google.com/gsi/client" async defer></script> #}
     <div class="toast-inscription d-flex justify-content-center align-items-center">
         <div class="toast fade show w-auto mx-auto" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body">
@@ -17,9 +16,19 @@
                 </ul>
                 <div class="mt-2 pt-2 border-top">
                     {{ form(registerForm, { 'attr': { 'data-turbo': 'false' } }) }}
+                    {# Affichage des erreurs si le formulaire n'est pas valide #}
+                    {% if registerForm is not empty and registerForm.vars.errors|length > 0 %}
+                        <div class="alert alert-danger mt-2">
+                            <ul>
+                                {% for error in registerForm.vars.errors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                 </div>
 
-                {# Bouton Se connecter avec Google #}
+                {# Optionnel: Connexion via Google (désactivée pour l'instant) #}
                 {# <div class="mt-3 text-center">
                     <button id="google-sign-in-btn" class="btn btn-outline-primary">
                         <i class="fab fa-google"></i> Se connecter avec Google
@@ -29,7 +38,7 @@
         </div>
     </div>
 
-    {# Inclusion du script Google Sign-In #}
+    {# Si vous prévoyez d'ajouter la connexion Google plus tard, voici le code pour l'initialiser #}
     {# <script>
         window.onload = function () {
             google.accounts.id.initialize({
@@ -38,7 +47,6 @@
             });
             google.accounts.id.renderButton(
                 document.getElementById("google-sign-in-btn"),
-                // Configuration du bouton
                 { 
                     theme: "outline",
                     size: "large",

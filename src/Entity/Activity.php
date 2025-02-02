@@ -42,12 +42,32 @@ class Activity
 
     #[ORM\Column]
     private ?float $tva = null;
-
-    #[ORM\ManyToOne(inversedBy: 'activity')]
+    
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "activities")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'activity')]
+    #[ORM\ManyToOne(targetEntity: Subcategory::class, inversedBy: 'activities')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Subcategory $subcategory = null;
+
+    /**
+     * @var Collection
+     */
+    #[ORM\OneToMany(targetEntity: Trend::class, mappedBy: "activity")]
+    private Collection $trends;
+
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'activity')]
+    private Collection $offers;
+
+    public function __construct()
+    {
+        $this->offers = new ArrayCollection();
+        $this->trends = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -194,6 +214,33 @@ class Activity
     public function setSubcategory(?Subcategory $subcategory): static
     {
         $this->subcategory = $subcategory;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Offer>
+     */
+    public function getOffers(): Collection
+    {
+        return $this->offers;
+    }
+
+    public function addOffer(Offer $offer): static
+    {
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+            $offer->addActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): static
+    {
+        if ($this->offers->removeElement($offer)) {
+            $offer->removeActivity($this);
+        }
 
         return $this;
     }

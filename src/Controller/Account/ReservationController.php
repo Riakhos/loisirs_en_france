@@ -12,7 +12,7 @@ class ReservationController extends AbstractController
     public function reservation(): Response
     {
         return $this->render('account/reservation.html.twig', [
-            'controller_name' => 'ReservationController',
+            'controller_name' => 'Vos Réservations ',
         ]);
     }
 }

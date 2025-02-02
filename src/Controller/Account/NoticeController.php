@@ -12,7 +12,7 @@ class NoticeController extends AbstractController
     public function notice(): Response
     {
         return $this->render('account/notice.html.twig', [
-            'controller_name' => 'NoticeController',
+            'controller_name' => 'Vos Avis',
         ]);
     }
 }

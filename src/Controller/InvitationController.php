@@ -13,7 +13,7 @@ class InvitationController extends AbstractController
     public function index(): Response
     {
         return $this->render('invitation/invitation.html.twig', [
-            'controller_name' => 'InvitationController',
+            'controller_name' => 'Carte Invitation',
         ]);
     }
     

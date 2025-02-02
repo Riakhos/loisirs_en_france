@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion Loisirs en France!{% endblock %}
+{% block title %}{{ controller_name }}{% endblock %}
 
 {% block body %}
-    {# <script src="https://accounts.google.com/gsi/client" async defer></script> #}
     <div class="toast-inscription d-flex justify-content-center align-items-center">
         <div class="toast fade show w-auto mx-auto" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body">
@@ -28,14 +27,14 @@
                         {% endif %}
 
                         <h1 class="h3 mb-3 font-weight-normal">Connectez-vous</h1>
-                        <label class="mb-3" for="username">Votre adresse mail</label>
-                        <input type="email" placeholder="Veuillez entrer votre adresse mail" value="{{ last_username }}" name="_username" id="username" class="form-control mb-3" autocomplete="email" required autofocus>
-                        <label class="mb-3" for="password">Votre mot de passe</label>
-                        <input type="password" placeholder="Veuillez entrer votre mot de passe" name="_password" id="password" class="form-control" autocomplete="current-password" required>
 
-                        <input type="hidden" name="_csrf_token"
-                            value="{{ csrf_token('authenticate') }}"
-                        >
+                        <label class="mb-3" for="username">Votre adresse mail</label>
+                        <input type="email" placeholder="Veuillez entrer votre adresse mail" value="{{ last_username }}" name="_username" id="username" class="form-control mb-3" autocomplete="email" required aria-describedby="emailHelp" aria-label="Adresse e-mail">
+
+                        <label class="mb-3" for="password">Votre mot de passe</label>
+                        <input type="password" placeholder="Veuillez entrer votre mot de passe" name="_password" id="password" class="form-control" autocomplete="current-password" required aria-describedby="passwordHelp" aria-label="Mot de passe">
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                         {#
                             Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -43,7 +42,7 @@
                         #}
 
                         <div class="form-check mb-3">
-                            <input class="form-check-input"  type="checkbox" name="_remember_me" id="_remember_me">
+                            <input class="form-check-input" type="checkbox" name="_remember_me" id="_remember_me">
                             <label class="form-check-label mb-3" for="_remember_me">Se souvenir de moi</label>
                         </div>
 
@@ -55,7 +54,7 @@
                     </form>
                 </div>
 
-                {# Bouton Se connecter avec Google #}
+                {# Optionnel: Connexion via Google (désactivée pour l'instant) #}
                 {# <div class="mt-3 text-center">
                     <button id="google-sign-in-btn" class="btn btn-outline-primary">
                         <i class="fab fa-google"></i> Se connecter avec Google
@@ -65,7 +64,7 @@
         </div>
     </div>
 
-    {# Inclusion du script Google Sign-In #}
+    {# Inclusion du script Google Sign-In (si vous réactivez cette fonctionnalité) #}
     {# <script>
         window.onload = function () {
             google.accounts.id.initialize({
@@ -74,7 +73,6 @@
             });
             google.accounts.id.renderButton(
                 document.getElementById("google-sign-in-btn"),
-                // Configuration du bouton
                 { 
                     theme: "outline",
                     size: "large",

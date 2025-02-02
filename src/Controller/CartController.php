@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Classe\Cart;
+use App\Repository\OfferRepository;
 use App\Repository\ActivityRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * CartController
@@ -39,7 +40,7 @@ class CartController extends AbstractController
         
         // Rendu de la vue Twig avec les données du panier
         return $this->render('cart/cart.html.twig', [
-            'controller_name' => 'CartController',
+            'controller_name' => 'Mon panier',
             'cart' => $cart->getCart(),
             'subtotal' => $subtotal,
             'tva' => $tva,
@@ -81,6 +82,28 @@ class CartController extends AbstractController
         // Redirection vers la page précédente
         return $this->redirect($request->headers->get('referer'));
     }
+    
+    /**
+     * 
+     */
+    #[Route('/cart/add-offer/{id}', name: 'app_cart_add_offer')]
+    public function addOffer(int $id, Cart $cart, OfferRepository $offerRepository, Request $request): Response
+    {
+        // Recherche de l'offre spéciale par son ID
+        $offer = $offerRepository->findOneById($id);
+
+        // Ajout de l'offre spéciale au panier
+        $cart->addOffer($offer);
+
+        // Message flash pour indiquer le succès de l'ajout
+        $this->addFlash(
+            'success',
+            'L\'offre spéciale a été correctement ajoutée à votre panier.'
+        );
+        
+        // Redirection vers la page précédente
+        return $this->redirect($request->headers->get('referer'));
+    }
 
     /**
      * app_cart_decrease
@@ -103,6 +126,25 @@ class CartController extends AbstractController
         $this->addFlash(
             'success',
             'Activité correctement supprimée de votre panier.'
+        );
+        
+        // Redirection vers la page du panier
+        return $this->redirectToRoute('app_cart');
+    }
+    
+    /**
+     * 
+     */
+    #[Route('/cart/decrease_offer/{id}', name: 'app_cart_decrease_offer')]
+    public function decreaseOffer($id, Cart $cart): Response
+    {
+        // Réduction de la quantité de l'article dans le panier
+        $cart->decrease($id);
+
+        // Message flash pour indiquer le succès de l'opération
+        $this->addFlash(
+            'success',
+            'Offre spéciale correctement supprimée de votre panier.'
         );
         
         // Redirection vers la page du panier

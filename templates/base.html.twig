@@ -7,7 +7,7 @@
 
         <title>{% block title %}Bienvenue!{% endblock %}</title>
 
-        <link rel="stylesheet" href="/assets/styles/app-520D7dk.css">
+        <link rel="stylesheet" href="/css/style.css">
         
         <link rel="icon" href="{{ asset('static/favicon.ico') }}" type="image/x-icon"> 
 
@@ -140,8 +140,11 @@
                     {% endfor %}
                 {% endfor %}
             </div>
+
         {# Body Content #}
-        {% block body %}{% endblock %}
+        <div class="container mt-5">
+            {% block body %}{% endblock %}
+        </div>
 
         {# Footer #}
         <footer>

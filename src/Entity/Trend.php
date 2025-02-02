@@ -23,7 +23,8 @@ class Trend
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
     
-    #[ORM\ManyToOne(inversedBy: 'trends')]
+    #[ORM\ManyToOne(targetEntity: Activity::class, inversedBy: "trends")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Activity $activity = null;
 
     #[ORM\Column(length: 255)]

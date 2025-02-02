@@ -22,7 +22,7 @@ class SubcategoryController extends AbstractController
         }
         
         return $this->render('category/subcategory.html.twig', [
-            'controller_name' => 'SubcategoryController',
+            'controller_name' => 'Sous-Catégorie',
             'subcategory' => $subcategory,
         ]);
     }

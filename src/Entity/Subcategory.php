@@ -29,7 +29,7 @@ class Subcategory
      * @var Collection<int, Activity>
      */
     #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'subcategory')]
-    private Collection $activity;
+    private Collection $activities;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -39,7 +39,7 @@ class Subcategory
 
     public function __construct()
     {
-        $this->activity = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function __toString()
@@ -115,15 +115,15 @@ class Subcategory
     /**
      * @return Collection<int, Activity>
      */
-    public function getActivity(): Collection
+    public function getActivities(): Collection
     {
-        return $this->activity;
+        return $this->activities;
     }
 
     public function addActivity(Activity $activity): static
     {
-        if (!$this->activity->contains($activity)) {
-            $this->activity->add($activity);
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
             $activity->setSubcategory($this);
         }
 
@@ -132,7 +132,7 @@ class Subcategory
 
     public function removeActivity(Activity $activity): static
     {
-        if ($this->activity->removeElement($activity)) {
+        if ($this->activities->removeElement($activity)) {
             // set the owning side to null (unless already changed)
             if ($activity->getSubcategory() === $this) {
                 $activity->setSubcategory(null);

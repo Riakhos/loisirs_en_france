@@ -67,11 +67,6 @@ class ActivityCrudController extends AbstractCrudController
                 ->setHelp('URL de votre activité générée automatiquement')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Description'),
-            TextEditorField::new('description')
-                ->setLabel('Description')
-                ->setHelp('Description de la sous-categorie')
-            ,
             FormField::addPanel('Images de l\'activité'),
             ImageField::new('image')
                 ->setLabel('Image principale')
@@ -127,6 +122,11 @@ class ActivityCrudController extends AbstractCrudController
             FormField::addPanel('Associations'),
             AssociationField::new('category', 'Catégories associées')->setColumns(6),
             AssociationField::new('subcategory', 'Sous-Catégories associées')->setColumns(6)
+            ,
+            FormField::addPanel('Description'),
+            TextEditorField::new('description')
+                ->setLabel('Description')
+                ->setHelp('Description de la sous-categorie')
         ];
     }
 }

@@ -48,11 +48,6 @@ class SubcategoryCrudController extends AbstractCrudController
                 ->setHelp('URL de votre sous-catégorie générée automatiquement')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Description'),
-            TextEditorField::new('description')
-                ->setLabel('Description')
-                ->setHelp('Description de la sous-categorie')
-            ,
             FormField::addPanel('Image de la sous-catégorie'),
             ImageField::new('image')
                 ->setLabel('Image')
@@ -63,7 +58,12 @@ class SubcategoryCrudController extends AbstractCrudController
                 ->setRequired($required)
             ,
             FormField::addPanel('Associations'),
-            AssociationField::new('category', 'Catégories associées'),
+            AssociationField::new('category', 'Catégories associées')
+            ,
+            FormField::addPanel('Description'),
+            TextEditorField::new('description')
+                ->setLabel('Description')
+                ->setHelp('Description de la sous-categorie')
         ];
     }
 }

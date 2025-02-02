@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OfferRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 class Offer
@@ -34,6 +37,22 @@ class Offer
 
     #[ORM\ManyToOne(inversedBy: 'offer')]
     private ?Eventstrend $eventstrend = null;
+
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[Assert\Count(
+        min: 0,
+        max: 3,
+        maxMessage: "Vous ne pouvez associer que trois activités maximum."
+    )]
+    #[ORM\ManyToMany(targetEntity: Activity::class, inversedBy: 'offers')]
+    private Collection $activity;
+
+    public function __construct()
+    {
+        $this->activity = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +106,13 @@ class Offer
 
         return $this;
     }
+    
+    public function getPriceWt()
+    {
+        $coeff = 1 + ($this->tva/100);
+        
+        return $coeff * $this->price;
+    }
 
     public function getTva(): ?float
     {
@@ -120,6 +146,34 @@ class Offer
     public function setEventstrend(?Eventstrend $eventstrend): static
     {
         $this->eventstrend = $eventstrend;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivity(): Collection
+    {
+        return $this->activity;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if ($this->activity->count() >= 3) {
+            throw new \Exception("Une offre ne peut avoir que 3 activités.");
+        }
+
+        if (!$this->activity->contains($activity)) {
+            $this->activity->add($activity);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): static
+    {
+        $this->activity->removeElement($activity);
 
         return $this;
     }

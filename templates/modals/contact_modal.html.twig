@@ -3,28 +3,28 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between align-items-center">
-                <h2 class="modal-title" id="contactModalLabel">Nous contacter</h2>
+                <h2 class="modal-title" id="contactModalLabel" aria-live="polite">Nous contacter</h2>
                 <div class="d-flex align-items-center">
                     <a href="mailto:loisirsenfrance@gmail.com" aria-label="Nous contacter par email">
-                    <i class="bi bi-envelope fs-3" alt="Icône enveloppe"></i></a>
-                    <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <i class="bi bi-envelope fs-3" alt="Icône enveloppe"></i>
+                    </a>
+                    <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
             </div>
             <div class="modal-body">
                 <p class="text-center">
-                    Vous pouvez nous joindre de plusieurs façons pour répondre à vos besoins et vos questions. Remplissez simplement le formulaire de contact à droite en veillant à fournir vos coordonnées pour que nous puissions vous répondre rapidement. Vous pouvez également nous appeler directement pendant nos horaires d'ouverture, ou nous envoyer un email à tout moment. N'hésitez pas à venir nous rendre visite à notre adresse pour une assistance personnalisée. Nous sommes là pour vous aider !
+                    Vous pouvez nous joindre de plusieurs façons pour répondre à vos besoins et vos questions. Remplissez simplement le formulaire de contact ci-dessous en veillant à fournir vos coordonnées pour que nous puissions vous répondre rapidement. Vous pouvez également nous appeler directement pendant nos horaires d'ouverture ou nous envoyer un email à tout moment.
                 </p>
             </div>
             <div class="modal-body">
-                <form>
                 {# <form method="POST" action="{{ path('contact_form_submit') }}"> #}
                     <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
                         <label for="name" class="form-label color-secondary-custom">Nom <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Veuillez entrer votre nom" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Veuillez entrer votre nom" required aria-describedby="nameHelp">
                     </div>
                     <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
                         <label for="email" class="form-label color-secondary-custom">Adresse Mail <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Veuillez entrer votre adresse mail" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Veuillez entrer votre adresse mail" required aria-describedby="emailHelp">
                     </div>
                     <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
                         <label for="subject" class="form-label color-secondary-custom">Sujet du message</label>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
                         <label for="message" class="form-label color-secondary-custom">Message <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Veuillez entrer votre message" maxlength="100" required></textarea>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Veuillez entrer votre message" maxlength="1000" required aria-describedby="messageHelp"></textarea>
                     </div>
                     <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
                         <label for="captcha" class="form-check-label color-secondary-custom">
@@ -46,15 +46,17 @@
                 </form>
             </div>
             <div class="container modal-footer py-4">
-            <div class="row gy-3">
-                <h2 class="row">Coordonnées de contact</h2>
+                <div class="row gy-3">
+                    <h2 class="row">Coordonnées de contact</h2>
                     <div class="col-12 col-md-6 d-flex align-items-center">
                         <i class="bi bi-geo-alt-fill me-2 color-secondary-custom"></i>
                         <p class="mb-0 color-secondary-custom"><strong>Adresse :</strong> 138 avenue Jean Jaurès, 95100 Argenteuil</p>
                     </div>
                     <div class="col-12 col-md-6 d-flex align-items-center">
                         <i class="bi bi-telephone-fill me-2 color-secondary-custom"></i>
-                        <p class="mb-0 color-secondary-custom"><strong>Téléphone :</strong> +33 x xx xx xx xx</p>
+                        <p class="mb-0 color-secondary-custom"><strong>Téléphone :</strong> 
+                            <a href="tel:+33x xx xx xx xx" class="color-secondary-custom">+33 x xx xx xx xx</a>
+                        </p>
                     </div>
                     <div class="col-12 col-md-6 d-flex align-items-center">
                         <i class="bi bi-envelope-fill me-2 color-secondary-custom"></i>

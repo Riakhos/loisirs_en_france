@@ -3,32 +3,36 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="aboutModalLabel">À propos de Loisirs en France</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h2 class="modal-title" id="aboutModalLabel" aria-live="polite">À propos de Loisirs en France</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div class="modal-body">
-                <h3 class="text-center py-3 color-primary-custom">À Propos de Nous</h3>
-                <p>Bienvenue sur Loisirs en France, votre plateforme dédiée à la découverte et à la réservation des meilleures sorties et activités partout en France. Que vous soyez une famille à la recherche d'une journée mémorable, un couple en quête d'une escapade romantique, ou un voyageur solo explorant les trésors de l'Hexagone, nous avons ce qu'il vous faut !</p>                    
-                <h3 class="text-center py-3 color-primary-custom">Notre Mission</h3>
-                <p>Nous avons pour objectif de rendre vos moments de loisirs inoubliables. En proposant une vaste sélection d'activités gratuites et payantes, adaptées à tous les profils et toutes les envies, nous facilitons l'accès à une multitude d’expériences culturelles, sportives et récréatives.</p>                    
-                <h3 class="text-center py-3 color-primary-custom">Ce Que Nous Offrons</h3>
-                <h5 class="color-primary-custom py-1">Une Expérience Utilisateur Optimisée :</h5>
-                <p>Notre site, conçu avec une approche mobile-first, garantit une navigation fluide et intuitive, où que vous soyez.</p>
-                <h5 class="color-primary-custom py-1">Un Catalogue Diversifié :</h5>
-                <p>Explorez des centaines d'activités classées par région, type d’expérience et public cible.</p>
-                <h5 class="color-primary-custom py-1">Réservation Simple et Sécurisée :</h5>
-                <p>Grâce à des technologies fiables, nous vous assurons une réservation rapide et des paiements sécurisés.</p>
-                <h5 class="color-primary-custom py-1">Contenu Inspirant :</h5>
-                <p>Découvrez des articles, des recommandations et des astuces pour enrichir vos moments de détente.</p>
-                <h3 class="text-center py-3 color-primary-custom">Pourquoi Choisir Loisirs en France ?</h3>
-                <p>Notre ambition est de devenir la référence pour ceux qui souhaitent explorer les richesses de la France tout en simplifiant leur organisation. Avec une équipe dévouée et des technologies modernes, nous sommes là pour vous accompagner à chaque étape de votre expérience.</p>
-                {# <form action="{{ path('update_about') }}" method="POST">
-                    <div class="mb-3">
-                        <label for="aboutText" class="form-label">Texte À Propos</label>
-                        <textarea class="form-control" id="aboutText" name="aboutText" rows="10">{{ about_text }}</textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </form> #}
+                <h3 class="text-center py-3 color-primary-custom" id="aboutHeading">À Propos de Nous</h3>
+                <p id="aboutText">Bienvenue sur Loisirs en France, votre plateforme dédiée à la découverte et à la réservation des meilleures sorties et activités partout en France. Que vous soyez une famille à la recherche d'une journée mémorable, un couple en quête d'une escapade romantique, ou un voyageur solo explorant les trésors de l'Hexagone, nous avons ce qu'il vous faut !</p>
+
+                <h3 class="text-center py-3 color-primary-custom" id="missionHeading">Notre Mission</h3>
+                <p id="missionText">Nous avons pour objectif de rendre vos moments de loisirs inoubliables. En proposant une vaste sélection d'activités gratuites et payantes, adaptées à tous les profils et toutes les envies, nous facilitons l'accès à une multitude d’expériences culturelles, sportives et récréatives.</p>
+
+                <h3 class="text-center py-3 color-primary-custom" id="offerHeading">Ce Que Nous Offrons</h3>
+                
+                <h5 class="color-primary-custom py-1" id="experienceHeading">Une Expérience Utilisateur Optimisée :</h5>
+                <p id="experienceText">Notre site, conçu avec une approche mobile-first, garantit une navigation fluide et intuitive, où que vous soyez.</p>
+
+                <h5 class="color-primary-custom py-1" id="catalogueHeading">Un Catalogue Diversifié :</h5>
+                <p id="catalogueText">Explorez des centaines d'activités classées par région, type d’expérience et public cible.</p>
+
+                <h5 class="color-primary-custom py-1" id="reservationHeading">Réservation Simple et Sécurisée :</h5>
+                <p id="reservationText">Grâce à des technologies fiables, nous vous assurons une réservation rapide et des paiements sécurisés.</p>
+
+                <h5 class="color-primary-custom py-1" id="contentHeading">Contenu Inspirant :</h5>
+                <p id="contentText">Découvrez des articles, des recommandations et des astuces pour enrichir vos moments de détente.</p>
+
+                <h3 class="text-center py-3 color-primary-custom" id="whyChooseHeading">Pourquoi Choisir Loisirs en France ?</h3>
+                <p id="whyChooseText">Notre ambition est de devenir la référence pour ceux qui souhaitent explorer les richesses de la France tout en simplifiant leur organisation. Avec une équipe dévouée et des technologies modernes, nous sommes là pour vous accompagner à chaque étape de votre expérience.</p>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ path('app_category', { slug: 'aventure' } ) }}" class="btn btn-primary">Découvrez nos activités</a>
+                </div>
             </div>
         </div>
     </div>

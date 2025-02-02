@@ -1,53 +1,56 @@
-{# Barre de navigation #}
 <div class="container">
-	{# Navigation Horizontale (visible seulement en desktop et large écrans) #}
-	<ul class="nav nav-tabs bg-primaryBlue shadow-sm p-3 rounded d-none d-sm-flex">
-		<li class="nav-item">
-			<a class="nav-link" href="{{ path('app_account') }}">Tableau de bord</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{{ path('app_account_reservation') }}">Réservations</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{{ path('app_account_profil') }}">Mon profil</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{{ path('app_account_message') }}">Messages</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{{ path('app_account_notice') }}">Avis</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link active" href="#" id="toggleSidebar">Mon panier</a>
-		</li>
-	</ul>
-	{# Lien "Mon panier" qui va ouvrir/fermer le menu vertical en petit écran #}
-	<ul class="nav nav-tabs bg-primaryBlue shadow-sm p-3 rounded d-block d-sm-none">
-		<li class="nav-item dropdown">
-			{# Dropdown Toggle #}
-			<a class="nav-link active dropdown-toggle fs-2" href="#"  role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu navigation">Mon panier</a>
-			{# Dropdown Menu #}
-			<ul class="nav flex-column dropdown-menu" aria-labelledby="navigationDropdown">
-				{# Dropdown Menu Item #}
-				<li class="nav-item">
-					<a class="nav-link dropdown-item" href="{{ path('app_account') }}">Tableau de bord</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link dropdown-item" href="{{ path('app_account_reservation') }}">Réservations</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link dropdown-item" href="{{ path('app_account_profil') }}">Mon profil</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link dropdown-item" href="{{ path('app_account_message') }}">Messages</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link dropdown-item" href="{{ path('app_account_notice') }}">Avis</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link active dropdown-item" href="{{ path('app_cart') }}">Mon panier</a>
-				</li>
-			</ul>
-		</li>
-	</ul>
+    {# Barre de navigation principale #}
+    <nav role="navigation" aria-label="Navigation principale" class="bg-primaryBlue shadow-sm p-3 rounded">
+        <ul class="nav nav-tabs d-none d-sm-flex">
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account' %}active{% endif %}" href="{{ path('app_account') }}" aria-label="Accéder au tableau de bord">Tableau de bord</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_reservation' %}active{% endif %}" href="{{ path('app_account_reservation') }}" aria-label="Voir mes réservations">Réservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_profil' %}active{% endif %}" href="{{ path('app_account_profil') }}" aria-label="Accéder à mon profil">Mon profil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_message' %}active{% endif %}" href="{{ path('app_account_message') }}" aria-label="Voir mes messages">Messages</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_notice' %}active{% endif %}" href="{{ path('app_account_notice') }}" aria-label="Voir les avis">Avis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if app.request.attributes.get('_route') == 'app_cart' %}active{% endif %}" href="{{ path('app_cart') }}" aria-label="Accéder à mon panier">Mon panier</a>
+            </li>
+        </ul>
+
+        {# Barre de navigation pour les petits écrans #}
+        <ul class="nav nav-tabs d-block d-sm-none">
+            <li class="nav-item dropdown">
+                {# Dropdown Toggle pour les petits écrans #}
+                <a class="nav-link dropdown-toggle fs-2 {% if app.request.attributes.get('_route') == 'app_cart' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu de navigation mobile" aria-controls="mobile-dropdown-menu">
+                    Tableau de bord
+                </a>
+                {# Dropdown Menu pour les petits écrans #}
+                <ul class="nav flex-column dropdown-menu" id="mobile-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account' %}active{% endif %}" href="{{ path('app_account') }}" aria-label="Accéder au tableau de bord">Tableau de bord</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_reservation' %}active{% endif %}" href="{{ path('app_account_reservation') }}" aria-label="Voir mes réservations">Réservations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_profil' %}active{% endif %}" href="{{ path('app_account_profil') }}" aria-label="Accéder à mon profil">Mon profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_message' %}active{% endif %}" href="{{ path('app_account_message') }}" aria-label="Voir mes messages">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_account_notice' %}active{% endif %}" href="{{ path('app_account_notice') }}" aria-label="Voir les avis">Avis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'app_cart' %}active{% endif %}" href="{{ path('app_cart') }}" aria-label="Accéder à mon panier">Mon panier</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
 </div>
