@@ -53,7 +53,7 @@ class OfferCrudController extends AbstractCrudController
         }
 
         return [
-            FormField::addPanel('Informations principales'),
+            FormField::addFieldset('Informations principales'),
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setHelp("Nom de l'offre spéciale")
@@ -65,19 +65,19 @@ class OfferCrudController extends AbstractCrudController
                 ->setHelp('URL de votre offre spéciale générée automatiquement')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Image de l\'offre spéciale'),
+            FormField::addFieldset('Image de l\'offre spéciale'),
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp("Image de votre offre spéciale en 600*600px")
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
-            FormField::addPanel('Tarification'),
+            FormField::addFieldset('Tarification'),
             NumberField::new('price')
-                ->setLabel('Prix H.T')
-                ->setHelp("Prix H.T de l'offre spéciale sans le sigle Euro")
+                ->setLabel('Prix T.T.C')
+                ->setHelp("Prix T.T.C de l'offre spéciale sans le sigle Euro")
                 ->setColumns(6)
             ,
             ChoiceField::new('tva')
@@ -90,7 +90,7 @@ class OfferCrudController extends AbstractCrudController
                 ->setHelp("TVA de l'offre spéciale")
                 ->setColumns(6)
             ,
-            FormField::addPanel('Associations'),
+            FormField::addFieldset('Associations'),
             AssociationField::new('eventstrend', 'Évènements Tendances associées')
                 ->setColumns(6)
             ,
@@ -116,7 +116,7 @@ class OfferCrudController extends AbstractCrudController
                 ])
                 ->setColumns(6)
             ,
-            FormField::addPanel('Description'),
+            FormField::addFieldset('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp("Description de l'offre spéciale")  

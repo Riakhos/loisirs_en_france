@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ExclusiveRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,10 +38,18 @@ class Exclusive
     private ?Eventstrend $eventstrend = null;
 
     #[ORM\Column]
-    private ?float $price = null;
+    private ?float $discountPercentage = null;
 
-    #[ORM\Column]
-    private ?float $tva = null;
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'exclusive')]
+    private Collection $activities;
+
+    public function __construct()
+    {
+        $this->activities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,27 +139,57 @@ class Exclusive
 
         return $this;
     }
-
-    public function getPrice(): ?float
+    
+    public function getDiscountPercentage(): ?float
     {
-        return $this->price;
+        return $this->discountPercentage;
     }
 
-    public function setPrice(float $price): static
+    public function setDiscountPercentage(float $discountPercentage): static
     {
-        $this->price = $price;
+        $this->discountPercentage = $discountPercentage;
+
+        return $this;
+    }
+    
+    /**
+     * Retourne le prix final TTC après réduction
+     */
+    public function getFinalPrice(): float
+    {
+        if (!$this->activities || !$this->activities->first()->getPrice()) {
+            return 0;
+        }
+
+        return $this->activities->first()->getPrice() * (1 - $this->discountPercentage / 100);
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setExclusive($this);
+        }
 
         return $this;
     }
 
-    public function getTva(): ?float
+    public function removeActivity(Activity $activity): static
     {
-        return $this->tva;
-    }
-
-    public function setTva(float $tva): static
-    {
-        $this->tva = $tva;
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getExclusive() === $this) {
+                $activity->setExclusive(null);
+            }
+        }
 
         return $this;
     }

@@ -20,28 +20,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class CartController extends AbstractController
 {
+    private $cart;
+    private $activityRepository;
+    private $offerRepository;
+
+    public function __construct(Cart $cart, ActivityRepository $activityRepository, OfferRepository $offerRepository)
+    {
+        $this->cart = $cart;
+        $this->activityRepository = $activityRepository;
+        $this->offerRepository = $offerRepository;
+    }
     /**
      * app-cart
          * *Affiche le contenu du panier
      *
-     * @param Cart $cart 
-         * *Service de gestion du panier
      * @return Response 
          * *Retourne une réponse HTTP contenant la vue du panier
      */
     #[Route('/mon-panier', name: 'app_cart')]
-    public function cart(Cart $cart): Response
+    public function cart(): Response
     {
         // Calcul des sous-totaux, TVA et total
-        $subtotal = $cart->getSubtotal();
-        $tva = $cart->getTva();
-        $tvaDetails = $cart->getTvaDetails();
-        $total = $cart->getTotal();
+        $subtotal = $this->cart->getSubtotal();
+        $tva = $this->cart->getTva();
+        $tvaDetails = $this->cart->getTvaDetails();
+        $total = $this->cart->getTotal();
         
         // Rendu de la vue Twig avec les données du panier
         return $this->render('cart/cart.html.twig', [
             'controller_name' => 'Mon panier',
-            'cart' => $cart->getCart(),
+            'cart' => $this->cart->getCart(),
             'subtotal' => $subtotal,
             'tva' => $tva,
             'tvaDetails' => $tvaDetails,
@@ -50,102 +58,99 @@ class CartController extends AbstractController
     }
 
     /**
-     * app_cart_add
+     * app_cart_addW
          * *Ajoute une activité au panier.
      *
      * @param int $id 
          * *L'identifiant de l'activité à ajouter.
-     * @param Cart $cart
-         * *Service de gestion du panier.
-     * @param ActivityRepository $activityRepository
-         * *Repository pour accéder aux activités.
      * @param Request $request
          * *La requête HTTP.
      * @return Response
          * *Redirige vers la page précédente après ajout.
      */
-    #[Route('/cart/add/{id}', name: 'app_cart_add')]
-    public function add(int $id, Cart $cart, ActivityRepository $activityRepository, Request $request): Response
+    #[Route('/cart/add/{type}/{id}', name: 'app_cart_add')]
+    public function add(string $type, int $id, Request $request): Response
     {
-        // Recherche de l'activité par son ID
-        $activity = $activityRepository->findOneById($id);
+        // Vérification du type (offer ou activity) et récupération de l'objet correspondant
+        if ($type === 'offer') {
+            // Recherche de l'offre par son ID
+            $offer = $this->offerRepository->findOneById($id);
 
-        // Ajout de l'activité au panier
-        $cart->add($activity);
+            if ($offer) {
+                // Ajout de l'offre exclusive au panier
+                $this->cart->addOffer($offer);
 
-        // Message flash pour indiquer le succès de l'ajout
-        $this->addFlash(
-            'success',
-            'L\'activité a été correctement ajoutée à votre panier.'
-        );
+                // Message flash pour indiquer le succès de l'ajout
+                $this->addFlash(
+                    'success',
+                    "L'offre exclusive a été correctement ajoutée à votre panier."
+                );
+            } else {
+                // Message flash si l'offre n'est pas trouvée
+                $this->addFlash(
+                    'error',
+                    "L'offre avec l'ID $id n'existe pas."
+                );
+            }
+        } elseif ($type === 'activity') {
+            // Recherche de l'activité par son ID
+            $activity = $this->activityRepository->findOneById($id);
+
+            if ($activity) {
+                // Ajout de l'activité au panier
+                $this->cart->addActivity($activity);
+
+                // Message flash pour indiquer le succès de l'ajout
+                $this->addFlash(
+                    'success',
+                    "L'activité a été correctement ajoutée à votre panier."
+                );
+            } else {
+                // Message flash si l'activité n'est pas trouvée
+                $this->addFlash(
+                    'error',
+                    "L'activité avec l'ID $id n'existe pas."
+                );
+            }
+        } else {
+            // Message flash si le type est invalide
+            $this->addFlash(
+                'error',
+                "Type d'élément invalide spécifié."
+            );
+        }
         
         // Redirection vers la page précédente
         return $this->redirect($request->headers->get('referer'));
     }
     
-    /**
-     * 
-     */
-    #[Route('/cart/add-offer/{id}', name: 'app_cart_add_offer')]
-    public function addOffer(int $id, Cart $cart, OfferRepository $offerRepository, Request $request): Response
-    {
-        // Recherche de l'offre spéciale par son ID
-        $offer = $offerRepository->findOneById($id);
-
-        // Ajout de l'offre spéciale au panier
-        $cart->addOffer($offer);
-
-        // Message flash pour indiquer le succès de l'ajout
-        $this->addFlash(
-            'success',
-            'L\'offre spéciale a été correctement ajoutée à votre panier.'
-        );
-        
-        // Redirection vers la page précédente
-        return $this->redirect($request->headers->get('referer'));
-    }
-
     /**
      * app_cart_decrease
          * *Diminue la quantité d'une activité dans le panier.
      *
      * @param int $id
          * *L'identifiant de l'activité à diminuer.
-     * @param Cart $cart
-         * *Service de gestion du panier.
      * @return Response
          * *Redirige vers la page du panier après modification.
      */
     #[Route('/cart/decrease/{id}', name: 'app_cart_decrease')]
-    public function decrease($id, Cart $cart): Response
+    public function decrease(int $id): Response
     {
-        // Réduction de la quantité de l'article dans le panier
-        $cart->decrease($id);
+        $cart = $this->cart->getCart();
 
-        // Message flash pour indiquer le succès de l'opération
-        $this->addFlash(
-            'success',
-            'Activité correctement supprimée de votre panier.'
-        );
-        
-        // Redirection vers la page du panier
-        return $this->redirectToRoute('app_cart');
-    }
-    
-    /**
-     * 
-     */
-    #[Route('/cart/decrease_offer/{id}', name: 'app_cart_decrease_offer')]
-    public function decreaseOffer($id, Cart $cart): Response
-    {
-        // Réduction de la quantité de l'article dans le panier
-        $cart->decrease($id);
+        if (!isset($cart[$id])) {
+            $this->addFlash('error', "L'élément avec l'ID $id n'est pas dans le panier.");
+        } else {
+            
+            // Réduction de la quantité de l'élément dans le panier
+            $this->cart->decrease($id);
 
-        // Message flash pour indiquer le succès de l'opération
-        $this->addFlash(
-            'success',
-            'Offre spéciale correctement supprimée de votre panier.'
-        );
+            // Message flash pour indiquer le succès de l'opération
+            $this->addFlash(
+                'success',
+                'Loisir correctement supprimé de votre panier.'
+            );
+        }
         
         // Redirection vers la page du panier
         return $this->redirectToRoute('app_cart');
@@ -155,16 +160,14 @@ class CartController extends AbstractController
      * app_cart_remove
          * *Supprime totalement le panier.
      *
-     * @param Cart $cart
-         * *Service de gestion du panier.
      * @return Response
          * *Redirige vers la page du compte après suppression.
      */
     #[Route('/cart/remove', name: 'app_cart_remove')]
-    public function remove(Cart $cart): Response
+    public function remove(): Response
     {
         // Suppression complète du panier
-        $cart->remove();
+        $this->cart->remove();
         
         // Redirection vers la page du compte utilisateur
         return $this->redirectToRoute('app_account');

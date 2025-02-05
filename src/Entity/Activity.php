@@ -63,6 +63,9 @@ class Activity
     #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'activity')]
     private Collection $offers;
 
+    #[ORM\ManyToOne(targetEntity: Exclusive::class, inversedBy: 'activities')]
+    private ?Exclusive $exclusive = null;
+
     public function __construct()
     {
         $this->offers = new ArrayCollection();
@@ -179,7 +182,7 @@ class Activity
     {
         $coeff = 1 + ($this->tva/100);
         
-        return $coeff * $this->price;
+        return $this->price / $coeff;
     }
 
     public function getTva(): ?float
@@ -230,7 +233,6 @@ class Activity
     {
         if (!$this->offers->contains($offer)) {
             $this->offers->add($offer);
-            $offer->addActivity($this);
         }
 
         return $this;
@@ -241,6 +243,50 @@ class Activity
         if ($this->offers->removeElement($offer)) {
             $offer->removeActivity($this);
         }
+
+        return $this;
+    }
+
+    public function getDiscountedPrice(): float
+    {
+        $now = new \DateTime();
+
+        /** @var Exclusive $exclusive */
+        foreach ($this->exclusive as $exclusive) {
+            if ($exclusive->getDateStart() <= $now && $exclusive->getDateStop() >= $now) {
+                $discount = $exclusive->getDiscountPercentage() / 100;
+                return $this->price * (1 - $discount);
+            }
+        }
+
+        return $this->price;
+    }
+
+    public function getDiscountedPriceWt(): float
+    {
+        $now = new \DateTime();
+
+        /** @var Exclusive $exclusive */
+        foreach ($this->exclusive as $exclusive) {
+            if ($exclusive->getDateStart() <= $now && $exclusive->getDateStop() >= $now) {
+                $discount = $exclusive->getDiscountPercentage() / 100;
+                $discountedPrice = $this->price * (1 - $discount);
+                $coeff = 1 + ($this->tva / 100);
+                return $discountedPrice * $coeff;
+            }
+        }
+
+        return $this->getPriceWt();
+    }
+
+    public function getExclusive(): ?Exclusive
+    {
+        return $this->exclusive;
+    }
+
+    public function setExclusive(?Exclusive $exclusive): static
+    {
+        $this->exclusive = $exclusive;
 
         return $this;
     }

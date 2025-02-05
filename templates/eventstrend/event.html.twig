@@ -8,7 +8,7 @@
             <div class="row g-0 d-flew justify-content-center align-items-center">
                 <small class="card-header color-secondary-custom" style="border-bottom: none;">
                     <i>
-                        <a href="{{ path('app_eventstrend', { slug : event.eventstrend.slug } ) }}" class=" text-decoration-none color-secondary-custom">{{ event.eventstrend.name }}
+                        <a href="{{ path('app_eventstrend', { slug : event.eventstrend.slug } ) }}" class=" text-decoration-none color-secondary-custom" aria-label="Retour aux évènements tendances">{{ event.eventstrend.name }}
                         </a> > {{ event.name }}
                     </i>
                 </small>
@@ -36,21 +36,25 @@
                                 data-activity-id="{{ event.activity.id }}"
                             >
                                 <a href="{{ path('app_activity', { slug: event.activity.slug } ) }}" aria-label="Voir l'activité {{ event.activity.name }}">
-                                    <img 
-                                        src="/uploads/{{ event.activity.image }}"
-                                        class="figure-img img-fluid rounded border-secondary-custom" 
-                                        alt="Image de {{ event.activity.name }}" 
-                                        style="object-fit: cover; width: 100%; height: 400px;"
-                                        loading="lazy"
-                                        aria-hidden="false"
-                                    >
+                                    <picture>
+                                        {# WebP version #}
+                                        <source srcset="/uploads/{{ event.activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                        {# Fallback JPG/PNG #}
+                                        <img 
+                                            src="/uploads/{{ event.activity.image }}"
+                                            class="figure-img img-fluid rounded border-secondary-custom" 
+                                            alt="Image de {{ event.activity.name }}" 
+                                            style="object-fit: cover; width: 100%; height: 400px;"
+                                            loading="lazy"
+                                            aria-hidden="false"
+                                        >
+                                    </picture>
                                     <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
                                         <h2 class="color-secondary-custom">{{ event.activity.name }}</h2>
                                     </div>
                                 </a>
                             </div>
                         </div>
-
                         {# Boutons de navigation #}
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselEvent" data-bs-slide="prev" aria-label="Image Précédent">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -63,7 +67,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card-body">
+                    <div class="card-body test-center">
                         <h1 class="card-title color-secondary-custom">{{ event.name }}</h1>
                         <div>
                             {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}

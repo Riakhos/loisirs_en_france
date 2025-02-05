@@ -47,7 +47,7 @@ class TrendCrudController extends AbstractCrudController
     }
         
         return [
-            FormField::addPanel('Informations principales'),
+            FormField::addFieldset('Informations principales'),
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setHelp('Nom de l\'activité tendance')
@@ -59,23 +59,23 @@ class TrendCrudController extends AbstractCrudController
                 ->setHelp('URL de votre activité tendance générée automatiquement')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Image de l\'activité tendance'),
+            FormField::addFieldset('Image de l\'activité tendance'),
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp('Image de votre activité tendance en 600*600px')
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
-            FormField::addPanel('Associations'),
+            FormField::addFieldset('Associations'),
             AssociationField::new('eventstrend', 'Évènements Tendances associées')
                 ->setColumns(6)
             ,
             AssociationField::new('activity', 'Activités')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Description'),
+            FormField::addFieldset('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp("Description de l\'évènement spécial")

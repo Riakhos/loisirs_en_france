@@ -28,13 +28,18 @@
                                     data-trend-slug="{{ trend.slug }}"
                                 >
                                     <a href="{{ path('app_activity', { slug: trend.activity.slug }) }}" aria-label="Voir l'activité {{ trend.activity.name }}">
-                                        <img 
-                                            src="/uploads/{{ trend.activity.image }}"
-                                            class="figure-img img-fluid rounded border-secondary-custom" 
-                                            alt="Image de l'activité {{ trend.activity.name }}"
-                                            loading="lazy"
-                                            style="object-fit: cover; width: 100%; height: 400px;"
-                                        >
+                                        <picture>
+                                            {# WebP version #}
+                                            <source srcset="/uploads/{{ trend.activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            {# Fallback JPG/PNG #}
+                                            <img 
+                                                src="/uploads/{{ trend.activity.image }}"
+                                                class="figure-img img-fluid rounded border-secondary-custom" 
+                                                alt="Image de l'activité {{ trend.activity.name }}"
+                                                loading="lazy"
+                                                style="object-fit: cover; width: 100%; height: 400px;"
+                                            >
+                                        </picture>
                                         <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
                                             <h2 class="color-secondary-custom">{{ trend.activity.name }}</h2>
                                         </div>

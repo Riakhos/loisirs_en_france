@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ controller.name }} {{ subcategory.name }}{% endblock %}
+{% block title %}{{ controller_name }} {{ subcategory.name }}{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
@@ -39,7 +39,9 @@
                                 >
                                     <a href="{{ path('app_activity', { slug: activity.slug} ) }}" aria-label="Voir l'activité {{ activity.name }}">
                                         <picture>
-                                            <source srcset="/uploads/{{ activity.image }}" type="image/webp">
+                                            {# WebP version #}
+                                            <source srcset="/uploads/{{ activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            {# Fallback JPG/PNG #}
                                             <img 
                                                 src="/uploads/{{ activity.image }}"
                                                 class="figure-img img-fluid rounded border-secondary-custom" 
@@ -177,7 +179,7 @@
                 const activeItem = carousel.querySelector('.carousel-item.active');
                 const activityId = activeItem?.getAttribute('data-activity-id');
                 if (activityId) {
-                    addToCartButton.setAttribute('href', `/cart/add/${activityId}`);
+                    addToCartButton.setAttribute('href', `/cart/add/activity/${activityId}`);
                 } else {
                     addToCartButton.removeAttribute('href');
                 }

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ controller.name }}{{ category.slug }}{% endblock %}
+{% block title %}{{ controller_name }}{{ category.slug }}{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
@@ -31,13 +31,18 @@
                                     data-category-slug="{{ category.slug }}"
                                 >
                                     <a href="{{ path('app_subcategory', { slug: subcategories.slug }) }}" aria-label="Voir la sous-catégorie {{ subcategories.name }}">
-                                        <img 
-                                            src="/uploads/{{ subcategories.image }}"
-                                            class="figure-img img-fluid rounded border-secondary-custom" 
-                                            alt="Image de la sous-catégorie {{ subcategories.name }}" 
-                                            style="object-fit: cover; width: 100%; height: 400px;"
-                                            loading="lazy"
-                                        >
+                                        <picture>
+                                            {# WebP version #}
+                                            <source srcset="/uploads/{{ subcategories.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            {# Fallback JPG/PNG #}
+                                            <img 
+                                                src="/uploads/{{ subcategories.image }}"
+                                                class="figure-img img-fluid rounded border-secondary-custom" 
+                                                alt="Image de la sous-catégorie {{ subcategories.name }}" 
+                                                style="object-fit: cover; width: 100%; height: 400px;"
+                                                loading="lazy"
+                                            >
+                                        </picture>
                                         <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
                                             <h2 class="color-secondary-custom">{{ subcategories.name }}</h2>
                                         </div>

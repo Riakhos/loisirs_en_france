@@ -35,7 +35,7 @@ class EventstrendCrudController extends AbstractCrudController
         }
 
         return [
-            FormField::addPanel('Informations principales'),
+            FormField::addFieldset('Informations principales'),
             TextField::new('name')
                 ->setLabel('Titre')
                 ->setHelp('Titre des évènements tendances')
@@ -51,11 +51,11 @@ class EventstrendCrudController extends AbstractCrudController
                 ->setLabel('Image')
                 ->setHelp('Image de votre évènement tendance en 600*600px')
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
-            FormField::addPanel('Description'),
+            FormField::addFieldset('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp("Description de l\'évènement spécial")

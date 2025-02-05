@@ -14,17 +14,22 @@
                 <div class="row align-items-center">
                     <div class="col-md-6 d-flex justify-content-center p-0">
                         <div class="fixed-square">
-                            <img 
-                                src="/img/aventure-td.jpg" 
-                                class="img-fluid rounded-start h-100 object-fit-cover"
-                                alt="Image représentant une aventure en pleine nature"
-                                role="img"
-                                aria-label="Illustration d'une aventure"
-                                loading="lazy"
-                                aria-hidden="false"
-                                preserveAspectRatio="xMidYMid slice"
-                                focusable="false"
-                            >
+                            <picture>
+                                {# WebP version #}
+                                <source srcset="/img/aventure-td.webp" type="image/webp">
+                                {# Fallback JPG/PNG #}
+                                <img 
+                                    src="/img/aventure-td.jpg" 
+                                    class="img-fluid rounded-start h-100 object-fit-cover"
+                                    alt="Image représentant une aventure en pleine nature"
+                                    role="img"
+                                    aria-label="Illustration d'une aventure"
+                                    loading="lazy"
+                                    aria-hidden="false"
+                                    preserveAspectRatio="xMidYMid slice"
+                                    focusable="false"
+                                >
+                            </picture>
                         </div>
                     </div>
                     <div class="col-md-6 d-flex justify-content-center align-items-center">

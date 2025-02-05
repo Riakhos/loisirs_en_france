@@ -9,7 +9,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -40,7 +39,7 @@ class ExclusiveCrudController extends AbstractCrudController
         }
 
         return [
-            FormField::addPanel('Informations principales'),
+            FormField::addFieldset('Informations principales'),
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setHelp("Nom de l'offre exclusive")
@@ -52,32 +51,21 @@ class ExclusiveCrudController extends AbstractCrudController
                 ->setHelp('URL de votre offre exclusive générée automatiquement')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Image de l\'offre exclusive'),
+            FormField::addFieldset('Image de l\'offre exclusive'),
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp("Image de votre offre exclusive en 600*600px")
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
-            FormField::addPanel('Tarification'),
-            NumberField::new('price')
-                ->setLabel('Prix H.T')
-                ->setHelp("Prix H.T de l'offre exclusive sans le sigle Euro")
-                ->setColumns(6)
+            FormField::addFieldset('Tarification'),
+            NumberField::new('discountPercentage')
+                ->setLabel('Réduction (%)')
+                ->setHelp("Pourcentage de réduction appliqué sur le prix de l'activité")
             ,
-            ChoiceField::new('tva')
-                ->setLabel('Taux de TVA')
-                ->setChoices([
-                    '5.5%' => '5.5',
-                    '10%' => '10',
-                    '20%' => '20'
-                ])
-                ->setHelp("TVA de l'offre exclusive")
-                ->setColumns(6)
-            ,
-            FormField::addPanel('Dates'),
+            FormField::addFieldset('Dates'),
             DateField::new('dateStart')
                 ->setLabel('Date de début')
                 ->setHelp("Date du début de l'offre exclusive")
@@ -88,10 +76,15 @@ class ExclusiveCrudController extends AbstractCrudController
                 ->setHelp("Date de la fin de l'offre exclusive")
                 ->setColumns(6)
             ,
-            FormField::addPanel('Associations'),
-            AssociationField::new('eventstrend', 'Évènements Tendances associées')
+            FormField::addFieldset('Associations'),
+            AssociationField::new('activities', 'Activité associés')
+                ->setHelp('Sélectionnez l\'activité sur laquelle s\'applique cette offre exclusive')
+                ->setColumns(6)
             ,
-            FormField::addPanel('Description'),
+            AssociationField::new('eventstrend', 'Évènements Tendances associés')
+                ->setColumns(6)
+            ,
+            FormField::addFieldset('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp("Description de l'offre exclusive")

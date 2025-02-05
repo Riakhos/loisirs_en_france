@@ -166,6 +166,7 @@ class Offer
 
         if (!$this->activity->contains($activity)) {
             $this->activity->add($activity);
+            $activity->addOffer($this);
         }
 
         return $this;

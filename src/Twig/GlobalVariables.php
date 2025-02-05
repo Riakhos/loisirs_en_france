@@ -3,22 +3,24 @@
 namespace App\Twig;
 
 use App\Classe\Cart;
-use App\Repository\ActivityRepository;
+use App\Repository\TrendRepository;
 use Twig\Extension\GlobalsInterface;
 use Twig\Extension\AbstractExtension;
+use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\ExclusiveRepository;
 use App\Repository\EventstrendRepository;
 use App\Repository\SubcategoryRepository;
-use App\Repository\TrendRepository;
 
 class GlobalVariables extends AbstractExtension implements GlobalsInterface
 {
+	private Cart $cart;
 	private CategoryRepository $categoryRepository;
 	private SubcategoryRepository $subcategoryRepository;
 	private ActivityRepository $activityRepository;
-	private Cart $cart;
 	private EventstrendRepository $eventstrendRepository;
 	private TrendRepository $trendRepository;
+	private ExclusiveRepository $exclusiveRepository;
 
 	/**
 	 * __construct
@@ -30,14 +32,15 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	 * @param Cart $cart
 	 	* *Le service de gestion du panier
 	 */
-	public function __construct(CategoryRepository $categoryRepository, SubcategoryRepository $subcategoryRepository,ActivityRepository $activityRepository, Cart $cart, EventstrendRepository $eventstrendRepository, TrendRepository $trendRepository)
+	public function __construct(CategoryRepository $categoryRepository, SubcategoryRepository $subcategoryRepository,ActivityRepository $activityRepository, Cart $cart, EventstrendRepository $eventstrendRepository, TrendRepository $trendRepository, ExclusiveRepository $exclusiveRepository)
 	{
+		$this->cart = $cart;
 		$this->categoryRepository = $categoryRepository;
 		$this->subcategoryRepository = $subcategoryRepository;
 		$this->activityRepository = $activityRepository;
 		$this->eventstrendRepository = $eventstrendRepository;
-		$this->cart = $cart;
 		$this->trendRepository = $trendRepository;
+		$this->exclusiveRepository = $exclusiveRepository;
 	}
 
 	/**
@@ -57,8 +60,9 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 			'subcategories' => $this->subcategoryRepository->findAll(),
 			'activities' => $this->activityRepository->findAll(),
 			'eventstrends' => $this->eventstrendRepository->findAll(),
-			'fullCartQuantity' => $this->cart->fullQuantity(),
 			'trends' => $this->trendRepository->findAll(),
+			'exclusives' => $this->exclusiveRepository->findAll(),
+			'fullCartQuantity' => $this->cart->fullQuantity(),
 		];
 	}
 }

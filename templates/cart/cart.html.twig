@@ -15,20 +15,25 @@
                     <div class="card mb-4 shadow-sm border-1">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img 
-                                    src="/uploads/{{ activity.object.image }}" 
-                                    class="img-fluid rounded-start h-100 object-fit-cover" 
-                                    alt="Image de {{ activity.object.name }}"
-                                    loading="lazy"
-                                    width="200" height="150"
-                                >
+                                <picture>
+                                    {# WebP version #}
+                                    <source srcset="/uploads/{{ activity.object.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                    {# Fallback JPG/PNG #}
+                                    <img 
+                                        src="/uploads/{{ activity.object.image }}" 
+                                        class="img-fluid rounded-start h-100 object-fit-cover" 
+                                        alt="Image de {{ activity.object.name }}"
+                                        loading="lazy"
+                                        width="200" height="150"
+                                    >
+                                </picture>
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h2 class="card-title fw-bold">{{ activity.object.name }}</h2>
                                     <p class="card-text">
                                         <span>Prix unitaire :</span> 
-                                        <strong>{{ activity.object.priceWt|price }}</strong>
+                                        <strong>{{ activity.object.price|price }}</strong>
                                     </p>
                                     <p class="card-text d-flex align-items-center gap-3">
                                         <span class="fw-semibold">Quantité :</span>
@@ -50,7 +55,7 @@
                                         
                                         {# Icône pour augmenter la quantité #}
                                         <a 
-                                            href="{{ path('app_cart_add', { id: activity.object.id } ) }}" 
+                                            href="{{ path('app_cart_add', { type: 'activity', id: activity.object.id } ) }}" 
                                             class="btn  shadow-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
                                             style="width: 20px; height: 20px;"
                                             aria-label="Augmenter la quantité de {{ activity.object.name }}"
@@ -61,7 +66,7 @@
 
                                     <p class="card-text">
                                         <strong>Total :</strong> 
-                                        <span class="text-success">{{ (activity.qty * activity.object.priceWt)|price }}</span>
+                                        <span class="text-success">{{ (activity.qty * activity.object.price)|price }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -70,7 +75,47 @@
                 {% else %}
                     <p class="text-center color-primary-custom">Votre panier est vide.</p>
                 {% endfor %}
+
+                {# Affichage des offres #}
+                {% if offers is defined %}
+                    <h3 class="text-center my-4">Offres spéciales</h3>
+                    {% for offer in offers %}
+                        <div class="card mb-4 shadow-sm border-1">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <picture>
+                                        {# WebP version #}
+                                        <source srcset="/uploads/{{ offer.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                        {# Fallback JPG/PNG #}
+                                            <img 
+                                                src="/uploads/{{ offer.image }}" 
+                                                class="img-fluid rounded-start h-100 object-fit-cover" 
+                                                alt="Image de {{ offer.name }}"
+                                                loading="lazy"
+                                                width="200" height="150"
+                                            >
+                                    </picture>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h2 class="card-title fw-bold">{{ offer.name }}</h2>
+                                        <p class="card-text">
+                                            <span>Prix avant offre :</span> 
+                                            <strong>{{ offer.originalPrice|price }}</strong>
+                                        </p>
+                                        <p class="card-text">
+                                            <span>Prix avec offre :</span> 
+                                            <strong class="text-success">{{ offer.discountedPrice|price }}</strong>
+                                        </p>
+                                        <a href="{{ path('app_offer_details', { id: offer.id }) }}" class="btn btn-primary">Voir l'offre</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
+            
             {% if cart|length > 0 %}
                 {# Récapitulatif du panier #}
                 <div class="col-md-4">

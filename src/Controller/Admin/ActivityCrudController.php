@@ -55,7 +55,7 @@ class ActivityCrudController extends AbstractCrudController
         }
         
         return [
-            FormField::addPanel('Informations principales'),
+            FormField::addFieldset('Informations principales'),
             TextField::new('name')
                 ->setLabel('Titre')
                 ->setHelp('Titre de l\'activité')
@@ -67,12 +67,12 @@ class ActivityCrudController extends AbstractCrudController
                 ->setHelp('URL de votre activité générée automatiquement')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Images de l\'activité'),
+            FormField::addFieldset('Images de l\'activité'),
             ImageField::new('image')
                 ->setLabel('Image principale')
                 ->setHelp('Image principale de votre activité en 600*600px')
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
                 ->setColumns(3)
@@ -81,7 +81,7 @@ class ActivityCrudController extends AbstractCrudController
                 ->setLabel('Image secondaire')
                 ->setHelp('Image secondaire de votre activité en 600*600px')
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
                 ->setColumns(3)
@@ -90,7 +90,7 @@ class ActivityCrudController extends AbstractCrudController
                 ->setLabel('Image secondaire')
                 ->setHelp('Image secondaire de votre activité en 600*600px')
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
                 ->setColumns(3)
@@ -99,15 +99,15 @@ class ActivityCrudController extends AbstractCrudController
                 ->setLabel('Image secondaire')
                 ->setHelp('Image secondaire de votre activité en 600*600px')
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
                 ->setColumns(3)
             ,
-            FormField::addPanel('Tarification'),
+            FormField::addFieldset('Tarification'),
             NumberField::new('price')
-                ->setLabel('Prix H.T')
-                ->setHelp('Prix H.T de l\activité sans le sigle Euro')
+                ->setLabel('Prix T.T.C')
+                ->setHelp('Prix T.T.C de l\activité sans le sigle Euro')
                 ->setColumns(6)
             ,
             ChoiceField::new('tva')
@@ -119,11 +119,11 @@ class ActivityCrudController extends AbstractCrudController
                 ])
                 ->setColumns(6)
             ,
-            FormField::addPanel('Associations'),
+            FormField::addFieldset('Associations'),
             AssociationField::new('category', 'Catégories associées')->setColumns(6),
             AssociationField::new('subcategory', 'Sous-Catégories associées')->setColumns(6)
             ,
-            FormField::addPanel('Description'),
+            FormField::addFieldset('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp('Description de la sous-categorie')

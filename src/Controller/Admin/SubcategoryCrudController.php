@@ -36,7 +36,7 @@ class SubcategoryCrudController extends AbstractCrudController
         }
         
         return [
-            FormField::addPanel('Informations principales'),
+            FormField::addFieldset('Informations principales'),
             TextField::new('name')
                 ->setLabel('Nom')
                 ->setHelp('Nom de la sous-catégorie')
@@ -48,19 +48,19 @@ class SubcategoryCrudController extends AbstractCrudController
                 ->setHelp('URL de votre sous-catégorie générée automatiquement')
                 ->setColumns(6)
             ,
-            FormField::addPanel('Image de la sous-catégorie'),
+            FormField::addFieldset('Image de la sous-catégorie'),
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp('Image de votre activité en 600*600px')
                 ->setUploadDir('/public/uploads')
-                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
                 ->setRequired($required)
             ,
-            FormField::addPanel('Associations'),
+            FormField::addFieldset('Associations'),
             AssociationField::new('category', 'Catégories associées')
             ,
-            FormField::addPanel('Description'),
+            FormField::addFieldset('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
                 ->setHelp('Description de la sous-categorie')

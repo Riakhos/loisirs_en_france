@@ -8,7 +8,6 @@ use App\Entity\Offer;
 use App\Entity\Trend;
 use App\Entity\Activity;
 use App\Entity\Category;
-use App\Entity\Subtrend;
 use App\Entity\Exclusive;
 use App\Entity\Eventstrend;
 use App\Entity\Subcategory;

@@ -39,13 +39,18 @@
                                             data-eventstrend-slug="{{ eventstrend.slug }}"
                                         >
                                                 <a href="{{ path(relation.route, { slug: item.slug }) }}" class="text-decoration-none">
-                                                <img 
-                                                    src="/uploads/{{ item.image }}"
-                                                    class="figure-img img-fluid rounded border-secondary-custom" 
-                                                    alt="{{ item.name }}" 
-                                                    style="object-fit: cover; width: 100%; height: 400px;"
-                                                    loading="lazy"
-                                                >
+                                                <picture>
+                                                    {# WebP version #}
+                                                    <source srcset="/uploads/{{ item.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                    {# Fallback JPG/PNG #}
+                                                    <img 
+                                                        src="/uploads/{{ item.image }}"
+                                                        class="figure-img img-fluid rounded border-secondary-custom" 
+                                                        alt="{{ item.name }}" 
+                                                        style="object-fit: cover; width: 100%; height: 400px;"
+                                                        loading="lazy"
+                                                    >
+                                                </picture>
                                                 <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
                                                     <h2 class="color-secondary-custom">{{ item.name }}</h2>
                                                 </div>

@@ -27,7 +27,7 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            FormField::addPanel('Informations principales'),
+            FormField::addFieldset('Informations principales'),
             TextField::new('email')
                 ->setLabel('Mail')
                 ->onlyOnIndex()

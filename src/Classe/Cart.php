@@ -19,53 +19,93 @@ class Cart
         // L'accès direct à la session dans le constructeur est déconseillé car la session pourrait ne pas être encore initialisée.
         // $this->session = $requestStack->getSession();
     }
+
+	/**
+	 * getSession()
+		 * *Récupère la session actuelle
+	 *
+	 * @return
+	 */
+	private function getSession()
+    {
+        return $this->requestStack->getSession();
+    }
 	
 	/**
-	 * add
-		 * *Fonction permettant l'ajout d'une activité au panier
+	 * getCart()
+		 * *Récupère le panier depuis la session
 	 *
-	 * @param mixed $activity
-		 * *L'objet représentant l'activité à ajouter.
-     * @return void
+	 * @return array
+		 * *Le panier (tableau associatif) ou null s'il est vide
 	 */
-	public function add($activity)
+	public function getCart(): array
 	{
-		// Récupération de la session
-		$session = $this->requestStack->getSession();
-		
-		// Récupération du panier actuel ou initialisation
-        $cart = $session->get('cart', []);
-		
-		// ID unique de l'activité
-        $activityId = $activity->getId();
+		return $this->requestStack->getSession()->get('cart', []);
+	}
 
-		// Vérification si l'activité est déjà dans le panier
-        if (isset($cart[$activityId])) {
-            //* Incrémentation de la quantité
-            $cart[$activityId]['qty']++;
+	/**
+	 * saveCart()
+		 * *Enregistre le panier dans la session
+	 *
+	 * @param array $cart
+	 * @return void
+	 */
+	private function saveCart(array $cart): void
+    {
+        $this->getSession()->set('cart', $cart);
+    }
+
+	/**
+	 * addActivity()
+		 * *Ajoute un élément activité au panier
+	 *
+	 * @param [type] $item
+	 * @param string $type
+	 * @return void
+	 */
+	public function addActivity($activity): void
+    {
+        $cart = $this->getCart();
+        $id = $activity->getId();
+
+        if (isset($cart[$id])) {
+            $cart[$id]['qty']++;
         } else {
-            //* Ajout d'une nouvelle activité avec une quantité initiale de 1
-            $cart[$activityId] = [
+            $cart[$id] = [
                 'object' => $activity,
                 'qty' => 1
             ];
         }
+
+        $this-> saveCart($cart);
+    }
 		
-		// Mise à jour du panier dans la session
-        $session->set('cart', $cart);
-	}
+	
 	
 	/**
-	 * getCart
-		 * *Retourne le contenu du panier
+	 * addOffer()
+		 * *Fonction permettant l'ajout d'une offre spéciale au panier
 	 *
-	 * @return mixed
-		 * *Le panier (tableau associatif) ou null s'il est vide
+	 * @param [type] $offer
+		 * * *L'objet représentant l'offre spéciale à ajouter.
+	 * @return void
 	 */
-	public function getCart()
-	{
-		return $this->requestStack->getSession()->get('cart');
-	}
+	public function addOffer($offer): void
+    {
+		$cart = $this->getCart();
+        $id = $offer->getId();
+
+        if (isset($cart[$id])) {
+            $cart[$id]['qty']++;
+        } else {
+            $cart[$id] = [
+                'object' => $offer,
+                'qty' => 1
+            ];
+        }
+
+        $this-> saveCart($cart);
+    }
 	
 	/**
 	 * remove
@@ -75,7 +115,7 @@ class Cart
 	 */
 	public function remove()
 	{
-		return $this->requestStack->getSession()->remove('cart');
+		return $this->getSession()->remove('cart');
 	}
 
 	/**
@@ -92,12 +132,12 @@ class Cart
 
 		// Parcours des éléments du panier pour calculer le total H.T
         foreach ($cart as $item) {
-            $subtotal += $item['object']->getPrice() * $item['qty'];
+            $subtotal += $item['object']->getPriceWt() * $item['qty'];
         }
 
         return $subtotal;
     }
-
+	
 	/**
 	 * getTvaDetails
 		 * *Retourne les détails de la TVA par taux
@@ -112,7 +152,7 @@ class Cart
 
 		foreach ($cart as $item) {
 			$activity = $item['object'];
-			$priceHt = $activity->getPrice(); //* Prix HT de l'activité
+			$priceHt = $activity->getPriceWt(); //* Prix HT de l'activité
 			$tvaRate = $activity->getTva();  //* Taux de TVA
 			$quantity = $item['qty'];        //* Quantité dans le panier
 
@@ -128,8 +168,7 @@ class Cart
 
 		return $tvaDetails;
 	}
-
-
+	
 	/**
 	 * getTva
 		 * *Calcule le montant total de la TVA pour le panier
@@ -143,13 +182,19 @@ class Cart
 		return array_sum($tvaDetails);; //* Somme des montants de TVA
 	}
 
+	/**
+	 * getTotal()
+	 * *Retourne le total TTC du panier
+	 *
+	 * @return float
+	 */
     public function getTotal(): float
     {
         return $this->getSubtotal() + $this->getTva();
     }
 
 	/**
-	 * decrease
+	 * decrease()
 	 	 * *Diminue la quantité d'une activité dans le panier
      	 * *Si la quantité atteint 1, l'activité est supprimée
 	 *
@@ -157,7 +202,7 @@ class Cart
 		 * *L'identifiant de l'activité à diminuer
 	 * @return void
 	 */
-	public function decrease($id)
+	public function decrease(int $id): void
     {
 		// Récupération du panier
         $cart = $this->getCart();
@@ -165,14 +210,15 @@ class Cart
 		// Vérification si l'activité existe dans le panier
         if ($cart[$id]['qty'] > 1) {
 			// Réduction de la quantité
-            $cart[$id]['qty'] = $cart[$id]['qty'] - 1;
+            // $cart[$id]['qty'] = $cart[$id]['qty'] - 1;
+            $cart[$id]['qty']--;
         } else {
 			// Suppression de l'activité si la quantité atteint 1
             unset($cart[$id]);
         }
 
 		// Mise à jour du panier dans la session
-        $this->requestStack->getSession()->set('cart', $cart);
+        $this->saveCart($cart);
     }
 
 	/**
@@ -190,45 +236,9 @@ class Cart
             return $quantity;
         }
         
-        foreach ($cart as $activity) {
-            $quantity = $quantity + $activity['qty'];
+        foreach ($cart as $item) {
+            $quantity = $quantity + $item['qty'];
         }
-        
         return $quantity;
     }
-
-	/**
-	 * addOffer
-	 	* *Fonction permettant l'ajout d'une offre spéciale au panier
-	 *
-	 * @param [type] $offer
-		 * *L'objet représentant l'offre spéciale à ajouter.
-	 * @return void
-	 */
-	public function addOffer($offer)
-	{
-		// Récupération de la session
-		$session = $this->requestStack->getSession();
-		
-		// Récupération du panier actuel ou initialisation
-        $cart = $session->get('cart', []);
-		
-		// ID unique de l'offre spéciale
-		$offerId = $offer->getId();
-
-		// Vérification si l'offre spéciale est déjà dans le panier
-        if (isset($cart[$offerId])) {
-            //* Incrémentation de la quantité
-            $cart[$offerId]['qty']++;
-        } else {
-            //* Ajout d'une nouvelle offre spéciale avec une quantité initiale de 1
-            $cart[$offerId] = [
-                'object' => $offer,
-                'qty' => 1
-            ];
-        }
-		
-		// Mise à jour du panier dans la session
-        $session->set('cart', $cart);
-	}
 }
