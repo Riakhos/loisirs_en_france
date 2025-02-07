@@ -16,6 +16,21 @@ class ExclusiveRepository extends ServiceEntityRepository
         parent::__construct($registry, Exclusive::class);
     }
 
+    public function findWithActivities(int $id): ?Exclusive
+    {
+        $exclusive =  $this->createQueryBuilder('e')
+            ->leftJoin('e.activities', 'a') // Jointure avec les activités
+            ->addSelect('a') // Sélectionner aussi les activités pour éviter le lazy-loading
+            ->where('e.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+            // dump($exclusive);
+            
+            return $exclusive;
+    }
+
     //    /**
     //     * @return Exclusive[] Returns an array of Exclusive objects
     //     */

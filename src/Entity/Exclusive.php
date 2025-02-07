@@ -155,13 +155,50 @@ class Exclusive
     /**
      * Retourne le prix final TTC après réduction
      */
-    public function getFinalPrice(): float
+    public function getPrice(): float
     {
-        if (!$this->activities || !$this->activities->first()->getPrice()) {
+        if ($this->activities->isEmpty() || !$this->activities->first()->getPrice()) {
             return 0;
         }
 
         return $this->activities->first()->getPrice() * (1 - $this->discountPercentage / 100);
+    }
+
+    /**
+     * getPriceWt
+     *
+     * @return float
+     */
+    public function getPriceWt(): float
+    {
+        if ($this->activities->isEmpty()) {
+            return 0;
+        }
+
+        // Récupérer la TVA de la première activité associée
+        $activity = $this->activities->first();
+        $tva = $activity->getTva(); // Supposant que la méthode getTva() existe dans Activity
+
+        // Calcul du prix TTC
+        $coeff = 1 + ($tva / 100);
+        return $this->getPrice() / $coeff;
+    }
+
+    /**
+     * getTva()
+     *
+     * @return float|null
+     */
+    public function getTva(): ?float
+    {
+        if ($this->activities->isEmpty()) {
+            return null; // Aucune activité associée
+        }
+
+        // Récupérer la TVA de la première activité associée
+        $activity = $this->activities->first();
+
+        return $activity->getTva(); // Supposant que Activity a bien une méthode getTva()
     }
 
     /**

@@ -39,6 +39,7 @@
 										class="carousel-item {% if loop.first %}active{% endif %}"
 										data-activities-name="{{ activities.name }}"
 										data-activities-slug="{{ activities.slug }}"
+										data-exclusive-id="{{ exclusive.id }}"
 									>
 										<a href="{{ path('app_activity', { slug: activities.slug } ) }}" aria-label="Voir l'offre exclusive {{ activities.name }}">
 										<picture>
@@ -180,19 +181,19 @@
                                 <p class="card-text color-secondary-custom">
 									{% for activities in exclusive.activities %}
 										<i class="bi bi-tag-fill me-2" aria-hidden="true"></i>
-										Prix TTC <strong>{{ activities.price|price }}</strong>
+										Prix TTC <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2 rounded-pill w-75" aria-label="Prix de l'activité">{{ activities.price|price }}</strong>
 									{% endfor %}
                                 </p>
 								<h3 class="visually-hidden">Réduction</h3>
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-percent me-2" aria-hidden="true"></i>
-                                    Réduction <strong>{{ exclusive.discountPercentage }}%</strong>
+                                    Réduction <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2 rounded-pill w-75" aria-label="Réduction de l'activité">{{ exclusive.discountPercentage }}%</strong>
                                 </p>
 								<h3 class="visually-hidden">Prix final</h3>
                                 <p class="card-text color-secondary-custom">
 									<i class="bi bi-cash me-2" aria-hidden="true"></i>
-									Prix final <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2 rounded-pill w-75" aria-label="Prix de l'activité">
-										{{ exclusive.getFinalPrice()|price }}</strong>
+									Prix final <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2 rounded-pill w-75" aria-label="Prix final de l'activité">
+										{{ exclusive.getPrice()|price }}</strong>
                                 </p>
                             </section>
                         </div>
@@ -211,6 +212,7 @@
 							</section>
                         </div>
                     </div>
+					
                     {# Section : Boutons d'actions #}
                     <div class="btn-group d-flex justify-content-center align-items-center" role="group" aria-label="Options d'achat" style="border-top: none;">
                         <a href="{{ path('app_cart_add', { type: 'exclusive', id: exclusive.id } ) }}" class="btn btn-primary" aria-label="Ajouter cette offre au panier">

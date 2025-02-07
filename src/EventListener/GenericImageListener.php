@@ -73,6 +73,7 @@ class GenericImageListener implements EventSubscriberInterface
         }
     
         $this->entityManager->persist($entity);
+        $this->entityManager->flush();
     }
 
     private function processImageField($entity, \ReflectionProperty $property): void
@@ -84,7 +85,10 @@ class GenericImageListener implements EventSubscriberInterface
             return;
         }
 
-        $imageFile = $entity->$getter();
+        $imageFile = $entity->$getter();+
+        
+        var_dump($imageFile); die;
+
 
         if ($imageFile instanceof UploadedFile) {
             $filePath = $imageFile->getPathname();

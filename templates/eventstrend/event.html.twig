@@ -6,54 +6,52 @@
     <div class="d-flex justify-content-center align-items-center">
         <div class="card w-auto border-secondary-custom bg-primaryBlue m-2 p-3" style="max-width: 1000px;">
             <div class="row g-0 d-flew justify-content-center align-items-center">
+                
+			{# Section : Navigation et titre #}
                 <small class="card-header color-secondary-custom" style="border-bottom: none;">
                     <i>
                         <a href="{{ path('app_eventstrend', { slug : event.eventstrend.slug } ) }}" class=" text-decoration-none color-secondary-custom" aria-label="Retour aux évènements tendances">{{ event.eventstrend.name }}
                         </a> > {{ event.name }}
                     </i>
                 </small>
+                
+                {# Section : Carrousel d'images #}
                 <div class="col-md-6">
                     <div id="carouselEvent" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
                         {# Indicateurs du carrousel #}
                         <div class="carousel-indicators">
-                            {% for activity in event.activity %}
-                                <button 
-                                    type="button" 
-                                    data-bs-target="#carouselEvent" 
-                                    data-bs-slide-to="{{ loop.index0 }}" 
-                                    class="{% if loop.first %}active{% endif %}" 
-                                    aria-current="{% if loop.first %}true{% endif %}" 
-                                    aria-label="Slide {{ loop.index }}"
-                                ></button>
+                            {% for i in 0..3 %}
+                                <button type="button" data-bs-target="#carouselEvent" data-bs-slide-to="{{ i }}" class="{% if i == 0 %}active{% endif %}" aria-label="Slide {{ i + 1 }}"></button>
                             {% endfor %}
                         </div>
                         {# Slides du carrousel #}
                         <div class="carousel-inner" data-bs-interval="10000">
+                            {% for image in [event.image, event.image1, event.image2, event.image3] %}
                             <div 
-                                class="carousel-item active"
-                                data-activity-name="{{ event.activity.name }}"
-                                data-activity-slug="{{ event.activity.slug }}"
-                                data-activity-id="{{ event.activity.id }}"
+                                class="carousel-item {% if loop.first %}active{% endif %}"
+                                data-event-name="{{ event.name }}"
+                                data-event-slug="{{ event.slug }}"
                             >
-                                <a href="{{ path('app_activity', { slug: event.activity.slug } ) }}" aria-label="Voir l'activité {{ event.activity.name }}">
+                                <a href="#">
                                     <picture>
                                         {# WebP version #}
-                                        <source srcset="/uploads/{{ event.activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                        <source srcset="/uploads/{{ image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
                                         {# Fallback JPG/PNG #}
                                         <img 
-                                            src="/uploads/{{ event.activity.image }}"
+                                            src="/uploads/{{ image }}"
                                             class="figure-img img-fluid rounded border-secondary-custom" 
-                                            alt="Image de {{ event.activity.name }}" 
+                                            alt="Image de {{ event.name }}" 
                                             style="object-fit: cover; width: 100%; height: 400px;"
                                             loading="lazy"
                                             aria-hidden="false"
                                         >
                                     </picture>
                                     <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
-                                        <h2 class="color-secondary-custom">{{ event.activity.name }}</h2>
+                                        <h2 class="color-secondary-custom">{{ event.name }}</h2>
                                     </div>
                                 </a>
                             </div>
+                            {% endfor %}
                         </div>
                         {# Boutons de navigation #}
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselEvent" data-bs-slide="prev" aria-label="Image Précédent">
@@ -66,11 +64,14 @@
                         </button>
                     </div>
                 </div>
+
+                {# Section : Description #}
                 <div class="col-md-6">
                     <div class="card-body test-center">
                         <h1 class="card-title color-secondary-custom">{{ event.name }}</h1>
+                        <h2 class="visually-hidden">Description</h2>
                         <div>
-                            {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}
+							{# Collapse sur mobile  #}
                             <p class="d-sm-block d-md-none">
                                 <a 
                                     class="link text-decoration-none" 
@@ -84,7 +85,6 @@
                                     Voir Plus...
                                 </a>
                             </p>
-                            {# Conteneur pour la description avec collapse horizontal seulement pour sm et plus petits #}
                             <div class="d-sm-block d-md-none">
                                 <div 
                                     class="collapse" 
@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {# La description est toujours visible sur md et plus grands #}
+							{# Description sur md #}
                             <div class="d-none d-md-block">
                                 <div 
                                     class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
@@ -105,17 +105,51 @@
                         </div>
                     </div>
                 </div>
+
+				{# Section : Informations de l'évènement spécial #}
                 <div class="card-footer d-block justify-content-center align-items-center" style="border-top: none;">
                     <div class="row w-100">
                         <div class="col-sm-6 col-md-8">
-                            <section class="mb-3" role="region" aria-labelledby="location-header">
+
+                            {# Section : Informations évènement spécial #}
+                            <h2 class="visually-hidden">Informations Évènement Spécial</h2>
+
+                            {# Section : Localisation #}
+                            <section class="mb-1" role="region" aria-labelledby="location-header">
                                 <h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
                                     Lieu de l'activité
                                 </p>
                             </section>
-                            <section class="mb-3" role="region" aria-labelledby="rating-header">
+
+                            {# Section : Partenaire #}
+                            <section class="mb-1" role="region" aria-labelledby="partner-header">
+                                <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
+                                <p class="card-text color-secondary-custom">
+                                    <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                    Partenaire
+                                </p>
+                            </section>
+
+                            {# Section : Dates #}
+                            <h2 class="visually-hidden">Dates de Validité</h2>
+
+                            <section class="mb-3">
+                                <p class="card-text color-secondary-custom">
+                                    <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
+                                    {% if event.dateStart and event.dateStop %}
+                                        Valide du <strong>{{ event.dateStart|date('d/m/Y') }}</strong> au <strong>{{ event.dateStop|date('d/m/Y') }}</strong>
+                                    {% else %}
+                                        Date de validité non définie
+                                    {% endif %}
+                                </p>
+                            </section>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+
+                            {# Section : Évaluations #}
+                            <section class="mb-1" role="region" aria-labelledby="rating-header">
                                 <h3 id="rating-header" class="visually-hidden">Notes et évaluations</h3>
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-star-fill me-2" aria-hidden="true"></i>
@@ -124,7 +158,9 @@
                                     <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note">Ajouter une note</a>
                                 </p>
                             </section>
-                            <section class="mb-3" role="region" aria-labelledby="reviews-header">
+
+                            {# Section : Avis #}
+                            <section class="mb-1" role="region" aria-labelledby="reviews-header">
                                 <h3 id="reviews-header" class="visually-hidden">Avis</h3>
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-stars me-2" aria-hidden="true"></i>
@@ -133,70 +169,32 @@
                                     <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter un avis">Ajouter un avis</a>
                                 </p>
                             </section>
-                        </div>
-                        <div class="col-sm-6 col-md-4">
-                            <section class="mb-3" role="region" aria-labelledby="partner-header">
-                                <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
-                                <p class="card-text color-secondary-custom">
-                                    <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
-                                    Partenaire
-                                </p>
-                            </section>
-                            <section class="mb-3" role="region" aria-labelledby="tag-header">
+
+                            {# Section : Tag #}
+                            <section class="mb-1" role="region" aria-labelledby="tag-header">
                                 <h3 id="tag-header" class="visually-hidden">Tag</h3>
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-tag-fill me-2" aria-hidden="true"></i>
                                     Tag
                                 </p>
                             </section>
-                            <section class="mb-3">
+
+                            {# Section : Tarifs #}
+                            <section class="mb-1">
                                 <h3 class="card-title text-center color-primary-custom mt-4 bg-secondaryYellow border-hover-custom fs-6 px-2 py-1 rounded-pill w-75 mx-auto" aria-label="Prix de l'activité">
-                                    {{ event.activity.priceWt|price }}
+                                    {{ event.priceWt|price }}
                                 </h3>
                             </section>
                         </div>
                     </div>
+					
+                    {# Section : Boutons d'actions #}
                     <div class="btn-group d-flex justify-content-center align-items-center" role="group" aria-label="Options de réservation" style="border-top: none;">
-                        <a id="addToCartButton" type="button" class="btn" aria-label="Ajouter cette activité au panier">Ajouter au panier</a>
+                        <a href="{{ path('app_cart_add', { type: 'event', id: event.id } ) }}" class="btn btn-primary" aria-label="Ajouter cette offre au panier">Ajouter au panier</a>
                         <button type="button" class="btn" aria-label="Réserver cette activité">Réserver</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script defer>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // Gestion du carrousel et de l'ID d'activité pour "Ajouter au panier"
-            const carousel = document.getElementById('carouselEvent');
-            const addToCartButton = document.getElementById('addToCartButton');
-
-            // Fonction pour mettre à jour l'ID de l'activité
-            function updateActivityId() {
-                const activeItem = carousel.querySelector('.carousel-item.active');
-                const activityId = activeItem ? activeItem.getAttribute('data-activity-id') : null;
-                if (activityId) {
-                    addToCartButton.setAttribute('href', `/cart/add/${activityId}` );  // Changez l'URL en fonction de votre route
-                } else {
-                    // Désactive le bouton si aucun ID n'est trouvé
-                    addToCartButton.removeAttribute('href');
-                }
-            }
-
-            // Mettre à jour l'ID de l'activité lorsque le carrousel change
-            carousel.addEventListener('slid.bs.carousel', updateActivityId);
-
-            // Initialiser l'ID de l'activité lorsque la page charge
-            updateActivityId();
-
-            // Gérer l'événement de clic sur le bouton
-            addToCartButton.addEventListener('click', (event) => {
-                const href = addToCartButton.getAttribute('href');
-                if (!href) {
-                    event.preventDefault(); // Empêche la redirection si l'ID n'est pas défini
-                    alert("Veuillez sélectionner une activité avant de l'ajouter au panier.");
-                }
-            });
-        });
-    </script>
 {% endblock %}

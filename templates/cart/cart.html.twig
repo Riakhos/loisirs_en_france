@@ -6,120 +6,309 @@
     {# Barre de navigation #}
     {% include "account/navbar.html.twig" %}
 
-    {# Mon Panier #}
-    <div class="container w-auto d-flex justify-content-center align-items-center my-5">
+    {# Conteneur principal du panier #}
+    <div class="container d-flex justify-content-center align-items-center my-5">
         <div class="row">
-            {# Contenu principal #}
+            
+            {# Section principale du panier #}
             <div class="col-md-8">
-                {% for activity in cart %}
-                    <div class="card mb-4 shadow-sm border-1">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <picture>
-                                    {# WebP version #}
-                                    <source srcset="/uploads/{{ activity.object.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
-                                    {# Fallback JPG/PNG #}
-                                    <img 
-                                        src="/uploads/{{ activity.object.image }}" 
-                                        class="img-fluid rounded-start h-100 object-fit-cover" 
-                                        alt="Image de {{ activity.object.name }}"
-                                        loading="lazy"
-                                        width="200" height="150"
-                                    >
-                                </picture>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h2 class="card-title fw-bold">{{ activity.object.name }}</h2>
-                                    <p class="card-text">
-                                        <span>Prix unitaire :</span> 
-                                        <strong>{{ activity.object.price|price }}</strong>
-                                    </p>
-                                    <p class="card-text d-flex align-items-center gap-3">
-                                        <span class="fw-semibold">Quantité :</span>
-                                        
-                                        {# Icône pour diminuer la quantité #}
-                                        <a 
-                                            href="{{ path('app_cart_decrease', { id: activity.object.id } ) }}" 
-                                            class="btn  shadow-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
-                                            style="width: 20px; height: 20px;"
-                                            aria-label="Diminuer la quantité de {{ activity.object.name }}"
-                                        >
-                                            <i class="bi bi-dash-lg color-primary-custom" aria-hidden="true" style="font-size: 1rem;"></i>
-                                        </a>
-                                        
-                                        {# Badge pour afficher la quantité #}
-                                        <span class="badge bg-primaryBlue color-secondary-custom shadow-sm fs-6 px-3 py-2">
-                                            x{{ activity.qty }}
-                                        </span>
-                                        
-                                        {# Icône pour augmenter la quantité #}
-                                        <a 
-                                            href="{{ path('app_cart_add', { type: 'activity', id: activity.object.id } ) }}" 
-                                            class="btn  shadow-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
-                                            style="width: 20px; height: 20px;"
-                                            aria-label="Augmenter la quantité de {{ activity.object.name }}"
-                                        >
-                                            <i class="bi bi-plus-lg color-primary-custom" aria-hidden="true" style="font-size: 1rem;"></i>
-                                        </a>
-                                    </p>
-
-                                    <p class="card-text">
-                                        <strong>Total :</strong> 
-                                        <span class="text-success">{{ (activity.qty * activity.object.price)|price }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                {% if cart is empty %}
+                    <p class="text-center color-primary-custom" role="alert">Votre panier est vide.</p>
                 {% else %}
-                    <p class="text-center color-primary-custom">Votre panier est vide.</p>
-                {% endfor %}
-
-                {# Affichage des offres #}
-                {% if offers is defined %}
-                    <h3 class="text-center my-4">Offres spéciales</h3>
-                    {% for offer in offers %}
-                        <div class="card mb-4 shadow-sm border-1">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <picture>
-                                        {# WebP version #}
-                                        <source srcset="/uploads/{{ offer.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
-                                        {# Fallback JPG/PNG #}
-                                            <img 
-                                                src="/uploads/{{ offer.image }}" 
-                                                class="img-fluid rounded-start h-100 object-fit-cover" 
-                                                alt="Image de {{ offer.name }}"
-                                                loading="lazy"
-                                                width="200" height="150"
-                                            >
-                                    </picture>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h2 class="card-title fw-bold">{{ offer.name }}</h2>
-                                        <p class="card-text">
-                                            <span>Prix avant offre :</span> 
-                                            <strong>{{ offer.originalPrice|price }}</strong>
-                                        </p>
-                                        <p class="card-text">
-                                            <span>Prix avec offre :</span> 
-                                            <strong class="text-success">{{ offer.discountedPrice|price }}</strong>
-                                        </p>
-                                        <a href="{{ path('app_offer_details', { id: offer.id }) }}" class="btn btn-primary">Voir l'offre</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    
+                    {# Détection des types d'articles présents #}
+                    {% set hasActivity = false %}
+                    {% set hasOffer = false %}
+                    {% set hasExclusive = false %}
+                    {% set hasEvent = false %}
+                    
+                    {# Types d'éléments présents dans le panier #}
+                    {% for item in cart %}
+                        {% if item.type == 'activity' %}
+                            {% set hasActivity = true %}
+                        {% elseif item.type == 'offer' %}
+                            {% set hasOffer = true %}
+                        {% elseif item.type == 'exclusive' %}
+                            {% set hasExclusive = true %}
+                        {% elseif item.type == 'event' %}
+                            {% set hasEvent = true %}
+                        {% endif %}
                     {% endfor %}
+                    
+                    {# Section des activités #}
+                    {% if hasActivity %}
+                        <section role="region" aria-labelledby="title-activities">
+                            <h2 id="title-activities" class="text-center color-primary-custom my-4">Activités</h2>
+                            {% for item in cart %}
+                                {% if item.type == 'activity' %}
+                                    {# Carte affichant une activité ajoutée au panier #}
+                                    <article class="card mb-4 shadow-sm border-1" role="group" aria-labelledby="activity-{{ item.object.id }}">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <picture>
+                                                    <source srcset="/uploads/{{ item.object.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                    <img 
+                                                        src="/uploads/{{ item.object.image }}" 
+                                                        class="img-fluid rounded-start h-100 object-fit-cover" 
+                                                        alt="{{ item.object.name }} - Activité"
+                                                        loading="lazy"
+                                                        width="200" height="150"
+                                                    >
+                                                </picture>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h3 id="activity-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
+                                                    <p class="card-text"><span>Prix unitaire :</span>
+                                                        <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                    </p>
+                                                    <p class="card-text d-flex align-items-center gap-3">
+                                                        <span class="fw-semibold">Quantité :</span>
+                                                        {# Boutons pour modifier la quantité #}
+                                                        <a href="{{ path('app_cart_decrease', { type: 'activity', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                        </a>
+                                                        <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue" aria-live="polite">{{ item.qty }}</span>
+                                                        <a href="{{ path('app_cart_add', { type: 'activity', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                        </a>
+                                                    </p>
+                                                    <p class="card-text"><strong>Total :</strong>
+                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                {% endif %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+                    
+                    {# Section des offres spéciales #}
+                    {% if hasOffer %}
+                        <section role="region" aria-labelledby="title-offers">
+                            <h2 id="title-offers" class="text-center color-primary-custom my-4">Offres spéciales</h2>
+                            {% for item in cart %}
+                                {% if item.type == 'offer' %}
+                                    {# Carte affichant une offre spéciale ajoutée au panier #}
+                                    <article class="card mb-4 shadow-sm border-1" role="group" aria-labelledby="offer-{{ item.object.id }}">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <picture>
+                                                    <source srcset="/uploads/{{ item.object.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                    <img 
+                                                        src="/uploads/{{ item.object.image }}" 
+                                                        class="img-fluid rounded-start h-100 object-fit-cover" 
+                                                        alt="{{ item.object.name }} - Offre spéciale"
+                                                        loading="lazy"
+                                                        width="200" height="150"
+                                                    >
+                                                </picture>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h3 id="offer-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
+                                                    <p class="card-text"><span>Prix :</span>
+                                                        <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                    </p>
+                                                    <p class="card-text d-flex align-items-center gap-3">
+                                                        <span class="fw-semibold">Quantité :</span>
+                                                        <a href="{{ path('app_cart_decrease', { type: 'offer', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                        </a>
+                                                        <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue">{{ item.qty }}</span>
+                                                        <a href="{{ path('app_cart_add', { type: 'offer', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                        </a>
+                                                    </p>
+                                                    <p class="card-text"><strong>Total :</strong>
+                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                {% endif %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+
+                    {# Section des offres exclusives #}
+                    {% if hasExclusive %}
+                        <section role="region" aria-labelledby="title-exclusives">
+                            <h2 id="title-exclusives" class="text-center color-primary-custom my-4">Offres exclusives</h2>
+                            {% for item in cart %}
+                                {% if item.type == 'exclusive' %}
+                                    
+                                    {# Carte affichant une offre exclusive ajoutée au panier #}
+                                    <article class="card mb-4 shadow-sm border-1" role="group" aria-labelledby="exclusive-{{ item.object.id }}">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <picture>
+                                                    <source srcset="/uploads/{{ item.object.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                    <img 
+                                                        src="/uploads/{{ item.object.image }}" 
+                                                        class="img-fluid rounded-start h-100 object-fit-cover" 
+                                                        alt="{{ item.object.name }} - Offre exclusive"
+                                                        loading="lazy"
+                                                        width="200" height="150"
+                                                    >
+                                                </picture>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    {# Informations activité #}
+                                                    <h3 class="visually-hidden">Informations Activités</h3>
+                                                    <h3 id="exclusive-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
+                                                    {# Section : Activité #}
+                                                    <section class="mb-1">
+                                                        <h4 class="visually-hidden">Activité concernée</h4>
+                                                        {% for activities in item.object.activities %}
+                                                            <p class="card-text">
+                                                                <i class="bi bi-activity me-2" aria-hidden="true"></i>
+                                                                Activité : <a href="{{ path('app_activity', { slug: activities.slug } ) }}" class="text-decoration-none color-primary-custom">
+                                                                    {{ activities.name }}
+                                                                </a>
+                                                            </p>
+                                                        {% endfor %}
+                                                    </section>
+                                                    {# Section : Localisation #}
+                                                    <section class="mb-1" role="region" aria-labelledby="location-header">
+                                                        <h4 id="location-header" class="visually-hidden">Lieu de l'activité</h4>
+                                                        <p class="card-text">
+                                                            <i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
+                                                            Lieu de l'activité
+                                                        </p>
+                                                    </section>
+                                                    {# Section : Dates #}
+                                                    <section class="mb-3">
+                                                        <h4 class="visually-hidden">Dates de Validité</h4>
+                                                        <p class="card-text">
+                                                            <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
+                                                            {% if item.object.dateStart and item.object.dateStop %}
+                                                                Valide du <strong>{{ item.object.dateStart|date('d/m/Y') }}</strong> au <strong>{{ item.object.dateStop|date('d/m/Y') }}</strong>
+                                                            {% else %}
+                                                                Date de validité non définie
+                                                            {% endif %}
+                                                        </p>
+                                                    </section>
+                                                    <p class="card-text"><span>Prix :</span>
+                                                        <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                    </p>
+                                                    <p class="card-text d-flex align-items-center gap-3">
+                                                        <span class="fw-semibold">Quantité :</span>
+                                                        <a href="{{ path('app_cart_decrease', { type: 'exclusive', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                        </a>
+                                                        <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue">{{ item.qty }}</span>
+                                                        <a href="{{ path('app_cart_add', { type: 'exclusive', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                        </a>
+                                                    </p>
+                                                    <p class="card-text"><strong>Total :</strong>
+                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                {% endif %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+
+                    {# Section des évènements spéciaux #}
+                    {% if hasEvent %}
+                        <section role="region" aria-labelledby="title-events">
+                            <h2 id="title-events" class="text-center color-primary-custom my-4">Évènements spéciaux</h2>
+                            {% for item in cart %}
+                                {% if item.type == 'event' %}
+                                    
+                                    {# Carte affichant une évènement spécial ajoutée au panier #}
+                                    <article class="card mb-4 shadow-sm border-1" role="group" aria-labelledby="évènement-{{ item.object.id }}">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <picture>
+                                                    <source srcset="/uploads/{{ item.object.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                    <img 
+                                                        src="/uploads/{{ item.object.image }}" 
+                                                        class="img-fluid rounded-start h-100 object-fit-cover" 
+                                                        alt="{{ item.object.name }} - Évènement spécial"
+                                                        loading="lazy"
+                                                        width="200" height="150"
+                                                    >
+                                                </picture>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    {# Informations évènement spécial #}
+                                                    <h3 class="visually-hidden">Informations Évènement spécial</h3>
+                                                    <h3 id="évènement-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
+                                                    {# Section : Évènement spécial #}
+                                                    <section class="mb-1">
+                                                        <h4 class="visually-hidden">Évènement spécial concerné</h4>
+                                                            <p class="card-text">
+                                                                <i class="bi bi-activity me-2" aria-hidden="true"></i>
+                                                                Évènement spécial : <a href="{{ path('app_event', { slug: item.object.slug } ) }}" class="text-decoration-none color-primary-custom">
+                                                                    {{ item.object.name }}
+                                                                </a>
+                                                            </p>
+                                                    </section>
+                                                    {# Section : Localisation #}
+                                                    <section class="mb-1" role="region" aria-labelledby="location-header">
+                                                        <h4 id="location-header" class="visually-hidden">Lieu de l'activité</h4>
+                                                        <p class="card-text">
+                                                            <i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
+                                                            Lieu de l'activité
+                                                        </p>
+                                                    </section>
+                                                    {# Section : Dates #}
+                                                    <section class="mb-3">
+                                                        <h4 class="visually-hidden">Dates de Validité</h4>
+                                                        <p class="card-text">
+                                                            <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
+                                                            {% if item.object.dateStart and item.object.dateStop %}
+                                                                Valide du <strong>{{ item.object.dateStart|date('d/m/Y') }}</strong> au <strong>{{ item.object.dateStop|date('d/m/Y') }}</strong>
+                                                            {% else %}
+                                                                Date de validité non définie
+                                                            {% endif %}
+                                                        </p>
+                                                    </section>
+                                                    <p class="card-text"><span>Prix :</span>
+                                                        <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                    </p>
+                                                    <p class="card-text d-flex align-items-center gap-3">
+                                                        <span class="fw-semibold">Quantité :</span>
+                                                        <a href="{{ path('app_cart_decrease', { type: 'event', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                        </a>
+                                                        <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue">{{ item.qty }}</span>
+                                                        <a href="{{ path('app_cart_add', { type: 'event', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
+                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                        </a>
+                                                    </p>
+                                                    <p class="card-text"><strong>Total :</strong>
+                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                {% endif %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+
                 {% endif %}
             </div>
             
-            {% if cart|length > 0 %}
-                {# Récapitulatif du panier #}
+            {# Récapitulatif du panier #}
+            {% if cart|length > 0 %}            
                 <div class="col-md-4">
                     <div class="card shadow-sm border-1 p-3 sticky-top" role="complementary" aria-labelledby="recapitulatif-title">
+            
+                        {# Titre du récapitulatif avec icône de suppression #}
                         <div class="row">
                             <h3 id="recapitulatif-title" class="col-md-10 text-center color-primary-custom">Récapitulatif</h3>
                             <a href="{{ path('app_cart_remove') }}" class="col-md-2" aria-label="Vider le panier">
@@ -127,28 +316,63 @@
                             </a>
                         </div>
                         <hr>
+
+                        {# Liste des articles dans le panier #}
+                        {% for id, item in cart %}
+                            <p class="d-flex justify-content-between">
+                                <span class="col-md-8">
+
+                                    {# Identification du type d'article (activité, offre, exclusivité, événement) #}
+                                    {% if item.type == 'activity' %}
+                                        <strong> Activité : </strong>{{ item.object.name }}
+                                    {% elseif item.type == 'offer' %}
+                                        <strong>Offre Spéciale : </strong>{{ item.object.name }}
+                                    {% elseif item.type == 'exclusive' %}
+                                        <strong>Exclusive : </strong>{{ item.object.name }}
+                                    {% elseif item.type == 'event' %}
+                                        <strong>Événement : </strong>{{ item.object.name }}
+                                    {% endif %}
+                                </span>
+                                
+                                {# Prix total de l'élément (prix unitaire x quantité) #}
+                                <strong aria-label="Prix total">{{ (item.object.getPrice * item.qty)|price }}</strong>
+                            </p>
+                        {% endfor %}
+
+                        <hr>
+                        
+                        {# Sous-total hors taxes #}
                         <p class="d-flex justify-content-between">
-                            <span>Sous-total HT :</span> 
+                            <span aria-label="Sous-total HT">Sous-total HT :</span> 
                             <strong>{{ subtotal|price }}</strong>
                         </p>
-                        {# Détails des TVA #}
+
+                        {# Détails des TVA par taux appliqué #}
                         {% for rate, amount in tvaDetails %}
                             <p class="d-flex justify-content-between">
-                                <span>TVA ({{ rate }}%) :</span> 
+                                <span aria-label="TVA au taux de {{ rate }}%">TVA ({{ rate }}%) :</span> 
                                 <strong>{{ amount|price }}</strong>
                             </p>
                         {% endfor %}
+
                         {# Total des TVA #}
                         <p class="d-flex justify-content-between">
-                            <span>Total TVA :</span> 
+                            <span aria-label="Total TVA">Total TVA :</span> 
                             <strong>{{ tva|price }}</strong>
                         </p>
+
                         <hr>
+                        
+                        {# Montant total à payer #}
                         <p class="d-flex justify-content-between">
-                            <span>Total :</span> 
+                            <span aria-label="Montant total à payer">Total :</span> 
                             <strong class="text-success">{{ total|price }}</strong>
                         </p>
-                        <a href="#" class="btn btn-primary btn-block mt-3" aria-label="Réserver l'activité">Réserver</a>
+
+                        {# Bouton pour finaliser la réservation #}
+                        <a href="#" class="btn btn-primary btn-block mt-3" aria-label="Réserver les articles du panier">
+                            Réserver
+                        </a>
                     </div>
                 </div>
             {% endif %}

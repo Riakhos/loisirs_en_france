@@ -111,7 +111,7 @@ class Offer
     {
         $coeff = 1 + ($this->tva/100);
         
-        return $coeff * $this->price;
+        return $this->price / $coeff;
     }
 
     public function getTva(): ?float

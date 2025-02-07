@@ -91,6 +91,13 @@ class Event
         return $this;
     }
 
+    public function getPriceWt()
+    {
+        $coeff = 1 + ($this->tva/100);
+        
+        return $this->price / $coeff;
+    }
+
     public function getTva(): ?float
     {
         return $this->tva;

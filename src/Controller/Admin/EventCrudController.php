@@ -25,7 +25,7 @@ class EventCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Évènement spéciale')
+            ->setEntityLabelInSingular('Évènement spécial')
             ->setEntityLabelInPlural('Évènements spéciaux')
             ->setDateFormat('dd/MM/yyyy');
     }
@@ -42,19 +42,19 @@ class EventCrudController extends AbstractCrudController
             FormField::addFieldset('Informations principales'),
             TextField::new('name')
                 ->setLabel('Nom')
-                ->setHelp("Nom de l\'évènement spécial")
+                ->setHelp("Nom de l'évènement spécial")
                 ->setColumns(6)
             ,
             SlugField::new('slug')
                 ->setLabel('URL')
                 ->setTargetFieldName('name')
-                ->setHelp("URL de votre évènement spéciale générée automatiquement")
+                ->setHelp("URL de votre évènement spécial générée automatiquement")
                 ->setColumns(6)
             ,
-            FormField::addFieldset('Images de l\'évènement spéciale'),
+            FormField::addFieldset('Images de l\'évènement spécial'),
             ImageField::new('image')
                 ->setLabel('Image')
-                ->setHelp("Image de votre évènement spéciale en 600*600px")
+                ->setHelp("Image de votre évènement spécial en 600*600px")
                 ->setUploadDir('/public/uploads')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
@@ -63,7 +63,7 @@ class EventCrudController extends AbstractCrudController
             ,
             ImageField::new('image1')
                 ->setLabel('Image secondaire')
-                ->setHelp('Image secondaire de votre activité en 600*600px')
+                ->setHelp('Image secondaire de votre évènement spécial en 600*600px')
                 ->setUploadDir('/public/uploads')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
@@ -72,7 +72,7 @@ class EventCrudController extends AbstractCrudController
             ,
             ImageField::new('image2')
                 ->setLabel('Image secondaire')
-                ->setHelp('Image secondaire de votre activité en 600*600px')
+                ->setHelp('Image secondaire de votre évènement spécial en 600*600px')
                 ->setUploadDir('/public/uploads')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
@@ -81,7 +81,7 @@ class EventCrudController extends AbstractCrudController
             ,
             ImageField::new('image3')
                 ->setLabel('Image secondaire')
-                ->setHelp('Image secondaire de votre activité en 600*600px')
+                ->setHelp('Image secondaire de votre évènement spécial en 600*600px')
                 ->setUploadDir('/public/uploads')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
                 ->setBasePath('/uploads')
@@ -91,7 +91,7 @@ class EventCrudController extends AbstractCrudController
             FormField::addFieldset('Tarification'),
             NumberField::new('price')
                 ->setLabel('Prix T.T.C')
-                ->setHelp("Prix T.T.C de l\'évènement spéciale sans le sigle Euro")
+                ->setHelp("Prix T.T.C de l'évènement spécial sans le sigle Euro")
                 ->setColumns(6)
             ,
             ChoiceField::new('tva')
@@ -101,18 +101,18 @@ class EventCrudController extends AbstractCrudController
                     '10%' => '10',
                     '20%' => '20'
                 ])
-                ->setHelp("TVA de l'évènement spéciale")
+                ->setHelp("TVA de l'évènement spécial")
                 ->setColumns(6)
             ,
             FormField::addFieldset('Dates'),
             DateField::new('dateStart')
                 ->setLabel('Date de début')
-                ->setHelp("Date du début de l\'évènement spécial")
+                ->setHelp("Date du début de l'évènement spécial")
                 ->setColumns(6)
             ,
             DateField::new('dateStop')
                 ->setLabel('Date de fin')
-                ->setHelp("Date de la fin de l\'évènement spécial")
+                ->setHelp("Date de la fin de l'évènement spécial")
                 ->setColumns(6)
             ,
             FormField::addFieldset('Associations'),
@@ -121,7 +121,7 @@ class EventCrudController extends AbstractCrudController
             FormField::addFieldset('Description'),
             TextEditorField::new('description')
                 ->setLabel('Description')
-                ->setHelp("Description de l\'évènement spécial")
+                ->setHelp("Description de l'évènement spécial")
         ];
     }
 }
