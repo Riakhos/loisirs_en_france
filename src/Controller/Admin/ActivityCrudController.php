@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -108,7 +109,7 @@ class ActivityCrudController extends AbstractCrudController
             NumberField::new('price')
                 ->setLabel('Prix T.T.C')
                 ->setHelp('Prix T.T.C de l\activité sans le sigle Euro')
-                ->setColumns(6)
+                ->setColumns(4)
             ,
             ChoiceField::new('tva')
                 ->setLabel('Taux de TVA')
@@ -117,7 +118,13 @@ class ActivityCrudController extends AbstractCrudController
                     '10%' => '10',
                     '20%' => '20'
                 ])
-                ->setColumns(6)
+                ->setHelp('TVA de l\activité')
+                ->setColumns(4)
+            ,
+            IntegerField::new('peopleCount')
+                ->setLabel('Nombre de personnes')
+                ->setHelp('Le nombre de personnes autorisées pour cette activité')
+                ->setColumns(4)
             ,
             FormField::addFieldset('Associations'),
             AssociationField::new('category', 'Catégories associées')->setColumns(6),

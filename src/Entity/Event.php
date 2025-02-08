@@ -50,6 +50,15 @@ class Event
     #[ORM\Column(length: 255)]
     private ?string $image3 = null;
 
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    private ?Category $category = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    private ?Subcategory $subcategory = null;
+
+    #[ORM\Column]
+    private ?int $peopleCount = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -202,6 +211,42 @@ class Event
     public function setImage3(string $image3): static
     {
         $this->image3 = $image3;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getSubcategory(): ?Subcategory
+    {
+        return $this->subcategory;
+    }
+
+    public function setSubcategory(?Subcategory $subcategory): static
+    {
+        $this->subcategory = $subcategory;
+
+        return $this;
+    }
+
+    public function getPeopleCount(): ?int
+    {
+        return $this->peopleCount;
+    }
+
+    public function setPeopleCount(int $peopleCount): static
+    {
+        $this->peopleCount = $peopleCount;
 
         return $this;
     }

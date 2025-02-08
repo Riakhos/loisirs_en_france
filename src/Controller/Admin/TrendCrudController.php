@@ -72,7 +72,7 @@ class TrendCrudController extends AbstractCrudController
             AssociationField::new('eventstrend', 'Évènements Tendances associées')
                 ->setColumns(6)
             ,
-            AssociationField::new('activity', 'Activités')
+            AssociationField::new('activities', 'Activités associées')
                 ->setColumns(6)
             ,
             FormField::addFieldset('Description'),

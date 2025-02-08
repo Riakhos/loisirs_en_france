@@ -14,37 +14,39 @@
                                     data-bs-slide-to="{{ loop.index0 }}" 
                                     class="{% if loop.first %}active{% endif %}" 
                                     aria-current="{% if loop.first %}true{% endif %}" 
-                                    aria-label="Afficher l'activité {{ trend.activity.name }}"
+                                    aria-label="Afficher l'activité {{ trend.name }}"
                                 ></button>
                             {% endfor %}
                         </div>
                         {# Slides #}
                         <div class="carousel-inner" data-bs-interval="10000">
                             {% for trend in trends %}
-                                <div 
-                                    class="carousel-item {% if loop.first %}active{% endif %}"
-                                    data-activity-name="{{ trend.activity.name }}"
-                                    data-activity-slug="{{ trend.activity.slug }}"
-                                    data-trend-slug="{{ trend.slug }}"
-                                >
-                                    <a href="{{ path('app_activity', { slug: trend.activity.slug }) }}" aria-label="Voir l'activité {{ trend.activity.name }}">
-                                        <picture>
-                                            {# WebP version #}
-                                            <source srcset="/uploads/{{ trend.activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
-                                            {# Fallback JPG/PNG #}
-                                            <img 
-                                                src="/uploads/{{ trend.activity.image }}"
-                                                class="figure-img img-fluid rounded border-secondary-custom" 
-                                                alt="Image de l'activité {{ trend.activity.name }}"
-                                                loading="lazy"
-                                                style="object-fit: cover; width: 100%; height: 400px;"
-                                            >
-                                        </picture>
-                                        <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
-                                            <h2 class="color-secondary-custom">{{ trend.activity.name }}</h2>
-                                        </div>
-                                    </a>
-                                </div>
+                                {% for activity in trend.activities %}
+                                    <div 
+                                        class="carousel-item {% if loop.first %}active{% endif %}"
+                                        data-activity-name="{{ activity.name }}"
+                                        data-activity-slug="{{ activity.slug }}"
+                                        data-trend-slug="{{ trend.slug }}"
+                                    >
+                                        <a href="{{ path('app_activity', { slug: activity.slug }) }}" aria-label="Voir l'activité {{ activity.name }}">
+                                            <picture>
+                                                {# WebP version #}
+                                                <source srcset="/uploads/{{ trend.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                {# Fallback JPG/PNG #}
+                                                <img 
+                                                    src="/uploads/{{ trend.image }}"
+                                                    class="figure-img img-fluid rounded border-secondary-custom" 
+                                                    alt="Image de l'activité {{ trend.name }}"
+                                                    loading="lazy"
+                                                    style="object-fit: cover; width: 100%; height: 400px;"
+                                                >
+                                            </picture>
+                                            <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                                <h2 class="color-secondary-custom">{{ trend.name }}</h2>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
                             {% endfor %}
                         </div>
                         {# Boutons de navigation #}
@@ -63,7 +65,7 @@
                         <h1 class="card-title color-secondary-custom">Explorez Maintenant</h1>
                         <p class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom mt-5">
                             <strong>"Ne manquez pas les activités qui font vibrer la planète ! Rejoignez la fête et vivez des moments incroyables."</strong>
-                            Plongez dans des expériences uniques qui vous feront découvrir de nouvelles passions et créer des souvenirs inoubliables. Que vous soyez à la recherche d'aventure, de découvertes culturelles ou simplement de fun, ces activités vous promettent des instants magiques. Rejoignez-nous pour vivre la fête et partager des moments exceptionnels qui resteront gravés dans votre mémoire !
+                            Plongez dans des expériences uniques qui vous feront découvrir de nouvelles passions et créer des souvenirs inoubliables. Que vous soyez à la recherche d'aventure, de découvertes culturelles ou simplement de fun, ces activités vous promettent des instants magiques. Rejoignez-nous pour vivre la fête et partager des moments exceptionnels qui resteront gravés dans votre mémoire!
                         </p>
                     </div>
                 </div>

@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -92,7 +93,7 @@ class EventCrudController extends AbstractCrudController
             NumberField::new('price')
                 ->setLabel('Prix T.T.C')
                 ->setHelp("Prix T.T.C de l'évènement spécial sans le sigle Euro")
-                ->setColumns(6)
+                ->setColumns(4)
             ,
             ChoiceField::new('tva')
                 ->setLabel('Taux de TVA')
@@ -102,7 +103,12 @@ class EventCrudController extends AbstractCrudController
                     '20%' => '20'
                 ])
                 ->setHelp("TVA de l'évènement spécial")
-                ->setColumns(6)
+                ->setColumns(4)
+            ,
+            IntegerField::new('peopleCount')
+                ->setLabel('Nombre de personnes')
+                ->setHelp('Le nombre de personnes autorisées pour cet évènement spécial')
+                ->setColumns(4)
             ,
             FormField::addFieldset('Dates'),
             DateField::new('dateStart')
@@ -116,7 +122,9 @@ class EventCrudController extends AbstractCrudController
                 ->setColumns(6)
             ,
             FormField::addFieldset('Associations'),
-            AssociationField::new('eventstrend', 'Évènements Tendances associées')
+            AssociationField::new('eventstrend', 'Évènements Tendances associées')->setColumns(4),
+            AssociationField::new('category', 'Catégories associées')->setColumns(4),
+            AssociationField::new('subcategory', 'Sous-Catégories associées')->setColumns(4)
             ,
             FormField::addFieldset('Description'),
             TextEditorField::new('description')

@@ -54,6 +54,12 @@
     border-radius:10px;
 }
 
+@media (max-width: 576px) { /* Pour les écrans sm et plus petits */
+    .fs-sm-4 {
+      font-size: 1.25rem !important; /* Ajuste selon tes besoins */
+    }
+}
+
 /* Réinitialisation de base */
 body {
     font-family: var(--bs-font-pt-serif);

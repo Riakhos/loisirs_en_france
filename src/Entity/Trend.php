@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\TrendRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TrendRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: TrendRepository::class)]
 class Trend
@@ -22,10 +24,6 @@ class Trend
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
-    
-    #[ORM\ManyToOne(targetEntity: Activity::class, inversedBy: "trends")]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Activity $activity = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
@@ -35,6 +33,12 @@ class Trend
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
+
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'trend')]
+    private Collection $activities;
 
     public function getId(): ?int
     {
@@ -68,6 +72,7 @@ class Trend
     public function __construct()
     {
         $this->date = new \DateTimeImmutable();
+        $this->activities = new ArrayCollection();
     }
 
     public function getDate(): ?\DateTimeImmutable
@@ -78,18 +83,6 @@ class Trend
     public function setDate(\DateTimeImmutable $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-    
-    public function getActivity(): ?Activity
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(?Activity $activity): static
-    {
-        $this->activity = $activity;
 
         return $this;
     }
@@ -126,6 +119,36 @@ class Trend
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setTrend($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): static
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getTrend() === $this) {
+                $activity->setTrend(null);
+            }
+        }
 
         return $this;
     }

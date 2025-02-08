@@ -6,15 +6,16 @@
     <div class="d-flex justify-content-center align-items-center">
         <div class="card w-auto border-secondary-custom bg-primaryBlue mb-5 p-3" style="max-width: 1000px;">
             <div class="row g-0 d-flex justify-content-center align-items-center">
-                
-			{# Section : Navigation et titre #}
+				{# Section : Navigation et titre #}
                 <small class="card-header color-secondary-custom" style="border-bottom: none;">
                     <i>
-                        <a href="{{ path('app_eventstrend', { slug : exclusive.eventstrend.slug } ) }}" class="text-decoration-none color-secondary-custom" aria-label="Retour aux offres exclusives"> {{ exclusive.eventstrend.name }}
+                        <a 
+							href="{{ path('app_eventstrend', { slug : exclusive.eventstrend.slug } ) }}" 
+							class="text-decoration-none color-secondary-custom" 
+							aria-label="Retour aux offres exclusives"> {{ exclusive.eventstrend.name }}
                         </a> > {{ exclusive.name }}
                     </i>
                 </small>
-                
                 {# Section : Carrousel d'images #}
                 <div class="col-md-6">
 					<h2 class="visually-hidden">Galerie d'images</h2>
@@ -33,15 +34,15 @@
                         </div>
                         {# Slides du carrousel #}
                         <div class="carousel-inner" data-bs-interval="10000">
-							{% for activities in exclusive.activities %}
-								{% for image in [activities.image, activities.image1, activities.image2, activities.image3] %}
+							{% for activity in exclusive.activities %}
+								{% for image in [activity.image, activity.image1, activity.image2, activity.image3] %}
 									<div 
 										class="carousel-item {% if loop.first %}active{% endif %}"
-										data-activities-name="{{ activities.name }}"
-										data-activities-slug="{{ activities.slug }}"
+										data-activity-name="{{ activity.name }}"
+										data-activity-slug="{{ activity.slug }}"
 										data-exclusive-id="{{ exclusive.id }}"
 									>
-										<a href="{{ path('app_activity', { slug: activities.slug } ) }}" aria-label="Voir l'offre exclusive {{ activities.name }}">
+										<a href="{{ path('app_activity', { slug: activity.slug } ) }}" aria-label="Voir l'offre exclusive {{ activity.name }}">
 										<picture>
 											{# WebP version #}
 											<source srcset="/uploads/{{ image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
@@ -49,14 +50,14 @@
 											<img 
 												src="/uploads/{{ image }}" 
 												class="figure-img img-fluid rounded border-secondary-custom" 
-												alt="Image de {{ activities.name }}" 
+												alt="Image de {{ activity.name }}" 
 												style="object-fit: cover; width: 100%; height: 400px;"
 												loading="lazy"
 												aria-hidden="false"
 											>
 										</picture>
 											<div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
-												<h2 class="color-secondary-custom">{{activities.name }}</h2>
+												<h2 class="color-secondary-custom">{{activity.name }}</h2>
 											</div>
 										</a>
 									</div>
@@ -74,12 +75,11 @@
                         </button>
                     </div>
                 </div>
-
                 {# Section : Description #}
                 <div class="col-md-6">
                     <div class="card-body text-center">
-                        <h1 class="card-title color-secondary-custom">{{ exclusive.name }}</h1>
-						<h2 class="visually-hidden">Description</h2>
+                        <h2 class="card-title color-secondary-custom fs-1">{{ exclusive.name }}</h2>
+						<h3 class="visually-hidden">Description</h3>
                         <div>
 							{# Collapse sur mobile  #}
                             <p class="d-sm-block d-md-none">
@@ -111,20 +111,19 @@
                         </div>
                     </div>
                 </div>
-
 				{# Section : Informations de l'offre exclusive #}
                 <div class="card-footer d-block justify-content-center align-items-center" style="border-top: none;">
                     <div class="row w-100">
+						{# Section : Informations activité #}
 						<div class="col-sm-6 col-md-4">
-							{# Section : Informations activité #}
 							<h2 class="visually-hidden">Informations Activités</h2>
 							<section class="mb-1">
 								<h3 class="visually-hidden">Activité concernée</h3>
-								{% for activities in exclusive.activities %}
+								{% for activity in exclusive.activities %}
 									<p class="card-text color-secondary-custom">
 										<i class="bi bi-activity me-2" aria-hidden="true"></i>
-										Activité : <a href="{{ path('app_activity', { slug: activities.slug } ) }}" class="text-decoration-none color-secondary-custom">
-											{{ activities.name }}
+										Activité : <a href="{{ path('app_activity', { slug: activity.slug } ) }}" class="text-decoration-none color-secondary-custom">
+											{{ activity.name }}
 										</a>
 									</p>
 								{% endfor %}
@@ -144,9 +143,9 @@
                                 </p>
                             </section>
 						</div>
+						{# Section : Évaluations #}
 						<div class="col-sm-6 col-md-4">
 							<h2 class="visually-hidden">Notes, Avis et Tags</h2>
-							{# Section : Évaluations #}
 							<section class="mb-1" role="region" aria-labelledby="rating-header">
 								<h3 id="rating-header" class="visually-hidden">Notes</h3>
 								<p class="card-text color-secondary-custom">
@@ -173,34 +172,41 @@
                                 </p>
                             </section>
                         </div>
+						{# Section : Tarifs #}
                         <div class="col-sm-6 col-md-4">
 							<h2 class="visually-hidden">Prix et Réduction</h2>
-							{# Section : Tarifs #}
                             <section class="mb-1">
                                 <h3 class="visually-hidden">Prix</h3>
                                 <p class="card-text color-secondary-custom">
-									{% for activities in exclusive.activities %}
-										<i class="bi bi-tag-fill me-2" aria-hidden="true"></i>
-										Prix TTC <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2 rounded-pill w-75" aria-label="Prix de l'activité">{{ activities.price|price }}</strong>
+									{% for activity in exclusive.activities %}
+										<i class="bi bi-cash me-2" aria-hidden="true"></i>
+										Prix TTC <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2" aria-label="Prix de l'activité">{{ activity.price|price }}</strong>
+									{% endfor %}
+                                </p>
+                                <h3 class="visually-hidden">Nombre de personne</h3>
+                                <p class="card-text color-secondary-custom">
+									{% for activity in exclusive.activities %}
+										<i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+										Pour <strong class="text-center color-secondary-custom fs-7" aria-label="Nombre de personne pour l'activité">x{{ activity.peopleCount }}</strong> personne
 									{% endfor %}
                                 </p>
 								<h3 class="visually-hidden">Réduction</h3>
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-percent me-2" aria-hidden="true"></i>
-                                    Réduction <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2 rounded-pill w-75" aria-label="Réduction de l'activité">{{ exclusive.discountPercentage }}%</strong>
+                                    Réduction <strong class="text-center color-secondary-custom border-secondary-custom fs-7 px-2" aria-label="Réduction de l'activité">- {{ exclusive.discountPercentage }}%</strong>
                                 </p>
 								<h3 class="visually-hidden">Prix final</h3>
                                 <p class="card-text color-secondary-custom">
 									<i class="bi bi-cash me-2" aria-hidden="true"></i>
-									Prix final <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2 rounded-pill w-75" aria-label="Prix final de l'activité">
+									Prix final <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2" aria-label="Prix final de l'activité">
 										{{ exclusive.getPrice()|price }}</strong>
                                 </p>
                             </section>
                         </div>
-                        <div class="col-sm-6 col">
+						{# Section : Dates #}
+                        <div class="col-sm-6">
 							<h2 class="visually-hidden">Dates de Validité</h2>
-							{# Section : Dates #}
-							<section class="mb-3">
+							<section class="mb-1">
 								<p class="card-text color-secondary-custom">
 									<i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
 									{% if exclusive.dateStart and exclusive.dateStop %}

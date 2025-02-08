@@ -40,10 +40,17 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'category')]
+    private Collection $events;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
         $this->subcategories = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString()
@@ -158,6 +165,36 @@ class Category
             // set the owning side to null (unless already changed)
             if ($subcategory->getCategory() === $this) {
                 $subcategory->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getCategory() === $this) {
+                $event->setCategory(null);
             }
         }
 

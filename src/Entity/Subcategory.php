@@ -37,9 +37,16 @@ class Subcategory
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'subcategory')]
+    private Collection $events;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString()
@@ -136,6 +143,36 @@ class Subcategory
             // set the owning side to null (unless already changed)
             if ($activity->getSubcategory() === $this) {
                 $activity->setSubcategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setSubcategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getSubcategory() === $this) {
+                $event->setSubcategory(null);
             }
         }
 

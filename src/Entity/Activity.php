@@ -52,24 +52,26 @@ class Activity
     private ?Subcategory $subcategory = null;
 
     /**
-     * @var Collection
-     */
-    #[ORM\OneToMany(targetEntity: Trend::class, mappedBy: "activity")]
-    private Collection $trends;
-
-    /**
      * @var Collection<int, Offer>
      */
     #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'activity')]
     private Collection $offers;
-
+    
+    /**
+     * @var Exclusive|null
+     */
     #[ORM\ManyToOne(targetEntity: Exclusive::class, inversedBy: 'activities')]
     private ?Exclusive $exclusive = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $peopleCount = null;
+
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Trend $trend = null;
 
     public function __construct()
     {
         $this->offers = new ArrayCollection();
-        $this->trends = new ArrayCollection();
     }
 
     public function __toString()
@@ -287,6 +289,30 @@ class Activity
     public function setExclusive(?Exclusive $exclusive): static
     {
         $this->exclusive = $exclusive;
+
+        return $this;
+    }
+
+    public function getPeopleCount(): ?int
+    {
+        return $this->peopleCount;
+    }
+
+    public function setPeopleCount(?int $peopleCount): static
+    {
+        $this->peopleCount = $peopleCount;
+
+        return $this;
+    }
+
+    public function getTrend(): ?Trend
+    {
+        return $this->trend;
+    }
+
+    public function setTrend(?Trend $trend): static
+    {
+        $this->trend = $trend;
 
         return $this;
     }

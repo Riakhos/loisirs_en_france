@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ controller_name }}{{ category.slug }}{% endblock %}
+{% block title %}{{ controller_name }} {{ category.slug }}{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
@@ -61,11 +61,12 @@
                         </button>
                     </div>
                 </div>
+                {# Section : Description #}
                 <div class="col-md-6">
                     <div class="card-body">
                         <h1 class="card-title color-secondary-custom">{{ category.name }}</h1>
                         <div>
-                            {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}
+							{# Collapse sur mobile  #}
                             <p class="d-sm-block d-md-none">
                                 <a 
                                     class="link text-decoration-none" 
@@ -79,7 +80,6 @@
                                     Voir Plus...
                                 </a>
                             </p>
-                            {# Conteneur pour la description avec collapse horizontal seulement pour sm et plus petits #}
                             <div class="d-sm-block d-md-none">
                                 <div 
                                     class="collapse" 
@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {# La description est toujours visible sur md et plus grands #}
+							{# Description sur md #}
                             <div class="d-none d-md-block">
                                 <div 
                                     class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">

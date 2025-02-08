@@ -13,17 +13,17 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # Register ImageOptimizer as a service
-    App\Service\ImageOptimizer:
-        arguments:
-            $uploadDir: '%photo_dir%'
+    # App\Service\ImageOptimizer:
+    #     arguments:
+    #         $uploadDir: '%photo_dir%'
     
     # Register GenericImageListener as an event subscriber
-    App\EventListener\GenericImageListener:
-        arguments:
-            $imageOptimizer: '@App\Service\ImageOptimizer'
-            $entityManager: '@doctrine.orm.entity_manager'
-        tags:
-            - { name: 'kernel.event_subscriber' }
+    # App\EventListener\GenericImageListener:
+    #     arguments:
+    #         $imageOptimizer: '@App\Service\ImageOptimizer'
+    #         $entityManager: '@doctrine.orm.entity_manager'
+    #     tags:
+    #         - { name: 'kernel.event_subscriber' }
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

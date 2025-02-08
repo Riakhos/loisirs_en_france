@@ -24,6 +24,7 @@ class TrendController extends AbstractController
         return $this->render('eventstrend/trend.html.twig', [
             'controller_name' => 'Activités Tendances',
             'trend' => $trend,
+            'activities' => $trend->getActivities(),
         ]);
     }
 }

@@ -62,6 +62,10 @@
                                                     <p class="card-text"><span>Prix unitaire :</span>
                                                         <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
                                                     </p>
+                                                    <p class="card-text">
+                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
+                                                    </p>
                                                     <p class="card-text d-flex align-items-center gap-3">
                                                         <span class="fw-semibold">Quantité :</span>
                                                         {# Boutons pour modifier la quantité #}
@@ -111,6 +115,10 @@
                                                     <h3 id="offer-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
                                                     <p class="card-text"><span>Prix :</span>
                                                         <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
                                                     </p>
                                                     <p class="card-text d-flex align-items-center gap-3">
                                                         <span class="fw-semibold">Quantité :</span>
@@ -196,6 +204,10 @@
                                                     <p class="card-text"><span>Prix :</span>
                                                         <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
                                                     </p>
+                                                    <p class="card-text">
+                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
+                                                    </p>
                                                     <p class="card-text d-flex align-items-center gap-3">
                                                         <span class="fw-semibold">Quantité :</span>
                                                         <a href="{{ path('app_cart_decrease', { type: 'exclusive', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
@@ -277,6 +289,10 @@
                                                     </section>
                                                     <p class="card-text"><span>Prix :</span>
                                                         <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
                                                     </p>
                                                     <p class="card-text d-flex align-items-center gap-3">
                                                         <span class="fw-semibold">Quantité :</span>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ controller_name }}{% endblock %}
+{% block title %}{{ controller_name }} {{ eventstrend.name }}{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center">
@@ -38,7 +38,7 @@
                                             data-item-slug="{{ item.slug }}"
                                             data-eventstrend-slug="{{ eventstrend.slug }}"
                                         >
-                                                <a href="{{ path(relation.route, { slug: item.slug }) }}" class="text-decoration-none">
+                                            <a href="{{ path(relation.route, { slug: item.slug }) }}" class="text-decoration-none">
                                                 <picture>
                                                     {# WebP version #}
                                                     <source srcset="/uploads/{{ item.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
@@ -69,11 +69,12 @@
                                 </button>
                             </div>
                         </div>
+						{# Section : Description #}
                         <div class="col-md-6 d-flex justify-content-between align-items-center ">
                             <div class="card-body text-center">
                                 <h1 class="card-title color-secondary-custom">{{ eventstrend.name }}</h1>
                                 <div>
-                                    {# Lien "Voir Plus/Moins" pour la description visible uniquement sur sm et plus petits #}
+                                    {# Collapse sur mobile  #}
                                     <p class="d-sm-block d-md-none">
                                         <a 
                                             class="link text-decoration-none" 
@@ -87,7 +88,6 @@
                                             Voir Plus...
                                         </a>
                                     </p>
-                                    {# Conteneur pour la description avec collapse horizontal seulement pour sm et plus petits #}
                                     <div class="d-sm-block d-md-none">
                                         <div 
                                             class="collapse" 
@@ -98,7 +98,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {# La description est toujours visible sur md et plus grands #}
+                                    {# Description sur md #}
                                     <div class="d-none d-md-block">
                                         <div 
                                             class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
