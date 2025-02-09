@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Exclusive;
+use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -78,7 +79,17 @@ class ExclusiveCrudController extends AbstractCrudController
             ,
             FormField::addFieldset('Associations'),
             AssociationField::new('activities', 'Activité associés')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'multiple' => true,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('a')
+                            ->orderBy('a.name', 'ASC');
+                    },
+                ])
                 ->setHelp('Sélectionnez l\'activité sur laquelle s\'applique cette offre exclusive')
+                ->setFormTypeOption('choice_label', 'name')
+                ->setFormTypeOption('attr', ['data-limit' => 1])
                 ->setColumns(6)
             ,
             AssociationField::new('eventstrend', 'Évènements Tendances associés')

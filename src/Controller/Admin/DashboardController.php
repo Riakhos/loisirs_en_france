@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Offer;
 use App\Entity\Trend;
+use App\Entity\Partner;
 use App\Entity\Activity;
 use App\Entity\Category;
 use App\Entity\Exclusive;
@@ -13,6 +14,7 @@ use App\Entity\Eventstrend;
 use App\Entity\Subcategory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Controller\Admin\UserCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -52,9 +54,13 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
-        yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-list', User::class);
+        // 📌 Espace Membres et Partenaires
+        yield MenuItem::subMenu('Gestion et Accès', 'fas fa-folder')->setSubItems([
+            MenuItem::linkToCrud('Utilisateurs', 'fas fa-list', User::class),
+            MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class),
+        ]);
         
-        // 📌 Catégories et sous-sections
+        // 📌 Loisirs et sous-sections
         yield MenuItem::subMenu('Loisirs', 'fas fa-folder')->setSubItems([
             MenuItem::linkToCrud('Catégories', 'fas fa-list', Category::class),
             MenuItem::linkToCrud('Sous-Catégories', 'fas fa-list', Subcategory::class),

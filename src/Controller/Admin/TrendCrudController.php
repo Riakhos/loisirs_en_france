@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Trend;
+use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -38,30 +39,29 @@ class TrendCrudController extends AbstractCrudController
         }
 
         $dateField = DateField::new('date')
-        ->setLabel('Date de création')
-        ->setHelp('Cette date est définie automatiquement')
-        ->setRequired(false);
+            ->setLabel('Date de création')
+            ->setHelp('Cette date est définie automatiquement')
+            ->setRequired(false)
+            ->setFormTypeOption('disabled', true)
+        ;
     
-    if ($pageName === Crud::PAGE_NEW) {
-        $dateField->setValue(new \DateTimeImmutable());
-    }
+        if ($pageName === Crud::PAGE_NEW) {
+            $dateField->setValue(new \DateTimeImmutable());
+        }
         
         return [
             FormField::addFieldset('Informations principales'),
-            TextField::new('name')
-                ->setLabel('Nom')
+            TextField::new('name', 'Nom')
                 ->setHelp('Nom de l\'activité tendance')
                 ->setColumns(4)
             ,
-            SlugField::new('slug')
-                ->setLabel('URL')
+            SlugField::new('slug', 'URL')
                 ->setTargetFieldName('name')
                 ->setHelp('URL de votre activité tendance générée automatiquement')
                 ->setColumns(6)
             ,
             FormField::addFieldset('Image de l\'activité tendance'),
-            ImageField::new('image')
-                ->setLabel('Image')
+            ImageField::new('image', 'Image')
                 ->setHelp('Image de votre activité tendance en 600*600px')
                 ->setUploadDir('/public/uploads')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
@@ -70,14 +70,25 @@ class TrendCrudController extends AbstractCrudController
             ,
             FormField::addFieldset('Associations'),
             AssociationField::new('eventstrend', 'Évènements Tendances associées')
+                ->setHelp('Sélectionner les évènements tendances que l\'ont peu associer')
                 ->setColumns(6)
             ,
-            AssociationField::new('activities', 'Activités associées')
+            AssociationField::new('activities', 'Activité associés')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'multiple' => true,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('a')
+                            ->orderBy('a.name', 'ASC');
+                    },
+                ])
+                ->setHelp("Sélectionnez l\'activité que l'on souhaite mettre en avant")
+                ->setFormTypeOption('choice_label', 'name')
+                ->setFormTypeOption('attr', ['data-limit' => 1])
                 ->setColumns(6)
             ,
             FormField::addFieldset('Description'),
-            TextEditorField::new('description')
-                ->setLabel('Description')
+            TextEditorField::new('description', 'Description')
                 ->setHelp("Description de l\'évènement spécial")
                 ->setColumns(6)
             ,

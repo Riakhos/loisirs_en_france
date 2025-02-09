@@ -59,6 +59,14 @@ class Event
     #[ORM\Column]
     private ?int $peopleCount = null;
 
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    private ?Partner $partners = null;
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -247,6 +255,18 @@ class Event
     public function setPeopleCount(int $peopleCount): static
     {
         $this->peopleCount = $peopleCount;
+
+        return $this;
+    }
+
+    public function getPartners(): ?Partner
+    {
+        return $this->partners;
+    }
+
+    public function setPartners(?Partner $partners): static
+    {
+        $this->partners = $partners;
 
         return $this;
     }

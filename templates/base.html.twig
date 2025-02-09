@@ -339,7 +339,7 @@
             {% include 'modals/terms_modal.html.twig' %}
             {% include 'modals/legal_modal.html.twig' %}
             {% include 'modals/filter_modal.html.twig' %}
-            {% include 'modals/partner_modal.html.twig' %}
+            {% include 'modals/partner_modal.html.twig' with { partnerForm: partnerForm } %}
             {% include 'modals/invitation_modal.html.twig' %}
             {% include 'modals/reviews_modal.html.twig' %}
             {% include 'modals/contact_modal.html.twig' %}

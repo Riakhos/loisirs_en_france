@@ -24,6 +24,16 @@
 
             {# Formulaire de demande de partenariat #}
             <div class="modal-body">
+                {{ form(partnerForm, {'method': 'GET'}) }}
+                {# {{ form_start(partnerForm) }}
+                    {{ form_row(partnerForm.name) }}
+                    {{ form_row(partnerForm.website) }}
+                    {{ form_row(partnerForm.presentation) }}
+                    {{ form_row(partnerForm.user.email) }}
+                    {{ form_row(partnerForm.user.password) }}
+                    {{ form_row(partnerForm.captcha) }}
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                {{ form_end(partnerForm) }} #}
                 {# <form method="POST" action="{{ path('partner') }}"> #}
                     <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
                         <label for="name" class="form-label color-secondary-custom">Nom <span class="text-danger">*</span></label>

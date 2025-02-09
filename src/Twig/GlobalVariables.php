@@ -3,14 +3,18 @@
 namespace App\Twig;
 
 use App\Classe\Cart;
+use App\Entity\Partner;
+use App\Form\PartnerType;
 use App\Repository\TrendRepository;
 use Twig\Extension\GlobalsInterface;
 use Twig\Extension\AbstractExtension;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ExclusiveRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\EventstrendRepository;
 use App\Repository\SubcategoryRepository;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class GlobalVariables extends AbstractExtension implements GlobalsInterface
 {
@@ -21,6 +25,8 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	private EventstrendRepository $eventstrendRepository;
 	private TrendRepository $trendRepository;
 	private ExclusiveRepository $exclusiveRepository;
+	private FormFactoryInterface $formFactory;
+	private EntityManagerInterface $em;
 
 	/**
 	 * __construct
@@ -32,7 +38,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	 * @param Cart $cart
 	 	* *Le service de gestion du panier
 	 */
-	public function __construct(CategoryRepository $categoryRepository, SubcategoryRepository $subcategoryRepository,ActivityRepository $activityRepository, Cart $cart, EventstrendRepository $eventstrendRepository, TrendRepository $trendRepository, ExclusiveRepository $exclusiveRepository)
+	public function __construct(CategoryRepository $categoryRepository, SubcategoryRepository $subcategoryRepository,ActivityRepository $activityRepository, Cart $cart, EventstrendRepository $eventstrendRepository, TrendRepository $trendRepository, ExclusiveRepository $exclusiveRepository, FormFactoryInterface $formFactory, EntityManagerInterface $em)
 	{
 		$this->cart = $cart;
 		$this->categoryRepository = $categoryRepository;
@@ -41,6 +47,8 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 		$this->eventstrendRepository = $eventstrendRepository;
 		$this->trendRepository = $trendRepository;
 		$this->exclusiveRepository = $exclusiveRepository;
+		$this->formFactory = $formFactory;
+		$this->em = $em;
 	}
 
 	/**
@@ -55,6 +63,10 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	 */
 	public function getGlobals(): array
 	{
+		// Création d'un formulaire Partner
+		$partner = new Partner();
+		$form = $this->formFactory->create(PartnerType::class, $partner);
+		
 		return [
 			'categories' => $this->categoryRepository->findAll(),
 			'subcategories' => $this->subcategoryRepository->findAll(),
@@ -63,6 +75,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 			'trends' => $this->trendRepository->findAll(),
 			'exclusives' => $this->exclusiveRepository->findAll(),
 			'fullCartQuantity' => $this->cart->fullQuantity(),
+			'partnerForm' => $form->createView(),
 		];
 	}
 }

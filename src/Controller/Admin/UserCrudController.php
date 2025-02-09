@@ -5,7 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -26,25 +27,25 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             FormField::addFieldset('Informations principales'),
-            TextField::new('email')
-                ->setLabel('Mail')
+            TextField::new('email', 'Mail')
+                ->setHelp('Indiquer votre adresse mail')
                 ->onlyOnIndex()
             ,
-            TextField::new('firstname')
-                ->setLabel('Prénom')
+            TextField::new('firstname', 'Prénom')
+                ->setHelp('Indiquer votre prénom')
                 ->setColumns(6)
             ,
-            TextField::new('lastname')
-                ->setLabel('Nom')
+            TextField::new('lastname', 'Nom')
+                ->setHelp('Indiquer votre nom')
                 ->setColumns(6)
             ,
-            TextField::new('birthdayDate')
-                ->setLabel('Date de naissance')
+            TextField::new('birthdayDate', 'Date de naissance')
+                ->setHelp('Indiquer votre date de naissance')
                 ->onlyOnIndex()
                 ->setColumns(6)
             ,
-            TextField::new('phone')
-                ->setLabel('Téléphone')
+            TextField::new('phone', 'Téléphone')
+                ->setHelp('Indiquer votre numéro de téléphone')
                 ->onlyOnIndex()
                 ->setColumns(6)
             ,

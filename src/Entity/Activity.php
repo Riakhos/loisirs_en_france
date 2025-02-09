@@ -61,6 +61,7 @@ class Activity
      * @var Exclusive|null
      */
     #[ORM\ManyToOne(targetEntity: Exclusive::class, inversedBy: 'activities')]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
     private ?Exclusive $exclusive = null;
 
     #[ORM\Column(nullable: true)]
@@ -68,6 +69,9 @@ class Activity
 
     #[ORM\ManyToOne(inversedBy: 'activities')]
     private ?Trend $trend = null;
+
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Partner $partners = null;
 
     public function __construct()
     {
@@ -313,6 +317,18 @@ class Activity
     public function setTrend(?Trend $trend): static
     {
         $this->trend = $trend;
+
+        return $this;
+    }
+
+    public function getPartners(): ?Partner
+    {
+        return $this->partners;
+    }
+
+    public function setPartners(?Partner $partners): static
+    {
+        $this->partners = $partners;
 
         return $this;
     }

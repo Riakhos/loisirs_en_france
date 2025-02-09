@@ -49,9 +49,17 @@ class Offer
     #[ORM\ManyToMany(targetEntity: Activity::class, inversedBy: 'offers')]
     private Collection $activity;
 
+    #[ORM\ManyToOne(inversedBy: 'offers')]
+    private ?Partner $partners = null;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -175,6 +183,18 @@ class Offer
     public function removeActivity(Activity $activity): static
     {
         $this->activity->removeElement($activity);
+
+        return $this;
+    }
+
+    public function getPartners(): ?Partner
+    {
+        return $this->partners;
+    }
+
+    public function setPartners(?Partner $partners): static
+    {
+        $this->partners = $partners;
 
         return $this;
     }
