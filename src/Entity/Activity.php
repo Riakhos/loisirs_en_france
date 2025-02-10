@@ -70,7 +70,7 @@ class Activity
     #[ORM\ManyToOne(inversedBy: 'activities')]
     private ?Trend $trend = null;
 
-    #[ORM\ManyToOne(inversedBy: 'activities')]
+    #[ORM\ManyToOne(inversedBy: 'activities', fetch: 'EAGER')]
     private ?Partner $partners = null;
 
     public function __construct()

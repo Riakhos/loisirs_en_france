@@ -16,6 +16,20 @@ class OfferRepository extends ServiceEntityRepository
         parent::__construct($registry, Offer::class);
     }
 
+    // src/Repository/OfferRepository.php
+
+    public function findWithRelations(int $id): ?Offer
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.partners', 'p')
+            ->leftJoin('o.activity', 'a')
+            ->addSelect('p', 'a')
+            ->where('o.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Offer[] Returns an array of Offer objects
     //     */

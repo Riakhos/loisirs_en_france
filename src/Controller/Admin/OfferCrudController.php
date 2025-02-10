@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -74,16 +75,22 @@ class OfferCrudController extends AbstractCrudController
             FormField::addFieldset('Tarification'),
             NumberField::new('price', 'Prix T.T.C')
                 ->setHelp("Prix T.T.C de l'offre spéciale sans le sigle Euro")
-                ->setColumns(6)
+                ->setColumns(4)
             ,
             ChoiceField::new('tva', 'Taux de TVA')
+            ->setLabel('Taux de TVA')
                 ->setChoices([
                     '5.5%' => '5.5',
                     '10%' => '10',
                     '20%' => '20'
                 ])
                 ->setHelp("TVA de l'offre spéciale")
-                ->setColumns(6)
+                ->setColumns(4)
+            ,
+            IntegerField::new('peopleCount')
+                ->setLabel('Nombre de personnes')
+                ->setHelp('Le nombre de personnes autorisées pour cet évènement spécial')
+                ->setColumns(4)
             ,
             FormField::addFieldset('Associations'),
             AssociationField::new('eventstrend', 'Évènements Tendances associées')

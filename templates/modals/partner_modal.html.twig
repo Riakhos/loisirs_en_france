@@ -1,11 +1,14 @@
-{# Modal Devenir Partenaire #}
+{# Début de la modal Devenir Partenaire #}
 <div class="modal fade" id="partnerModal" tabindex="-1" aria-labelledby="partnerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            {# En-tête de la modal #}
             <div class="modal-header">
                 <h2 class="modal-title" id="partnerModalLabel" aria-live="polite">Devenir Partenaire</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
+            
+            {# Corps de la modal - Explication des étapes #}
             <div class="modal-body">
                 <p>
                     Devenir partenaire avec <strong>Loisirs en France</strong>, c'est l'opportunité de promouvoir votre établissement auprès d'une large communauté d'amateurs de loisirs.
@@ -13,67 +16,137 @@
                 </p>
                 <ul>
                     <li>Remplissez le formulaire en fournissant vos informations personnelles et celles de votre établissement.</li>
-                    <li>Précisez ce que vous proposez : une description claire de vos services, vos atouts, et ce qui vous rend unique.</li>
-                    <li>Assurez-vous de renseigner une adresse email valide et un numéro de téléphone pour que nous puissions vous recontacter rapidement.</li>
-                    <li>Soumettez votre demande et attendez la confirmation de notre équipe.</li>
+                    <li><strong>Informations personnelles :</strong> Indiquez votre nom et votre numéro de téléphone.</li>
+                    <li><strong>Coordonnées de connexion :</strong> Si vous avez déjà un compte utilisateur, connectez-vous avec votre email et votre mot de passe. Sinon, renseignez-les pour en créer un.</li>
+                    <li><strong>Informations sur votre établissement :</strong> Fournissez le nom de votre entreprise, son adresse complète, ainsi que la région et la ville où elle se situe.</li>
+                    <li><strong>Précisez ce que vous proposez :</strong> Une description claire de vos services, vos atouts, et ce qui vous rend unique.</li>
+                    <li><strong>Validation :</strong> Complétez le captcha et soumettez votre demande. Notre équipe vous recontactera rapidement.</li>
                 </ul>
                 <p>
                     Une fois votre demande acceptée, nous vous accompagnerons dans la mise en avant de vos activités pour maximiser votre visibilité. Ensemble, faisons découvrir vos talents et vos services à nos utilisateurs !
                 </p>
             </div>
 
-            {# Formulaire de demande de partenariat #}
+            {# Début du corps de la modal #}
             <div class="modal-body">
-                {{ form(partnerForm, {'method': 'GET'}) }}
-                {# {{ form_start(partnerForm) }}
-                    {{ form_row(partnerForm.name) }}
-                    {{ form_row(partnerForm.website) }}
-                    {{ form_row(partnerForm.presentation) }}
-                    {{ form_row(partnerForm.user.email) }}
-                    {{ form_row(partnerForm.user.password) }}
-                    {{ form_row(partnerForm.captcha) }}
-                    <button type="submit" class="btn btn-primary">Envoyer</button>
-                {{ form_end(partnerForm) }} #}
-                {# <form method="POST" action="{{ path('partner') }}"> #}
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="name" class="form-label color-secondary-custom">Nom <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Veuillez entrer votre nom" required>
+                {{ form_start(partnerForm, {'method': 'POST'}) }}
+
+                    {# Section Informations Générales #}
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.name, {'attr': {'aria-label': 'Nom du partenaire'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.phone, {'attr': {'aria-label': 'Numéro de téléphone'}}) }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="firstName" class="form-label color-secondary-custom">Prénom <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Veuillez entrer votre prénom" required>
+
+                    {# Section Coordonnées de contact #}
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.email, {'attr': {'aria-label': 'Adresse e-mail'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.website, {'attr': {'aria-label': 'Site web'}}) }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="email" class="form-label color-secondary-custom">Adresse Mail <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Veuillez entrer votre adresse mail" required>
+
+                    {# Section Adresse #}
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.address, {'attr': {'aria-label': 'Adresse'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.region, {'attr': {'aria-label': 'Région'}}) }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="tel" class="form-label color-secondary-custom">Téléphone </label>
-                        <input type="tel" class="form-control" id="tel" name="tel" placeholder="Veuillez entrer votre numéro de téléphone" required>
+
+                    {# Section Code Postal et Ville #}
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.postal, {'attr': {'aria-label': 'Code postal'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(partnerForm.city, {'attr': {'aria-label': 'Ville'}}) }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="companyName" class="form-label color-secondary-custom">Nom de votre établissement <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Veuillez entrer votre nom d'établissement" required>
+
+                    {# Section Présentation #}
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        {{ form_row(partnerForm.presentation, {'attr': {'aria-label': 'Présentation du partenaire'}}) }}
                     </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="webSite" class="form-label color-secondary-custom">Site web de votre établissement <span class="text-danger">*</span></label>
-                        <input type="url" class="form-control" id="webSite" name="webSite" placeholder="Veuillez entrer votre site web" required>
+
+                    {# Affichage de la connexion/inscription si l'utilisateur n'est pas connecté #}
+                    {% if not app.user %}
+                        <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                            <ul class="nav nav-tabs" id="authTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="inscription-tab" data-bs-toggle="tab" href="#inscription" role="tab" aria-controls="inscription" aria-selected="true">Inscription</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="connexion-tab" data-bs-toggle="tab" href="#connexion" role="tab" aria-controls="connexion" aria-selected="false">Connexion</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3">
+                                {# Formulaire d'Inscription #}
+                                <div class="tab-pane fade show active" id="inscription" role="tabpanel" aria-labelledby="inscription-tab">
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-md-6">
+                                            {{ form_row(partnerForm.user_email, {'attr': {'aria-label': 'Email utilisateur'}}) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(partnerForm.user_password, {'attr': {'aria-label': 'Mot de passe'}}) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# Formulaire de Connexion #}
+                                <div class="tab-pane fade" id="connexion" role="tabpanel" aria-labelledby="connexion-tab">
+                                    <form method="post" aria-label="Formulaire de connexion">
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Email</label>
+                                            <input type="email" id="username" name="_username" class="form-control" placeholder="Votre email" required aria-required="true">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">Mot de passe</label>
+                                            <input type="password" id="password" name="_password" class="form-control" placeholder="Votre mot de passe" required aria-required="true">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {# Ajouter un design pour user_email et user_password même si connecté #}
+                        <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                            <div class="row d-flex justify-content-between">
+                                <div class="col-md-6">
+                                    {{ form_row(partnerForm.user_email, {'attr': {'aria-label': 'Email utilisateur'}}) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(partnerForm.user_password, {'attr': {'aria-label': 'Mot de passe'}}) }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {# Section Captcha et Bouton de Soumission #}
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3 col-md-6 mx-auto text-center">
+                        {{ form_row(partnerForm.captcha, {'attr': {'aria-label': 'Captcha de validation'}}) }}
+                        {{ form_row(partnerForm.submit, {'attr': {'aria-label': 'Soumettre le formulaire'}}) }}
                     </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="description" class="form-label color-secondary-custom">Décrivez ce que vous proposez en quelques mots <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="description" name="description" rows="5" placeholder="Décrivez en quelques lignes votre activité, votre programme, vos petits +. N'hésitez pas à nous parler de vous, votre histoire, votre passion, votre expertise." maxlength="100" required></textarea>
-                    </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <label for="captcha" class="form-check-label color-secondary-custom">
-                            <input type="checkbox" id="captcha" name="captcha" class="form-check-input" required>
-                            Vérifiez que vous êtes un humain.
-                        </label>
-                    </div>
-                    <div class="bg-primaryBlue border-secondary-custom p-3 mb-3">
-                        <button type="submit" class="btn btn-primary w-100 color-primary-custom">Envoyer</button>
-                    </div>
-                </form>
+
+                {{ form_end(partnerForm) }}
             </div>
+            {# Fin du corps de la modal #}
         </div>
     </div>
 </div>

@@ -46,6 +46,9 @@ class Exclusive
     #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'exclusive')]
     private Collection $activities;
 
+    #[ORM\Column]
+    private ?int $peopleCount = null;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
@@ -227,6 +230,18 @@ class Exclusive
                 $activity->setExclusive(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPeopleCount(): ?int
+    {
+        return $this->peopleCount;
+    }
+
+    public function setPeopleCount(int $peopleCount): static
+    {
+        $this->peopleCount = $peopleCount;
 
         return $this;
     }

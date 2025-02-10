@@ -78,6 +78,11 @@ class Partner
         $this->offers = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -315,5 +320,30 @@ class Partner
         $this->user = $user;
 
         return $this;
+    }
+    
+    // Générer un lien Google Maps
+    public function getGoogleMapsLink(): string
+    {
+        $formattedAddress = urlencode($this->address . ', ' . $this->postal . ' ' . $this->city . ', ' . $this->region);
+        return "https://www.google.com/maps/search/?api=1&query={$formattedAddress}";
+    }
+
+    // Générer un lien mailto
+    public function getMailtoLink(): string
+    {
+        return "mailto:" . $this->email;
+    }
+
+    // Générer un lien vers le site web du partenaire
+    public function getWebsiteLink(): ?string
+    {
+        return $this->website ? $this->website : null;
+    }
+
+    // Générer un lien de téléphone clickable
+    public function getPhoneLink(): string
+    {
+        return "tel:" . str_replace(' ', '', $this->phone);
     }
 }

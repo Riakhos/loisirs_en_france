@@ -59,27 +59,56 @@
                                             <div class="col-md-8">
                                                 <div class="card-body">
                                                     <h3 id="activity-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
-                                                    <p class="card-text"><span>Prix unitaire :</span>
-                                                        <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
-                                                    </p>
-                                                    <p class="card-text">
-                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
-                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
-                                                    </p>
-                                                    <p class="card-text d-flex align-items-center gap-3">
-                                                        <span class="fw-semibold">Quantité :</span>
-                                                        {# Boutons pour modifier la quantité #}
-                                                        <a href="{{ path('app_cart_decrease', { type: 'activity', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
-                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
-                                                        </a>
-                                                        <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue" aria-live="polite">{{ item.qty }}</span>
-                                                        <a href="{{ path('app_cart_add', { type: 'activity', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
-                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
-                                                        </a>
-                                                    </p>
-                                                    <p class="card-text"><strong>Total :</strong>
-                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
-                                                    </p>
+                                                    <div class="d-flex">
+                                                        <div class="col-sm-6 col-md-6 pe-2">
+                                                            <h2 class="visually-hidden">Informations Activités</h2>
+                                                            {# Section : localisation #}
+                                                            <section class="mb-1" role="region" aria-labelledby="location-header">
+                                                                <h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
+                                                                <p class="card-text">
+                                                                    <a href="{{ item.object.partners.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none color-primary-custom">
+                                                                        <i class="bi bi-geo-alt-fill me-2"></i><strong> Adresse : </strong>{{ item.object.partners.address }}
+                                                                    </a>
+                                                                </p>
+                                                            </section>
+                                                            {# Section : partenaire #}
+                                                            <section class="mb-1" role="region" aria-labelledby="partner-header">
+                                                                <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
+                                                                <div class="card-text">
+                                                                    <i class="bi bi-people-fill me-2" aria-hidden="true"></i>
+                                                                    <strong>{{ item.object.partners.name }}</strong>
+                                                                    <div class="row d-block">
+                                                                        <a href="{{ item.object.partners.getWebsiteLink() }}" target="_blank" class="text-decoration-none me-2 color-primary-custom"><i class="bi bi-globe"></i></a>
+                                                                        <a href="{{ item.object.partners.getPhoneLink() }}" class="text-decoration-none color-primary-custom"><i class="bi bi-telephone-fill me-2"></i></a>
+                                                                        <a href="{{ item.object.partners.getMailtoLink() }}" class="text-decoration-none color-primary-custom"><i class="bi bi-envelope-fill"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </section>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-6">
+                                                            <p class="card-text"><span><strong>Prix unitaire :</strong></span>
+                                                                <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                            </p>
+                                                            <p class="card-text">
+                                                                <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                                Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
+                                                            </p>
+                                                            <p class="card-text d-flex align-items-center gap-3">
+                                                                <span class="fw-semibold">Quantité :</span>
+                                                                {# Boutons pour modifier la quantité #}
+                                                                <a href="{{ path('app_cart_decrease', { type: 'activity', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
+                                                                    <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                                </a>
+                                                                <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue" aria-live="polite">{{ item.qty }}</span>
+                                                                <a href="{{ path('app_cart_add', { type: 'activity', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
+                                                                    <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                                </a>
+                                                            </p>
+                                                            <p class="card-text"><strong>Total :</strong>
+                                                                <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -112,27 +141,59 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
+                                                    <h3 class="visually-hidden">Informations Activités</h3>
                                                     <h3 id="offer-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
-                                                    <p class="card-text"><span>Prix :</span>
-                                                        <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
-                                                    </p>
-                                                    <p class="card-text">
-                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
-                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
-                                                    </p>
-                                                    <p class="card-text d-flex align-items-center gap-3">
-                                                        <span class="fw-semibold">Quantité :</span>
-                                                        <a href="{{ path('app_cart_decrease', { type: 'offer', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
-                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
-                                                        </a>
-                                                        <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue">{{ item.qty }}</span>
-                                                        <a href="{{ path('app_cart_add', { type: 'offer', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
-                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
-                                                        </a>
-                                                    </p>
-                                                    <p class="card-text"><strong>Total :</strong>
-                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
-                                                    </p>
+                                                    <div class="d-flex">
+                                                        <div class="col-sm-6 col-md-6 pe-2">
+                                                            <h2 class="visually-hidden">Informations Activités</h2>
+                                                            {# Section : localisation #}
+                                                            <section class="mb-1" role="region" aria-labelledby="location-header">
+                                                                <h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
+                                                                <p class="card-text">
+                                                                    <a href="{{ item.object.partners.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none color-primary-custom">
+                                                                        <i class="bi bi-geo-alt-fill me-2"></i><strong> Adresse : </strong>{{ item.object.partners.address }}
+                                                                    </a>
+                                                                </p>
+                                                            </section>
+                                                            {# Section : partenaire #}
+                                                            <section class="mb-1" role="region" aria-labelledby="partner-header">
+                                                                <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
+                                                                <div class="card-text">
+                                                                    <i class="bi bi-people-fill me-2" aria-hidden="true"></i>
+                                                                    <strong>{{ item.object.partners.name }}</strong>
+                                                                    <div class="row d-block">
+                                                                        <a href="{{ item.object.partners.getWebsiteLink() }}" target="_blank" class="text-decoration-none me-2 color-primary-custom"><i class="bi bi-globe"></i></a>
+                                                                        <a href="{{ item.object.partners.getPhoneLink() }}" class="text-decoration-none color-primary-custom"><i class="bi bi-telephone-fill me-2"></i></a>
+                                                                        <a href="{{ item.object.partners.getMailtoLink() }}" class="text-decoration-none color-primary-custom"><i class="bi bi-envelope-fill"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </section>
+                                                        </div>
+                                                        {# Tarif et quantité #}
+                                                        <div class="col-sm-6 col-md-6">
+                                                            <p class="card-text"><span><strong>Prix unitaire :</strong></span>
+                                                                <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
+                                                            </p>
+                                                            <p class="card-text">
+                                                                <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                                Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
+                                                            </p>
+                                                            <p class="card-text d-flex align-items-center gap-3">
+                                                                <span class="fw-semibold">Quantité :</span>
+                                                                {# Boutons pour modifier la quantité #}
+                                                                <a href="{{ path('app_cart_decrease', { type: 'offer', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
+                                                                    <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                                </a>
+                                                                <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue" aria-live="polite">{{ item.qty }}</span>
+                                                                <a href="{{ path('app_cart_add', { type: 'offer', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
+                                                                    <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                                </a>
+                                                            </p>
+                                                            <p class="card-text"><strong>Total :</strong>
+                                                                <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -148,7 +209,6 @@
                             <h2 id="title-exclusives" class="text-center color-primary-custom my-4">Offres exclusives</h2>
                             {% for item in cart %}
                                 {% if item.type == 'exclusive' %}
-                                    
                                     {# Carte affichant une offre exclusive ajoutée au panier #}
                                     <article class="card mb-4 shadow-sm border-1" role="group" aria-labelledby="exclusive-{{ item.object.id }}">
                                         <div class="row g-0">
@@ -169,58 +229,69 @@
                                                     {# Informations activité #}
                                                     <h3 class="visually-hidden">Informations Activités</h3>
                                                     <h3 id="exclusive-{{ item.object.id }}" class="card-title fw-bold">{{ item.object.name }}</h3>
-                                                    {# Section : Activité #}
                                                     <section class="mb-1">
-                                                        <h4 class="visually-hidden">Activité concernée</h4>
-                                                        {% for activities in item.object.activities %}
+                                                        {% for activity in item.object.activities %}
+                                                        {# Section : Activité concernée #}
+                                                            <h4 class="visually-hidden">Activité concernée</h4>
                                                             <p class="card-text">
                                                                 <i class="bi bi-activity me-2" aria-hidden="true"></i>
-                                                                Activité : <a href="{{ path('app_activity', { slug: activities.slug } ) }}" class="text-decoration-none color-primary-custom">
-                                                                    {{ activities.name }}
+                                                                Activité : <a href="{{ path('app_activity', { slug: activity.slug } ) }}" class="text-decoration-none color-primary-custom">
+                                                                    {{ activity.name }}
                                                                 </a>
                                                             </p>
+                                                            <div class="d-flex">
+                                                                <div class="col-sm-6 col-md-6 pe-2">
+                                                                    <h2 class="visually-hidden">Informations Activités</h2>
+                                                                    {# Section : localisation #}
+                                                                    <section class="mb-1" role="region" aria-labelledby="location-header">
+                                                                        <h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
+                                                                        <p class="card-text">
+                                                                            <a href="{{ activity.partners.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none color-primary-custom">
+                                                                                <i class="bi bi-geo-alt-fill me-2"></i><strong> Adresse : </strong>{{ activity.partners.address }}
+                                                                            </a>
+                                                                        </p>
+                                                                    </section>
+                                                                    {# Section : partenaire #}
+                                                                    <section class="mb-1" role="region" aria-labelledby="partner-header">
+                                                                        <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
+                                                                        <div class="card-text">
+                                                                            <i class="bi bi-people-fill me-2" aria-hidden="true"></i>
+                                                                            <strong>{{ activity.partners.name }}</strong>
+                                                                            <div class="row d-block">
+                                                                                <a href="{{ activity.partners.getWebsiteLink() }}" target="_blank" class="text-decoration-none me-2 color-primary-custom"><i class="bi bi-globe"></i></a>
+                                                                                <a href="{{ activity.partners.getPhoneLink() }}" class="text-decoration-none color-primary-custom"><i class="bi bi-telephone-fill me-2"></i></a>
+                                                                                <a href="{{ activity.partners.getMailtoLink() }}" class="text-decoration-none color-primary-custom"><i class="bi bi-envelope-fill"></i></a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </section>
+                                                                </div>
+                                                                {# Tarif et quantité #}
+                                                                <div class="col-sm-6 col-md-6">
+                                                                    <p class="card-text"><span><strong>Prix unitaire :</strong></span>
+                                                                        <strong aria-describedby="price-desc-{{ activity.id }}">{{ item.object.price|price }}</strong>
+                                                                    </p>
+                                                                    <p class="card-text">
+                                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ activity.peopleCount }}</strong> personne
+                                                                    </p>
+                                                                    <p class="card-text d-flex align-items-center gap-3">
+                                                                        <span class="fw-semibold">Quantité :</span>
+                                                                        {# Boutons pour modifier la quantité #}
+                                                                        <a href="{{ path('app_cart_decrease', { type: 'activity', id: activity.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ activity.name }}">
+                                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                                        </a>
+                                                                        <span id="quantity-{{ activity.id }}" class="badge bg-primaryBlue" aria-live="polite">{{ item.qty }}</span>
+                                                                        <a href="{{ path('app_cart_add', { type: 'activity', id: activity.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
+                                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                                        </a>
+                                                                    </p>
+                                                                    <p class="card-text"><strong>Total :</strong>
+                                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                         {% endfor %}
                                                     </section>
-                                                    {# Section : Localisation #}
-                                                    <section class="mb-1" role="region" aria-labelledby="location-header">
-                                                        <h4 id="location-header" class="visually-hidden">Lieu de l'activité</h4>
-                                                        <p class="card-text">
-                                                            <i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
-                                                            Lieu de l'activité
-                                                        </p>
-                                                    </section>
-                                                    {# Section : Dates #}
-                                                    <section class="mb-3">
-                                                        <h4 class="visually-hidden">Dates de Validité</h4>
-                                                        <p class="card-text">
-                                                            <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
-                                                            {% if item.object.dateStart and item.object.dateStop %}
-                                                                Valide du <strong>{{ item.object.dateStart|date('d/m/Y') }}</strong> au <strong>{{ item.object.dateStop|date('d/m/Y') }}</strong>
-                                                            {% else %}
-                                                                Date de validité non définie
-                                                            {% endif %}
-                                                        </p>
-                                                    </section>
-                                                    <p class="card-text"><span>Prix :</span>
-                                                        <strong aria-describedby="price-desc-{{ item.object.id }}">{{ item.object.price|price }}</strong>
-                                                    </p>
-                                                    <p class="card-text">
-                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
-                                                        Pour <strong class="text-center fs-7" aria-label="Nombre de personne pour l'activité">x{{ item.object.peopleCount }}</strong> personne
-                                                    </p>
-                                                    <p class="card-text d-flex align-items-center gap-3">
-                                                        <span class="fw-semibold">Quantité :</span>
-                                                        <a href="{{ path('app_cart_decrease', { type: 'exclusive', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Diminuer la quantité de {{ item.object.name }}">
-                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
-                                                        </a>
-                                                        <span id="quantity-{{ item.object.id }}" class="badge bg-primaryBlue">{{ item.qty }}</span>
-                                                        <a href="{{ path('app_cart_add', { type: 'exclusive', id: item.object.id } ) }}" class="btn shadow-sm rounded-circle p-0" aria-label="Augmenter la quantité de {{ item.object.name }}">
-                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
-                                                        </a>
-                                                    </p>
-                                                    <p class="card-text"><strong>Total :</strong>
-                                                        <span class="text-success" aria-labelledby="total-{{ item.object.id }}">{{ (item.qty * item.object.price)|price }}</span>
-                                                    </p>
                                                 </div>
                                             </div>
                                         </div>

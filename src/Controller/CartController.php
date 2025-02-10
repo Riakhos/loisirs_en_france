@@ -57,6 +57,9 @@ class CartController extends AbstractController
         // Tableau pour stocker les activités liées aux exclusivités
         $exclusiveActivities = [];
 
+        // Stocker les offres enrichies
+        $enrichedOffers = [];
+
         // Parcours des éléments du panier
         foreach ($cartItems as &$item) {
             $type = $item['type'];
@@ -72,6 +75,20 @@ class CartController extends AbstractController
                     $exclusiveActivities[$exclusive->getId()] = $exclusive->getActivities()->toArray();
                 }
             }
+
+            if ($type === 'offer') {
+                // Charger l'offre avec ses relations
+                $offer = $this->offerRepository->findWithRelations($item['object']->getId());
+
+                if ($offer) {
+                    $item['object'] = $offer;
+                    // Stocker l'offre enrichie pour la vue
+                    $enrichedOffers[$offer->getId()] = [
+                        'partners' => $offer->getPartners(),
+                        'activities' => $offer->getActivity()->toArray(),
+                    ];
+                }
+            }
         }
         
         // Rendu de la vue Twig avec les données du panier
@@ -83,6 +100,7 @@ class CartController extends AbstractController
             'tvaDetails' => $tvaDetails,
             'total' => $total,
             'exclusiveActivities' => $exclusiveActivities,
+            'enrichedOffers' => $enrichedOffers,
         ]);
     }
 

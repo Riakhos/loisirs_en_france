@@ -113,36 +113,29 @@
 				{# Section : Informations de l'évènement spécial #}
                 <div class="card-footer d-block justify-content-center align-items-center" style="border-top: none;">
                     <div class="row w-100">
-                        {# Section : Informations activité #}
                         <div class="col-sm-6 col-md-4">
                             <h2 class="visually-hidden">Informations Évènement Spécial</h2>
                             {# Section : Localisation #}
                             <section class="mb-1" role="region" aria-labelledby="location-header">
                                 <h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
                                 <p class="card-text color-secondary-custom">
-                                    <i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
-                                    Lieu de l'activité
+                                    <a href="{{ event.partners.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none">
+                                        <i class="bi bi-geo-alt-fill me-2"></i><strong> Adresse : </strong>{{ event.partners.address }}
+                                    </a>
                                 </p>
                             </section>
                             {# Section : Partenaire #}
                             <section class="mb-1" role="region" aria-labelledby="partner-header">
                                 <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
-                                <p class="card-text color-secondary-custom">
-                                    <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
-                                    Partenaire
-                                </p>
-                            </section>
-                            {# Section : Dates #}
-                            <section class="mb-1">
-                                <h3   h3 class="visually-hidden">Dates de Validité</h3>
-                                <p class="card-text color-secondary-custom">
-                                    <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
-                                    {% if event.dateStart and event.dateStop %}
-                                        Valide du <strong>{{ event.dateStart|date('d/m/Y') }}</strong> au <strong>{{ event.dateStop|date('d/m/Y') }}</strong>
-                                    {% else %}
-                                        Date de validité non définie
-                                    {% endif %}
-                                </p>
+                                <div class="card-text color-secondary-custom">
+                                    <i class="bi bi-people-fill me-2" aria-hidden="true"></i>
+                                    <strong>{{ event.partners.name }}</strong>
+                                    <div class="row d-block">
+                                        <a href="{{ event.partners.getWebsiteLink() }}" target="_blank" class="text-decoration-none me-2"><i class="bi bi-globe"></i></a>
+                                        <a href="{{ event.partners.getPhoneLink() }}" class="text-decoration-none"><i class="bi bi-telephone-fill me-2"></i></a>
+                                        <a href="{{ event.partners.getMailtoLink() }}" class="text-decoration-none"><i class="bi bi-envelope-fill"></i></a>
+                                    </div>
+                                </div>
                             </section>
                         </div>
                         {# Section : Évaluations #}
@@ -174,8 +167,8 @@
                                 </p>
                             </section>
                         </div>
-                        {# Section : Tarifs #}
                         <div class="col-sm-6 col-md-4">
+                            {# Section : Tarifs #}
                             <h2 class="visually-hidden">Prix et Réduction</h2>
                             <section class="mb-1">
                                 <h3 class="visually-hidden">Prix</h3>
@@ -187,6 +180,18 @@
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
                                     Pour <strong class="text-center color-secondary-custom fs-7" aria-label="Nombre de personne pour l'activité">x{{ event.peopleCount }}</strong> personne
+                                </p>
+                            </section>
+                            {# Section : Dates #}
+                            <section class="mb-1">
+                                <h3   h3 class="visually-hidden">Dates de Validité</h3>
+                                <p class="card-text color-secondary-custom">
+                                    <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
+                                    {% if event.dateStart and event.dateStop %}
+                                        Valide du <strong>{{ event.dateStart|date('d/m/Y') }}</strong> au <strong>{{ event.dateStop|date('d/m/Y') }}</strong>
+                                    {% else %}
+                                        Date de validité non définie
+                                    {% endif %}
                                 </p>
                             </section>
                         </div>

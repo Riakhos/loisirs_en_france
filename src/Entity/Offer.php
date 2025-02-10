@@ -52,6 +52,9 @@ class Offer
     #[ORM\ManyToOne(inversedBy: 'offers')]
     private ?Partner $partners = null;
 
+    #[ORM\Column]
+    private ?int $peopleCount = null;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
@@ -195,6 +198,18 @@ class Offer
     public function setPartners(?Partner $partners): static
     {
         $this->partners = $partners;
+
+        return $this;
+    }
+
+    public function getPeopleCount(): ?int
+    {
+        return $this->peopleCount;
+    }
+
+    public function setPeopleCount(int $peopleCount): static
+    {
+        $this->peopleCount = $peopleCount;
 
         return $this;
     }

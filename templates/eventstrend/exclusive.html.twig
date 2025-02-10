@@ -117,31 +117,39 @@
 						{# Section : Informations activité #}
 						<div class="col-sm-6 col-md-4">
 							<h2 class="visually-hidden">Informations Activités</h2>
-							<section class="mb-1">
-								<h3 class="visually-hidden">Activité concernée</h3>
-								{% for activity in exclusive.activities %}
+							{% for activity in exclusive.activities %}
+								<section class="mb-1">
+									<h3 class="visually-hidden">Activité concernée</h3>
 									<p class="card-text color-secondary-custom">
 										<i class="bi bi-activity me-2" aria-hidden="true"></i>
 										Activité : <a href="{{ path('app_activity', { slug: activity.slug } ) }}" class="text-decoration-none color-secondary-custom">
 											{{ activity.name }}
 										</a>
 									</p>
-								{% endfor %}
-							</section>
-							<section class="mb-1" role="region" aria-labelledby="location-header">
-								<h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
-								<p class="card-text color-secondary-custom">
-									<i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
-									Lieu de l'activité
-								</p>
-							</section>
-							<section class="mb-1" role="region" aria-labelledby="partner-header">
-                                <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
-                                <p class="card-text color-secondary-custom">
-                                    <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
-                                    Partenaire
-                                </p>
-                            </section>
+								</section>
+								{# Section : localisation #}
+								<section class="mb-1" role="region" aria-labelledby="location-header">
+									<h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
+									<p class="card-text color-secondary-custom">
+										<a href="{{ activity.partners.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none">
+											<i class="bi bi-geo-alt-fill me-2"></i><strong> Adresse : </strong>{{ activity.partners.address }}
+										</a>
+									</p>
+								</section>
+								{# Section : partenaire #}
+								<section class="mb-1" role="region" aria-labelledby="partner-header">
+									<h3 id="partner-header" class="visually-hidden">Partenaire</h3>
+									<div class="card-text color-secondary-custom">
+										<i class="bi bi-people-fill me-2" aria-hidden="true"></i>
+										<strong>{{ activity.partners.name }}</strong>
+										<div class="row d-block">
+											<a href="{{ activity.partners.getWebsiteLink() }}" target="_blank" class="text-decoration-none me-2"><i class="bi bi-globe"></i></a>
+											<a href="{{ activity.partners.getPhoneLink() }}" class="text-decoration-none"><i class="bi bi-telephone-fill me-2"></i></a>
+											<a href="{{ activity.partners.getMailtoLink() }}" class="text-decoration-none"><i class="bi bi-envelope-fill"></i></a>
+										</div>
+									</div>
+								</section>
+							{% endfor %}
 						</div>
 						{# Section : Évaluations #}
 						<div class="col-sm-6 col-md-4">

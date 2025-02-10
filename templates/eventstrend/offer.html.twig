@@ -38,8 +38,6 @@
                                     class="carousel-item {% if loop.first %}active{% endif %}"
                                     data-activity-name="{{ activity.name }}"
                                     data-activity-slug="{{ activity.slug }}"
-                                    data-activity-price="{{ activity.price|price }}"
-                                    data-activity-people="{{ activity.peopleCount }}"
                                     data-offer-id="{{ offer.id }}"
 								>
 									<a href="{{ path('app_activity', { slug: activity.slug }) }}">
@@ -115,9 +113,9 @@
 				{# Section : Informations de l'offre spéciale #}
                 <div class="card-footer d-block justify-content-center align-items-center" style="border-top: none;">
                     <div class="row w-100">
-						{# Section : Informations activité #}
-						<div class="col-sm-6 col-md-4">
-							<h2 class="visually-hidden">Informations Activités</h2>
+                        <div class="col-sm-6 col-md-4">
+                            <h2 class="visually-hidden">Informations Activités</h2>
+                            {# Section : Informations activité #}
 							<section class="mb-1">
 								<h3 class="visually-hidden">Activité concernée</h3>
                                 <p class="card-text color-secondary-custom">
@@ -127,19 +125,27 @@
                                     </a>
                                 </p>
 							</section>
+                            {# Section : localisation #}
 							<section class="mb-1" role="region" aria-labelledby="location-header">
-								<h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
+								<h3 id="location-header" class="visually-hidden">Lieu de l'offre spéciale</h3>
 								<p class="card-text color-secondary-custom">
-									<i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
-									Lieu de l'activité
+                                    <a href="{{ offer.partners.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none">
+                                        <i class="bi bi-geo-alt-fill me-2"></i><strong> Adresse : </strong>{{ offer.partners.address }}
+                                    </a>
 								</p>
 							</section>
-							<section class="mb-1" role="region" aria-labelledby="partner-header">
+							{# Section : partenaire #}
+                            <section class="mb-1" role="region" aria-labelledby="partner-header">
                                 <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
-                                <p class="card-text color-secondary-custom">
-                                    <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
-                                    Partenaire
-                                </p>
+                                <div class="card-text color-secondary-custom">
+                                    <i class="bi bi-people-fill me-2" aria-hidden="true"></i>
+                                    <strong>{{ offer.partners.name }}</strong>
+                                    <div class="row d-block">
+                                        <a href="{{ offer.partners.getWebsiteLink() }}" target="_blank" class="text-decoration-none me-2"><i class="bi bi-globe"></i></a>
+                                        <a href="{{ offer.partners.getPhoneLink() }}" class="text-decoration-none"><i class="bi bi-telephone-fill me-2"></i></a>
+                                        <a href="{{ offer.partners.getMailtoLink() }}" class="text-decoration-none"><i class="bi bi-envelope-fill"></i></a>
+                                    </div>
+                                </div>
                             </section>
 						</div>
 						{# Section : Évaluations #}
@@ -179,14 +185,14 @@
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-cash me-2" aria-hidden="true"></i>
                                     Prix TTC <strong id="activity-price" class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2" aria-label="Prix de l'activité">
-                                        {{ offer.activity|first.price|price }}
+                                        {{ offer.price|price }}
                                     </strong>
                                 </p>
                                 <h3 class="visually-hidden">Nombre de personne</h3>
                                 <p class="card-text color-secondary-custom">
                                     <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
                                     Pour <strong id="activity-people" class="text-center color-secondary-custom fs-7" aria-label="Nombre de personne pour l'activité">
-                                        x{{ offer.activity|first.peopleCount }}
+                                        x{{ offer.peopleCount }}
                                     </strong> personne
                                 </p>
                             </section>
@@ -212,20 +218,14 @@
     
             let activityName = document.getElementById('activity-name');
             let activityLink = document.getElementById('activity-link');
-            let activityPrice = document.getElementById('activity-price');
-            let activityPeople = document.getElementById('activity-people');
     
             carousel.addEventListener('slid.bs.carousel', function (event) {
                 let activeSlide = event.relatedTarget;
                 let newName = activeSlide.getAttribute('data-activity-name');
                 let newSlug = activeSlide.getAttribute('data-activity-slug');
-                let newPrice = activeSlide.getAttribute('data-activity-price');
-                let newPeople = activeSlide.getAttribute('data-activity-people');
     
                 activityName.textContent = newName;
                 activityLink.href = "/activite/" + newSlug;
-                activityPrice.textContent = newPrice;
-                activityPeople.textContent = "x" + newPeople;
             });
         });
     </script>
