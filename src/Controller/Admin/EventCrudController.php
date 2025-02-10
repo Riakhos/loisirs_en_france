@@ -122,9 +122,26 @@ class EventCrudController extends AbstractCrudController
                 ->setColumns(6)
             ,
             FormField::addFieldset('Associations'),
-            AssociationField::new('eventstrend', 'Évènements Tendances associées')->setColumns(4),
-            AssociationField::new('category', 'Catégories associées')->setColumns(4),
-            AssociationField::new('subcategory', 'Sous-Catégories associées')->setColumns(4)
+            AssociationField::new('eventstrend', 'Évènement Tendance associé')
+            ->setHelp("Sélectionnez l'évènement tendance que l'on souhaite associer")
+            ->setColumns(3)
+            ,
+            AssociationField::new('category', 'Catégories associées')
+                ->setHelp("Sélectionnez la catégorie que l'on souhaite associer")
+                ->setColumns(3)
+            ,
+            AssociationField::new('subcategory', 'Sous-Catégories associées')
+                ->setHelp("Sélectionnez la sous-catégorie que l'on souhaite associer")
+                ->setColumns(3)
+            ,
+            AssociationField::new('tags', 'Tags associés')
+                ->setHelp('Sélectionnez ou ajoutez des tags pour cet évènement spécial')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'multiple' => true,
+                ])
+                ->setCrudController(TagCrudController::class)
+                ->setColumns(3)
             ,
             FormField::addFieldset('Description'),
             TextEditorField::new('description')

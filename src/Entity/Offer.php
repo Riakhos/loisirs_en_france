@@ -55,9 +55,16 @@ class Offer
     #[ORM\Column]
     private ?int $peopleCount = null;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'offers')]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function __toString()
@@ -210,6 +217,33 @@ class Offer
     public function setPeopleCount(int $peopleCount): static
     {
         $this->peopleCount = $peopleCount;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeOffer($this);
+        }
 
         return $this;
     }

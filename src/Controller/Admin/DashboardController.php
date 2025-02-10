@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Offer;
@@ -12,9 +13,9 @@ use App\Entity\Category;
 use App\Entity\Exclusive;
 use App\Entity\Eventstrend;
 use App\Entity\Subcategory;
+use App\Controller\Admin\UserCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Controller\Admin\UserCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -27,19 +28,19 @@ class DashboardController extends AbstractDashboardController
     {
         // return parent::index();
 
-        // Option 1. You can make your dashboard redirect to some common page of your backend
+        // Option 1. Vous pouvez faire en sorte que votre tableau de bord soit redirigé vers une page commune de votre backend
         
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
 
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
+        // Option 2. Vous pouvez faire en sorte que votre tableau de bord redirige vers différentes pages en fonction de l'utilisateur
         //
         // if ('jane' === $this->getUser()->getUsername()) {
         //     return $this->redirect('...');
         // }
 
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
+        // Option 3. Vous pouvez créer un modèle personnalisé pour afficher un tableau de bord approprié avec des widgets, etc.
+        // (astuce : il est plus facile d'utiliser un modèle qui s'étend à partir de @EasyAdmin/page/content.html.twig)
         //
         // return $this->render('some/path/my-dashboard.html.twig');
     }
@@ -55,7 +56,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
         // 📌 Espace Membres et Partenaires
-        yield MenuItem::subMenu('Gestion et Accès', 'fas fa-folder')->setSubItems([
+        yield MenuItem::subMenu('Utilisateur', 'fas fa-folder')->setSubItems([
             MenuItem::linkToCrud('Utilisateurs', 'fas fa-list', User::class),
             MenuItem::linkToCrud('Partenaires', 'fas fa-list', Partner::class),
         ]);
@@ -74,6 +75,13 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Évènements Spéciaux', 'fas fa-calendar', Event::class),
             MenuItem::linkToCrud('Offres Exclusives', 'fas fa-gift', Exclusive::class),
             MenuItem::linkToCrud('Offres Spéciales', 'fas fa-tags', Offer::class),
+        ]);
+
+        // 📌 Évaluations & Mots-clés
+        yield MenuItem::subMenu('Critères & Avis', 'fas fa-star')->setSubItems([
+            MenuItem::linkToCrud('Tags', 'fas fa-tags', Tag::class),
+            // MenuItem::linkToCrud('Rates', 'fas fa-tags', Rate::class),
+            // MenuItem::linkToCrud('Notices', 'fas fa-tags', Notice::class),
         ]);
     }
 }

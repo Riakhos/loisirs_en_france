@@ -70,12 +70,19 @@ class Partner
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'partners')]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
         $this->activities = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->offers = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function __toString()
@@ -345,5 +352,32 @@ class Partner
     public function getPhoneLink(): string
     {
         return "tel:" . str_replace(' ', '', $this->phone);
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addPartner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removePartner($this);
+        }
+
+        return $this;
     }
 }

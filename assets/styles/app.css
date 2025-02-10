@@ -20,6 +20,10 @@
     background-color: var(--primary-color);
 }
 
+.bg-hoverBlue {
+    background-color: var(--hover-color);
+}
+
 .bg-secondaryYellow {
     background-color: var(--secondary-color);
 }

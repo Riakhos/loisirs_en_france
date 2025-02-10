@@ -170,10 +170,16 @@
 								</p>
 							</section>
                             <section class="mb-1" role="region" aria-labelledby="tag-header">
-                                <h3 id="tag-header" class="visually-hidden">Tag</h3>
+                                <h3 id="tag-header" class="visually-hidden">Tags</h3>
                                 <p class="card-text color-secondary-custom">
-                                    <i class="bi bi-tag-fill me-2" aria-hidden="true"></i>
-                                    Tag
+                                    <i class="bi bi-tags me-2" aria-hidden="true"></i>
+                                    {% if offer.tags is not empty %}
+                                        {% for tag in offer.tags|slice(-2,2) %}
+                                            <span class="badge bg-hoverBlue me-1">{{ tag.name }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="color-secondary-custom">Aucun tag disponible</span>
+                                    {% endif %}
                                 </p>
                             </section>
                         </div>
