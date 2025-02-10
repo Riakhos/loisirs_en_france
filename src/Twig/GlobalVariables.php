@@ -38,7 +38,18 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	 * @param Cart $cart
 	 	* *Le service de gestion du panier
 	 */
-	public function __construct(CategoryRepository $categoryRepository, SubcategoryRepository $subcategoryRepository,ActivityRepository $activityRepository, Cart $cart, EventstrendRepository $eventstrendRepository, TrendRepository $trendRepository, ExclusiveRepository $exclusiveRepository, FormFactoryInterface $formFactory, EntityManagerInterface $em)
+	public function __construct(
+		CategoryRepository $categoryRepository, 
+		SubcategoryRepository $subcategoryRepository,
+		ActivityRepository $activityRepository, 
+		Cart $cart, 
+		EventstrendRepository $eventstrendRepository, 
+		TrendRepository $trendRepository,
+		ExclusiveRepository $exclusiveRepository,
+		FormFactoryInterface $formFactory, 
+		EntityManagerInterface $em,
+	)
+	
 	{
 		$this->cart = $cart;
 		$this->categoryRepository = $categoryRepository;
@@ -65,7 +76,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	{
 		// Création d'un formulaire Partner
 		$partner = new Partner();
-		$form = $this->formFactory->create(PartnerType::class, $partner);
+		$partnerForm  = $this->formFactory->create(PartnerType::class, $partner);
 		
 		return [
 			'categories' => $this->categoryRepository->findAll(),
@@ -75,7 +86,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 			'trends' => $this->trendRepository->findAll(),
 			'exclusives' => $this->exclusiveRepository->findAll(),
 			'fullCartQuantity' => $this->cart->fullQuantity(),
-			'partnerForm' => $form->createView(),
+			'partnerForm' => $partnerForm ->createView(),
 		];
 	}
 }

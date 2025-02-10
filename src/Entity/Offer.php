@@ -55,9 +55,23 @@ class Offer
     #[ORM\Column]
     private ?int $peopleCount = null;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'offers')]
+    private Collection $tags;
+
+    /**
+     * @var Collection<int, Rating>
+     */
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'offer')]
+    private Collection $ratings;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function __toString()
@@ -212,5 +226,73 @@ class Offer
         $this->peopleCount = $peopleCount;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeOffer($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): static
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): static
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getOffer() === $this) {
+                $rating->setOffer(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getAverageRating(): ?float
+    {
+        $ratings = $this->ratings->toArray();
+        if (count($ratings) === 0) {
+            return null;
+        }
+
+        $sum = array_reduce($ratings, fn($carry, $rating) => $carry + $rating->getScore(), 0);
+        return round($sum / count($ratings), 1);
     }
 }

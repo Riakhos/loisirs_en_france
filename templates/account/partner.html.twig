@@ -1,0 +1,382 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    {% include "account/navbar.html.twig" %}
+
+    <main class="d-flex justify-content-center align-items-center" role="main">
+        <div class="card w-auto border-secondary-custom bg-primaryBlue m-2 p-3" style="max-width: 1000px;">
+            <div class="row g-0">
+                {# Titre et Navigation #}
+                <small class="card-header color-secondary-custom" style="border-bottom: none;">
+                    <i>
+                        <a href="{{ path('app_partner_list') }}" class="text-decoration-none color-secondary-custom">
+                            Partenaires
+                        </a> > {{ partner.name }}
+                    </i>
+                </small>
+
+                {# Carrousel des images des activités du partenaire #}
+                <div class="col-md-6">
+                    <h2 class="visually-hidden">Galerie d'images des activités</h2>
+                    <div id="carouselActivities" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
+                        {# Indicateurs du carrousel #}
+                        <div class="carousel-indicators">
+                            {% for i in 0..(partner.activities|length - 1) %}
+                                <button 
+                                    type="button"
+                                    data-bs-target="#carouselActivities"
+                                    data-bs-slide-to="{{ i }}"
+                                    class="{% if i == 0 %}active{% endif %}"
+                                    aria-label="Slide {{ i + 1 }}">
+                                </button>
+                            {% endfor %}
+                        </div>
+
+                        {# Slides du carrousel #}
+                        <div class="carousel-inner" data-bs-interval="10000">
+                            {% for activity in partner.activities %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                    <a href="{{ path('app_activity', { slug: activity.slug }) }}">
+                                        <picture>
+                                            {# WebP version #}
+                                            <source srcset="/uploads/{{ activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            {# Fallback JPG/PNG #}
+                                            <img 
+                                                src="/uploads/{{ activity.image }}"
+                                                class="figure-img img-fluid rounded border-secondary-custom" 
+                                                alt="Image de {{ activity.name }}" 
+                                                style="object-fit: cover; width: 100%; height: 400px;"
+                                                loading="lazy"
+                                                aria-hidden="false"
+                                            >
+                                        </picture>
+                                        <div class="carousel-caption" style="background-color: rgba(0, 0, 0, 0.2);">
+                                            <h2 class="color-secondary-custom">{{ activity.name }}</h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {# Boutons de navigation #}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselActivities" data-bs-slide="prev" aria-controls="carouselActivities" tabindex="0">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Précédent</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselActivities" data-bs-slide="next" aria-controls="carouselActivities" tabindex="0">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Suivant</span>
+                        </button>
+                    </div>
+                </div>
+
+                {# Informations du partenaire #}
+                <div class="col-md-6">
+                    <div class="card-body text-center">
+                        {# Présentation #}
+                        <h2 class="visually-hidden">{{ partner.name }}</h2>
+                        <h2 class="card-title color-secondary-custom fs-1">{{ partner.name }}</h2>
+                        <p class="card-text color-secondary-custom">
+                            <strong> Présentation : </strong>{{ partner.presentation is not empty ? partner.presentation|striptags : 'Aucune présentation disponible' }}
+                        </p>
+
+                        {# Adresse et liens #}
+                        <section class="mb-1" role="region" aria-labelledby="location-header">
+                            <h3 id="location-header" class="visually-hidden">Coordonnées du partenaire</h3>
+                            <p class="card-text color-secondary-custom border-secondary-custom-top">
+                                <a href="{{ partner.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none">
+                                    <i class="bi bi-geo-alt-fill me-2"></i> {{ partner.address }}
+                                    <p>{{ partner.postal }} {{ partner.city }}</p>
+                                    <p>{{ partner.region }}</p>
+                                </a>
+                            </p>
+                            <p class="card-text color-secondary-custom">
+                                <a href="{{ partner.getWebsiteLink() }}" target="_blank" class="text-decoration-none me-2">
+                                    <i class="bi bi-globe"></i><strong> {{ partner.website }}</strong>
+                                </a>
+                            </p>
+                            <div class="card-text color-secondary-custom pb-2">
+                                <a href="{{ partner.getPhoneLink() }}" class="text-decoration-none pe-3">
+                                    <i class="bi bi-telephone-fill me-2"></i> {{ partner.phone }}
+                                </a>
+                                <a href="{{ partner.getMailtoLink() }}" class="text-decoration-none">
+                                    <i class="bi bi-envelope-fill"></i> {{ partner.email }}
+                                </a>
+                            </div>
+                        </section>
+                        
+                        {# Section : Évaluations #}
+                        <div class="card-footer border-secondary-custom-top">
+                            <h2 class="visually-hidden">Notes, Avis et Tags</h2>
+
+                            {# Section : Avis #}
+                            <section class="mb-1" role="region" aria-labelledby="reviews-header">
+                                <p>
+                                    <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
+                                        <h3 id="avis-header" class="visually-hidden">Avis des utilisateurs</h3>
+                                        {% for rating in ratings|slice(-1,1) %}
+                                            <p><strong>({{ rating.score }}/5)</strong> - {{ rating.comment ?: 'Pas de commentaire' }}</p>
+                                        {% else %}
+                                            <p>Soyez le premier à donner votre avis</p>
+                                        {% endfor %}
+                                    </a>
+                                </p>
+                            </section>
+
+                            {# Section : Notes #}
+                            <section class="mb-1" role="region" aria-labelledby="rating-header">
+                                <h3 id="rating-header" class="visually-hidden">Notes</h3>
+                                <p class="card-text color-secondary-custom">
+                                    <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note" data-bs-toggle="collapse" data-bs-target="#ratingForm">
+                                        {% if averageRating is not null %}
+                                            <span class="stars">
+                                                {% for i in 1..5 %}
+                                                    {% if i <= averageRating %}
+                                                        <i class="bi bi-star-fill"></i>
+                                                    {% elseif i > averageRating and i < averageRating + 1 %}
+                                                        <i class="bi bi-star-half"></i>
+                                                    {% else %}
+                                                        <i class="bi bi-star"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </span>
+                                            ({{ averageRating }}/5)
+                                        {% else %}
+                                            ✩✩✩✩✩ (0/5)
+                                        {% endif %}
+                                    </a>
+                                </p>
+                                <div class="collapse" id="ratingForm">
+                                    {{ form_start(ratingForm) }}
+                                        {{ form_row(ratingForm.score) }}
+                                        {{ form_row(ratingForm.comment) }}
+                                        {{ form_row(ratingForm.submit) }}
+                                    {{ form_end(ratingForm) }}
+                                </div>
+                            </section>
+
+                            {# Section : Tag #}
+                            <section class="mb-1" role="region" aria-labelledby="tag-header">
+                                <h3 id="tag-header" class="visually-hidden">Tags</h3>
+                                <p class="card-text color-secondary-custom d-flex flex-wrap overflow-hidden">
+                                    <i class="bi bi-tags me-2" aria-hidden="true"></i>
+                                    {% if partner.tags is not empty %}
+                                        {% for tag in partner.tags|slice(-2,2) %}
+                                            <span class="badge bg-secondaryYellow color-primary-custom border-hover-custom me-1">{{ tag.name }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="color-secondary-custom">Aucun tag disponible</span>
+                                    {% endif %}
+                                </p>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+                {# Liste des loisirs du partenaire #}
+                    <h2 class="visually-hidden">Loisirs proposés par {{ partner.name }}</h2>
+
+                    {# Liste des activités du partenaire #}
+                    <section class="card-footer border-secondary-custom-top">
+                        <h2 class="color-secondary-custom text-center">Activités de {{ partner.name }}</h2>
+                        <h2 class="visually-hidden">Activités de {{ partner.name }}</h2>
+                        <div class="row justify-content-center">
+                            {% for activity in partner.activities %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-primaryBlue border-secondary-custom d-flex flex-column h-100">
+                                        <a href="{{ path('app_activity', { slug: activity.slug }) }}">
+                                            <img src="/uploads/{{ activity.image }}" class="card-img-top" alt="{{ activity.name }}">
+                                        </a>
+                                        <div class="card-body text-center mt-auto">
+                                            <h3 class="card-title color-secondary-custom">{{ activity.name }}</h3>
+
+                                            {# Description avec collapse sur mobile #}
+                                            <h3 class="visually-hidden">Description</h3>
+                                            <div>
+                                                <p class="d-sm-block d-md-none">
+                                                    <a class="link text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription-{{ activity.id }}" aria-expanded="false" aria-controls="collapseDescription-{{ activity.id }}" id="toggleDescriptionButton" aria-label="Voir plus de la description">
+                                                        Voir Plus...
+                                                    </a>
+                                                </p>
+                                                <div class="collapse d-sm-block d-md-none" id="collapseDescription-{{ activity.id }}">
+                                                    <div class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                                        {{ activity.description is not empty ? activity.description|striptags : 'Aucune description disponible' }}
+                                                    </div>
+                                                </div>
+                                                <div class="d-none d-md-block">
+                                                    <div class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                                        {{ activity.description is not empty ? activity.description|striptags|slice(0, 150) : 'Aucune description disponible' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {# Tarifs et nombre de personnes #}
+                                            <div>
+                                                <h3 class="visually-hidden">Prix et Réduction</h3>
+                                                <section class="mb-1">
+                                                    <h4 class="visually-hidden">Prix</h4>
+                                                    <p class="card-text color-secondary-custom">
+                                                        <i class="bi bi-cash me-2" aria-hidden="true"></i>
+                                                        Prix TTC <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2" aria-label="Prix de l'activité">{{ activity.price|price }}</strong>
+                                                    </p>
+                                                    <h4 class="visually-hidden">Nombre de personne</h4>
+                                                    <p class="card-text color-secondary-custom">
+                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                        Pour <strong class="text-center color-secondary-custom fs-7" aria-label="Nombre de personne pour l'activité">x {{ activity.peopleCount }}</strong> personne(s)
+                                                    </p>
+                                                </section>
+                                            </div>
+
+                                            {# Boutons d'actions #}
+                                            <a class="btn btn-primary" role="link" aria-label="Détails de l'activité" href="{{ path('app_activity', { slug: activity.slug }) }}">
+                                                Détails de l'activité
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="text-center color-secondary-custom">Aucune activité disponible pour ce partenaire.</p>
+                            {% endfor %}
+                        </div>
+                    </section>
+
+                    {# Section des offres #}
+                    <section class="card-footer border-secondary-custom-top">
+                        <h2 class="color-secondary-custom text-center">Offres spéciales de {{ partner.name }}</h2>
+                        <h2 class="visually-hidden">Offres spéciales de {{ partner.name }}</h2>
+                        <div class="row justify-content-center">
+                            {% for offer in partner.offers %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-primaryBlue border-secondary-custom d-flex flex-column h-100">
+                                        <a href="{{ path('app_offer', { slug: offer.slug }) }}">
+                                            <img src="/uploads/{{ offer.image }}" class="card-img-top" alt="{{ offer.name }}">
+                                        </a>
+                                        <div class="card-body text-center mt-auto">
+                                            <h3 class="card-title color-secondary-custom">{{ offer.name }}</h3>
+
+                                            {# Description avec collapse sur mobile #}
+                                            <h3 class="visually-hidden">Description</h3>
+                                            <div>
+                                                <p class="d-sm-block d-md-none">
+                                                    <a class="link text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription-{{ offer.id }}" aria-expanded="false" aria-controls="collapseDescription-{{ offer.id }}" id="toggleDescriptionButton" aria-label="Voir plus de la description">
+                                                        Voir Plus...
+                                                    </a>
+                                                </p>
+                                                <div class="collapse d-sm-block d-md-none" id="collapseDescription-{{ offer.id }}">
+                                                    <div class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                                        {{ offer.description is not empty ? offer.description|striptags : 'Aucune description disponible' }}
+                                                    </div>
+                                                </div>
+                                                <div class="d-none d-md-block">
+                                                    <div class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                                        {{ offer.description is not empty ? offer.description|striptags|slice(0, 150) : 'Aucune description disponible' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            {# Tarifs et nombre de personnes #}
+                                            <div>
+                                                <h3 class="visually-hidden">Prix et Réduction</h3>
+                                                <section class="mb-1">
+                                                    <h4 class="visually-hidden">Prix</h4>
+                                                    <p class="card-text color-secondary-custom">
+                                                        <i class="bi bi-cash me-2" aria-hidden="true"></i>
+                                                        Prix TTC <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2" aria-label="Prix de l'offre spéciale">{{ offer.price|price }}</strong>
+                                                    </p>
+                                                    <h4 class="visually-hidden">Nombre de personne</h4>
+                                                    <p class="card-text color-secondary-custom">
+                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                        Pour <strong class="text-center color-secondary-custom fs-7" aria-label="Nombre de personne pour l'offre spéciale">x {{ offer.peopleCount }}</strong> personne(s)
+                                                    </p>
+                                                </section>
+                                            </div>
+                                            
+                                            {# Boutons d'actions #}
+                                            <a role="link" aria-label="Voir l'offre spéciale" href="{{ path('app_offer', { slug: offer.slug }) }}" class="btn btn-primary">
+                                                Voir l'offre spéciale
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="text-center color-secondary-custom">Aucune offre spéciale disponible pour ce partenaire.</p>
+                            {% endfor %}
+                        </div>
+                    </section>
+
+                    {# Section des événements #}
+                    <section class="card-footer border-secondary-custom-top">
+                        <h2 class="color-secondary-custom text-center">Événements à venir chez {{ partner.name }}</h2>
+                        <h2 class="visually-hidden">Événements</h2>
+                        <div class="row justify-content-center">
+                            {% for event in partner.events %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-primaryBlue border-secondary-custom d-flex flex-column h-100">
+                                        <a href="{{ path('app_event', { slug: event.slug }) }}">
+                                            <img src="/uploads/{{ event.image }}" class="card-img-top" alt="{{ event.name }}">
+                                        </a>
+                                        <div class="card-body text-center mt-auto">
+                                            <h3 class="card-title color-secondary-custom">{{ event.name }}</h3>
+
+                                            {# Description avec collapse sur mobile #}
+                                            <h3 class="visually-hidden">Description</h3>
+                                            <div>
+                                                <p class="d-sm-block d-md-none">
+                                                    <a class="link text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription-{{ event.id }}" aria-expanded="false" aria-controls="collapseDescription-{{ event.id }}" id="toggleDescriptionButton" aria-label="Voir plus de la description">
+                                                        Voir Plus...
+                                                    </a>
+                                                </p>
+                                                <div class="collapse d-sm-block d-md-none" id="collapseDescription-{{ event.id }}">
+                                                    <div class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                                        {{ event.description is not empty ? event.description|striptags : 'Aucune description disponible' }}
+                                                    </div>
+                                                </div>
+                                                <div class="d-none d-md-block">
+                                                    <div class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
+                                                        {{ event.description is not empty ? event.description|striptags|slice(0, 150) : 'Aucune description disponible' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {# Tarifs et nombre de personnes #}
+                                            <div>
+                                                <h2 class="visually-hidden">Prix et Réduction</h2>
+                                                <section class="mb-1">
+                                                    <h3 class="visually-hidden">Prix</h3>
+                                                    <p class="card-text color-secondary-custom">
+                                                        <i class="bi bi-cash me-2" aria-hidden="true"></i>
+                                                        Prix TTC <strong class="text-center color-primary-custom bg-secondaryYellow border-hover-custom fs-7 px-2" aria-label="Prix de l'évènement spécial">{{ event.price|price }}</strong>
+                                                    </p>
+                                                    <h3 class="visually-hidden">Nombre de personne</h3>
+                                                    <p class="card-text color-secondary-custom">
+                                                        <i class="bi bi-person-fill me-2" aria-hidden="true"></i>
+                                                        Pour <strong class="text-center color-secondary-custom fs-7" aria-label="Nombre de personne pour l'évènement spécial">x {{ event.peopleCount }}</strong> personne(s)
+                                                    </p>
+                                                </section>
+                                            </div>
+
+
+                                            <p class="color-secondary-custom">
+                                                <i class="bi bi-calendar-event me-2"></i>
+                                                <strong>Du {{ event.dateStart|date('d/m/Y') }}</strong>
+                                                <strong> au {{ event.dateStop|date('d/m/Y') }}</strong>
+                                            </p>
+
+                                            {# Boutons d'actions #}
+                                            <a role="link" aria-label="Détails de l'évènement spécial" href="{{ path('app_event', { slug: event.slug }) }}" class="btn btn-primary">
+                                                Détails de l'événement spécial
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="text-center color-secondary-custom">Aucun événement prévu.</p>
+                            {% endfor %}
+                        </div>
+                </section>
+            </div>
+        </div>
+    </main>
+{% endblock %}

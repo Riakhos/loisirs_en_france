@@ -58,8 +58,8 @@ class ActivityCrudController extends AbstractCrudController
         return [
             FormField::addFieldset('Informations principales'),
             TextField::new('name')
-                ->setLabel('Titre')
-                ->setHelp('Titre de l\'activité')
+                ->setLabel('Nom')
+                ->setHelp('Nom de l\'activité')
                 ->setColumns(6)
             ,
             SlugField::new('slug')
@@ -127,8 +127,22 @@ class ActivityCrudController extends AbstractCrudController
                 ->setColumns(4)
             ,
             FormField::addFieldset('Associations'),
-            AssociationField::new('category', 'Catégories associées')->setColumns(6),
-            AssociationField::new('subcategory', 'Sous-Catégories associées')->setColumns(6)
+            AssociationField::new('category', 'Catégories associées')
+                ->setHelp("Sélectionnez la catégorie que l'on souhaite associer")
+                ->setColumns(4)
+            ,
+            AssociationField::new('subcategory', 'Sous-Catégories associées')
+                ->setHelp("Sélectionnez la sous-catégorie que l'on souhaite associer")
+                ->setColumns(4)
+            ,
+            AssociationField::new('tags', 'Tags associés')
+                ->setHelp('Sélectionnez ou ajoutez des tags pour cette activité')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'multiple' => true,
+                ])
+                ->setCrudController(TagCrudController::class)
+                ->setColumns(4)
             ,
             FormField::addFieldset('Description'),
             TextEditorField::new('description')

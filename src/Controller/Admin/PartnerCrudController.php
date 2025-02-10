@@ -114,7 +114,7 @@ class PartnerCrudController extends AbstractCrudController
                     },
                 ])
                 ->setFormTypeOption('choice_label', 'name')
-                ->setColumns(4)
+                ->setColumns(3)
             , 
             AssociationField::new('events', 'Événements spéciaux associées')
                 ->setHelp("Sélectionnez les événements spéciaux que l'on souhaite associer")
@@ -127,7 +127,7 @@ class PartnerCrudController extends AbstractCrudController
                     },
                 ])
                 ->setFormTypeOption('choice_label', 'name')
-                ->setColumns(4)
+                ->setColumns(3)
             ,
             AssociationField::new('offers', 'Offres spéciales associées')
                 ->setHelp("Sélectionnez les offres spéciales que l'on souhaite associer")
@@ -140,7 +140,16 @@ class PartnerCrudController extends AbstractCrudController
                     },
                 ])
                 ->setFormTypeOption('choice_label', 'name')
-                ->setColumns(4)
+                ->setColumns(3)
+            ,
+            AssociationField::new('tags', 'Tags associés')
+                ->setHelp('Sélectionnez ou ajoutez des tags pour ce partenaire')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'multiple' => true,
+                ])
+                ->setCrudController(TagCrudController::class)
+                ->setColumns(3)
             ,
             FormField::addFieldset('Présentation'),
             TextEditorField::new('presentation', 'Présentation')

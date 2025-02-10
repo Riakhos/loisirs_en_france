@@ -2,15 +2,19 @@
 
 namespace App\Controller\Eventstrend;
 
+use App\Entity\Rating;
+use App\Form\RatingType;
 use App\Repository\EventRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EventController extends AbstractController
 {
     #[Route('evenements-speciaux/{slug}', name: 'app_event')]
-    public function event(string $slug, EventRepository $eventRepository ): Response
+    public function event(string $slug, EventRepository $eventRepository, EntityManagerInterface $em, Request $request): Response
     {
         // Trouver l'évènement spéciale par son slug
         $event = $eventRepository->findOneBySlug($slug);
@@ -21,9 +25,43 @@ class EventController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
         
+
+        // Vérifier si l'utilisateur est connecté
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash(
+                'error',
+                'Vous devez être connecté pour ajouter une note.'
+            );
+            return $this->redirectToRoute('app_login');
+        }
+
+        $rating = new Rating();
+        $form = $this->createForm(RatingType::class, $rating);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $rating->setEvent($event);
+            
+            $em->persist($rating);
+            $em->flush();
+            
+            $this->addFlash(
+                'success',
+                'Votre note a été ajoutée avec succès.'
+            );
+            
+            return $this->redirectToRoute('app_event', [
+                'slug' => $event->getSlug()
+            ]);
+        }
+        
         return $this->render('eventstrend/event.html.twig', [
             'controller_name' => 'Évènements Spéciaux',
             'event' => $event,
+            'ratings' => $event->getRatings(),
+            'averageRating' => $event->getAverageRating(),
+            'ratingForm' => $form->createView(),
         ]);
     }
 }

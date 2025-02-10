@@ -23,6 +23,7 @@ class EventstrendCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Évènement Tendance')
             ->setEntityLabelInPlural('Évènements Tendances')
+            ->setPageTitle('index', 'Gestion des Évènements Tendances, des Activités Tendances, des Évènements Spéciaux, des Offres Exclusives et des Offres Spéciales')
         ;
     }
     

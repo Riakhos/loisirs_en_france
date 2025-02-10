@@ -95,7 +95,7 @@ class OfferCrudController extends AbstractCrudController
             FormField::addFieldset('Associations'),
             AssociationField::new('eventstrend', 'Évènements Tendances associées')
                 ->setHelp('L\évènement tendance de l\offre spéciale')
-                ->setColumns(6)
+                ->setColumns(4)
             ,
             // On utilise un champ personnalisé pour sélectionner 3 activités
             AssociationField::new('activity', 'Activité associée')
@@ -117,7 +117,16 @@ class OfferCrudController extends AbstractCrudController
                         maxMessage: "Vous ne pouvez sélectionner que trois activités maximum."
                     )
                 ])
-                ->setColumns(6)
+                ->setColumns(4)
+            ,
+            AssociationField::new('tags', 'Tags associés')
+                ->setHelp('Sélectionnez ou ajoutez des tags pour cette offre spéciale')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'multiple' => true,
+                ])
+                ->setCrudController(TagCrudController::class)
+                ->setColumns(4)
             ,
             FormField::addFieldset('Description'),
             TextEditorField::new('description', 'Description')

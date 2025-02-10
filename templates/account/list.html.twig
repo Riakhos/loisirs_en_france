@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    {# Barre de navigation #}
+    {% include "account/navbar.html.twig" %}
+
+    <div class="container my-5 d-flex justify-content-center align-items-center min-vh-100">
+        <div class="toast d-flex justify-content-center align-items-center">
+			<h1>Liste des Partenaires</h1>
+			<ul>
+				{% for partner in partners %}
+					<li>
+						<a href="{{ path('app_partner', { slug: partner.slug }) }}">
+							{{ partner.name }}
+						</a>
+		
+						<div>
+							<p><strong>Email:</strong> {{ partner.email }}</p>
+							<p><strong>Téléphone:</strong> {{ partner.phone }}</p>
+							<p><strong>Adresse:</strong> {{ partner.address }}, {{ partner.city }}</p>
+							<p><strong>Site Web:</strong> <a href="{{ partner.website }}" target="_blank">{{ partner.website }}</a></p>
+							<p><strong>Note Moyenne:</strong> {{ partner.getAverageRating() }}</p>
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+        </div>
+    </div>
+{% endblock %}

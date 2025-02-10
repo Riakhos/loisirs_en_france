@@ -2,11 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Entity\Partner;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -37,7 +35,7 @@ class PartnerType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez le nom de votre établissement'
                 ],
                 'label_attr' => [
@@ -54,7 +52,7 @@ class PartnerType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez votre adresse mail de contact'
                 ],
                 'label_attr' => [
@@ -71,7 +69,7 @@ class PartnerType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez le numéro de téléphone de votre établissement'
                 ],
                 'label_attr' => [
@@ -84,8 +82,9 @@ class PartnerType extends AbstractType
             ])
             ->add('website', UrlType::class, [
                 'label' => 'Site web de votre établissement',
+                'default_protocol' => 'https', // ✅ Ajout du protocole par défaut
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez URL de votre site web'
                 ],
                 'label_attr' => [
@@ -96,7 +95,7 @@ class PartnerType extends AbstractType
                 'label' => 'Décrivez ce que vous proposez en quelques mots',
                 'attr' => [
                     'maxlength' => 250,
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Présentez votre établissement'
                 ],
                 'label_attr' => [
@@ -113,7 +112,7 @@ class PartnerType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez l\'adresse de votre établissement'
                 ],
                 'label_attr' => [
@@ -130,7 +129,7 @@ class PartnerType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez le code postal de votre établissement'
                 ],
                 'label_attr' => [
@@ -147,7 +146,7 @@ class PartnerType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez la ville de votre établissement'
                 ],
                 'label_attr' => [
@@ -164,7 +163,7 @@ class PartnerType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-control color-secondary-custom',
+                    'class' => 'form-control',
                     'placeholder' => 'Indiquez la région de votre établissement'
                 ],
                 'label_attr' => [
@@ -207,7 +206,7 @@ class PartnerType extends AbstractType
                         ]),
                     ],
                     'attr' => [
-                        'class' => 'form-control color-secondary-custom',
+                        'class' => 'form-control',
                         'placeholder' => 'Entrez votre email'
                     ],
                     'label_attr' => [
@@ -226,7 +225,7 @@ class PartnerType extends AbstractType
                         ]),
                     ],
                     'attr' => [
-                        'class' => 'form-control color-secondary-custom',
+                        'class' => 'form-control',
                         'placeholder' => 'Entrez votre mot de passe'
                     ],
                     'label_attr' => [

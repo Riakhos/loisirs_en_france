@@ -43,6 +43,9 @@ class Activity
     #[ORM\Column]
     private ?float $tva = null;
     
+    #[ORM\Column(nullable: true)]
+    private ?int $peopleCount = null;
+    
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "activities")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
@@ -51,6 +54,16 @@ class Activity
     #[ORM\JoinColumn(nullable: false)]
     private ?Subcategory $subcategory = null;
 
+    #[ORM\ManyToOne(targetEntity: Exclusive::class, inversedBy: 'activities')]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
+    private ?Exclusive $exclusive = null;
+    
+    #[ORM\ManyToOne(inversedBy: 'activities')]
+    private ?Trend $trend = null;
+
+    #[ORM\ManyToOne(inversedBy: 'activities', fetch: 'EAGER')]
+    private ?Partner $partners = null;
+    
     /**
      * @var Collection<int, Offer>
      */
@@ -58,24 +71,22 @@ class Activity
     private Collection $offers;
     
     /**
-     * @var Exclusive|null
+     * @var Collection<int, Tag>
      */
-    #[ORM\ManyToOne(targetEntity: Exclusive::class, inversedBy: 'activities')]
-    #[ORM\JoinColumn(onDelete: "SET NULL")]
-    private ?Exclusive $exclusive = null;
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'activities')]
+    private Collection $tags;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $peopleCount = null;
-
-    #[ORM\ManyToOne(inversedBy: 'activities')]
-    private ?Trend $trend = null;
-
-    #[ORM\ManyToOne(inversedBy: 'activities', fetch: 'EAGER')]
-    private ?Partner $partners = null;
+    /**
+     * @var Collection<int, Rating>
+     */
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'activity')]
+    private Collection $ratings;
 
     public function __construct()
     {
         $this->offers = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function __toString()
@@ -331,5 +342,73 @@ class Activity
         $this->partners = $partners;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeActivity($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): static
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): static
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getActivity() === $this) {
+                $rating->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getAverageRating(): ?float
+    {
+        $ratings = $this->ratings->toArray();
+        if (count($ratings) === 0) {
+            return null;
+        }
+
+        $sum = array_reduce($ratings, fn($carry, $rating) => $carry + $rating->getScore(), 0);
+        return round($sum / count($ratings), 1);
     }
 }

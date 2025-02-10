@@ -153,36 +153,72 @@
                                                 </div>
                                             </div>
                                         </section>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                                 {# Section : Évaluations #}
                                 <div class="col-sm-6 col-md-4">
-                                    <h2 class="visually-hidden">Notes, Avis et Tags</h2>
-                                    <section class="mb-1" role="region" aria-labelledby="rating-header">
-                                        <h3 id="rating-header" class="visually-hidden">Notes</h3>
-                                        <p class="card-text color-secondary-custom">
-                                            <i class="bi bi-star-fill me-2" aria-hidden="true"></i>
-                                            <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Voir la note">Note</a>
-                                            et 
-                                            <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note">Ajouter une note</a>
-                                        </p>
-                                    </section>
-                                    <section class="mb-1" role="region" aria-labelledby="reviews-header">
-                                        <h3 id="reviews-header" class="visually-hidden">Avis</h3>
-                                        <p class="card-text color-secondary-custom">
-                                            <i class="bi bi-stars me-2" aria-hidden="true"></i>
-                                            <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">Voir les avis</a>
-                                            et 
-                                            <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter un avis">Ajouter un avis</a>
-                                        </p>
-                                    </section>
-                                    <section class="mb-1" role="region" aria-labelledby="tag-header">
-                                        <h3 id="tag-header" class="visually-hidden">Tag</h3>
-                                        <p class="card-text color-secondary-custom">
-                                            <i class="bi bi-tag-fill me-2" aria-hidden="true"></i>
-                                            Tag
-                                        </p>
-                                    </section>
+                                    {% for item in relation.items %}
+                                        <h2 class="visually-hidden">Notes, Avis et Tags</h2>
+                                        {# Section : Avis #}
+                                        <section class="mb-1" role="region" aria-labelledby="reviews-header">
+                                            <p>
+                                                <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
+                                                    <h3 id="avis-header" class="visually-hidden">Avis des utilisateurs</h3>
+                                                    {% for rating in item.ratings|slice(-1,1) %}
+                                                        <p><strong>({{ rating.score }}/5)</strong> - {{ rating.comment ?: 'Pas de commentaire' }}</p>
+                                                    {% else %}
+                                                        <p>Soyez le premier à donner votre avis</p>
+                                                    {% endfor %}
+                                                </a>
+                                            </p>
+                                        </section>
+                                        {# Section : Notes #}
+                                        <section class="mb-1" role="region" aria-labelledby="rating-header">
+                                            <h3 id="rating-header" class="visually-hidden">Notes</h3>
+                                            <p class="card-text color-secondary-custom">
+                                                <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note" data-bs-toggle="collapse" data-bs-target="#ratingForm">
+                                                    {% if item.averageRating is not null %}
+                                                        <span class="stars">
+                                                            {% for i in 1..5 %}
+                                                                {% if i <= item.averageRating %}
+                                                                    <i class="bi bi-star-fill"></i>
+                                                                {% elseif i > item.averageRating and i < item.averageRating + 1 %}
+                                                                    <i class="bi bi-star-half"></i>
+                                                                {% else %}
+                                                                    <i class="bi bi-star"></i>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </span>
+                                                        ({{ item.averageRating }}/5)
+                                                    {% else %}
+                                                        ✩✩✩✩✩ (0/5)
+                                                    {% endif %}
+                                                </a>
+                                            </p>
+                                            <div class="collapse" id="ratingForm">
+                                                {# Afficher le formulaire de notation spécifique à l'activité #}
+                                                {{ form_start(ratingForms[item.id]) }}
+                                                    {{ form_row(ratingForms[item.id].score) }}
+                                                    {{ form_row(ratingForms[item.id].comment) }}
+                                                    {{ form_row(ratingForms[item.id].submit) }}
+                                                {{ form_end(ratingForms[item.id]) }}
+                                            </div>
+                                        </section>
+                                        {# Section : Tag #}
+                                        <section class="mb-1" role="region" aria-labelledby="tag-header">
+                                            <h3 id="tag-header" class="visually-hidden">Tags</h3>
+                                            <p class="card-text color-secondary-custom">
+                                                <i class="bi bi-tags me-2" aria-hidden="true"></i>
+                                                {% if item.tags is not empty %}
+                                                    {% for tag in item.tags|slice(-2,2) %}
+                                                        <span class="badge bg-secondaryYellow color-primary-custom border-hover-custom me-1">{{ tag.name }}</span>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span class="color-secondary-custom">Aucun tag disponible</span>
+                                                {% endif %}
+                                            </p>
+                                        </section>
+                                    {% endfor %}
                                 </div>
                                 {# Section : Tarifs #}
                                 <div class="col-sm-6 col-md-4">

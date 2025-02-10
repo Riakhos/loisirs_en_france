@@ -70,12 +70,26 @@ class Partner
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'partners')]
+    private Collection $tags;
+
+    /**
+     * @var Collection<int, Rating>
+     */
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'partner')]
+    private Collection $ratings;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
         $this->activities = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->offers = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function __toString()
@@ -345,5 +359,73 @@ class Partner
     public function getPhoneLink(): string
     {
         return "tel:" . str_replace(' ', '', $this->phone);
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addPartner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removePartner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): static
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setPartner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): static
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getPartner() === $this) {
+                $rating->setPartner(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getAverageRating(): ?float
+    {
+        $ratings = $this->ratings->toArray();
+        if (count($ratings) === 0) {
+            return null;
+        }
+
+        $sum = array_reduce($ratings, fn($carry, $rating) => $carry + $rating->getScore(), 0);
+        return round($sum / count($ratings), 1);
     }
 }

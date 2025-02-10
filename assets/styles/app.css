@@ -20,6 +20,10 @@
     background-color: var(--primary-color);
 }
 
+.bg-hoverBlue {
+    background-color: var(--hover-color);
+}
+
 .bg-secondaryYellow {
     background-color: var(--secondary-color);
 }
@@ -43,6 +47,10 @@
 .border-secondary-custom {
     border: 2px solid var(--secondary-color);
     border-radius:10px;
+}
+
+.border-secondary-custom-top {
+    border-top: 2px solid var(--secondary-color);
 }
 
 .border-hover-custom {
