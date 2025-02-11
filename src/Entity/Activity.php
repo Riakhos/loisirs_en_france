@@ -58,6 +58,7 @@ class Activity
     #[ORM\JoinColumn(onDelete: "SET NULL")]
     private ?Exclusive $exclusive = null;
     
+    
     #[ORM\ManyToOne(inversedBy: 'activities')]
     private ?Trend $trend = null;
 
