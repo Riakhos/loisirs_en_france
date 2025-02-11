@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Tag;
-use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Offer;
