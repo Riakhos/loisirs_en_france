@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    {# Barre de navigation #}
+    {% include "account/navbar.html.twig" %}
+
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="toast m-3 d-flex justify-content-center align-items-center">
+            <h1>Bienvenue, {{ app.user.firstname }} !</h1>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-header">Réservations à venir</div>
+                        <div class="card-body">
+                            {# <h5 class="card-title">{{ upcomingReservations|length }}</h5>
+                            <p class="card-text">Vous avez {{ upcomingReservations|length }} réservations à venir.</p> #}
+                            <a href="{{ path('app_account_reservation') }}" class="btn btn-light">Voir les réservations</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-header">Messages non lus</div>
+                        <div class="card-body">
+                            {# <h5 class="card-title">{{ unreadMessages|length }}</h5>
+                            <p class="card-text">Vous avez {{ unreadMessages|length }} messages non lus.</p> #}
+                            <a href="{{ path('app_account_message') }}" class="btn btn-light">Voir les messages</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-warning mb-3">
+                        <div class="card-header">Avis laissés</div>
+                        <div class="card-body">
+                            {# <h5 class="card-title">{{ ratings|length }}</h5>
+                            <p class="card-text">Vous avez laissé {{ ratings|length }} avis.</p> #}
+                            <a href="{{ path('app_account_notice') }}" class="btn btn-light">Voir les avis</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
