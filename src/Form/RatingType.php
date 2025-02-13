@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\Rating;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,22 +35,39 @@ class RatingType extends AbstractType
                 'expanded' => true, // Pour afficher des boutons radio
                 'multiple' => false, // Sélection unique
                 'label' => 'Note',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner une note.'
+                    ])
+                ],
                 'attr' => [
                     'class' => 'd-flex flex-wrap justify-content-between color-secondary-custom mb-2'
                 ],
             ])
             ->add('comment', TextareaType::class, [
-                'label' => 'Commentaire',
+                'label' => 'Commentaire <span class="text-danger">*</span>',
+                'label_html' => true,
                 'required' => true,
-                'attr' => [
-                    'maxlength' => 250,
-                    'class' => 'form-control',
-                    'placeholder' => 'Laissez nous un commentaire'
-                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez laisser un commentaire.'
                     ]),
+                    new Length([
+                        'min' => 5,
+                        'max' => 250,
+                        'minMessage' => 'Votre commentaire doit contenir au moins {{ limit }} caractères.',
+                        'maxMessage' => 'Votre commentaire ne peut pas dépasser {{ limit }} caractères.'
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[A-Za-zÀ-ÿ0-9.,!?\'"\s-]+$/u', // Autorise lettres, chiffres, espaces et certains signes de ponctuation
+                        'message' => 'Le commentaire contient des caractères non autorisés.'
+                    ]),
+                ],
+                'attr' => [
+                    'maxlength' => 250,
+                    'class' => 'form-control',
+                    'placeholder' => 'Laissez nous un commentaire',
+                    'autocomplete' => 'off',
                 ],
                 'label_attr' => [
                     'class' => 'form-label color-secondary-custom'
@@ -67,10 +86,11 @@ class RatingType extends AbstractType
                 ]
             ])
             ->add('submit', SubmitType::class, [
+                'label' => 'Ajouter une note',
                 'attr' => [
-                    'class' => 'btn btn-primary d-block mx-auto w-100 color-primary-custom'
-                ],
-                'label' => 'Ajouter une note'
+                    'class' => 'btn btn-primary d-block mx-auto w-100 color-primary-custom',
+                    'data-loading-text' => 'Chargement...'
+                ]
             ])
         ;
     }

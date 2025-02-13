@@ -22,7 +22,7 @@ class Partner
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 10)]
+    #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]

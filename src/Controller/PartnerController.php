@@ -98,6 +98,16 @@ final class PartnerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             
+            // Nettoyage sécurisé uniquement des champs de type string
+            foreach ($form->all() as $child) {
+                $data = $child->getData();
+
+                if (is_string($data)) { // Vérifie si la valeur est bien une chaîne de caractères
+                    $cleanData = strip_tags(trim($data));
+                    $child->setData($cleanData);
+                }
+            }
+            
             // Si l'utilisateur est connecté, on l'associe directement au partenaire
             if ($currentUser) {
                 $partner->setUser($currentUser);

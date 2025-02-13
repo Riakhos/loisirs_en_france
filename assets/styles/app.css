@@ -147,3 +147,14 @@ h1, h2, h3, h4, h5, h6 {
     --bs-badge-padding-x: 0.8em !important;
     --bs-badge-padding-y: 0.4em !important;
 }
+
+/* Modifier la couleur de l'icône du sélecteur de date */
+#profil_form_birthdayDate::-webkit-calendar-picker-indicator, #personalize_birthday_card_when::-webkit-calendar-picker-indicator {
+    filter: invert(35%) sepia(50%) saturate(500%) hue-rotate(165deg);
+    opacity: 1;
+}
+
+/* Firefox - Pas de support direct pour l'icône, donc on applique la couleur au texte */
+#profil_form_birthdayDate, #personalize_birthday_card_when {
+    color: #2984B4;
+}

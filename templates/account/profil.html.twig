@@ -6,11 +6,11 @@
     {# Barre de navigation #}
     {% include "account/navbar.html.twig" %}
 
-    <div class="d-flex justify-content-center align-items-center gap-3">
-        <div class="col-md-8 toast d-flex m-3 p-3 justify-content-center align-items-center">
-            {{ form_start(profilForm, {'method': 'POST'}) }}
+    <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
 
-                {# Section Informations Personnelles #}
+        {# Section : Informations Personnelles #}
+        <div class="col-md-8 toast d-flex m-3 p-3">
+            {{ form_start(profilForm, {'method': 'POST', 'attr': {'class': 'w-100'}}) }}
                 <h1>Mes informations personnelles</h1>
                 <div class="row d-flex justify-content-between">
                     <div class="col-md-6">
@@ -33,7 +33,9 @@
                 </div>
             {{ form_end(profilForm) }}
         </div>
-        <div class="col-md-4 card bg-primaryBlue border-secondary-custom">
+
+        {# Section : Profil Information #}
+        <div class="col-md-4 card bg-primaryBlue border-secondary-custom m-3">
             <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100">
                 <div class="p-4 flex">
                     <div class="text-center">
@@ -51,35 +53,33 @@
                             {{ user.email }}
                         </p>
                     </div>
-                    </div>
                     <hr class="m-0 border-secondary-custom">
-                        <div class="pb-4 px-4 flex flex-col">
-                            <ul class="list-group list-unstyled p-0 m-0">
-                                <li class="mt-4">
-                                    <a  class="text-decoration-none" href="{{ path('app_account_modify_pwd') }}">Modifier mon mot de passe</a>
-                                </li>
-                                <li class="mt-4">
-                                    <a class="text-decoration-none cursor-pointer">
-                                        <span class="false  mb-4 cursor-pointer">
-                                            <span class="link-chevron">
-                                                Notifications
-                                            </span>
-                                            <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
+                    <div class="pb-4 px-4 flex flex-col">
+                        <ul class="list-group list-unstyled p-0 m-0">
+                            <li class="mt-4">
+                                <a  class="text-decoration-none" href="{{ path('app_account_modify_pwd') }}">Modifier mon mot de passe</a>
+                            </li>
+                            <li class="mt-4">
+                                <a class="text-decoration-none cursor-pointer">
+                                    <span class="false  mb-4 cursor-pointer">
+                                        <span class="link-chevron">
+                                            Notifications
                                         </span>
-                                    </a>
-                                </li>
-                                <li class="mt-4">
-                                    <a class="text-decoration-none cursor-pointer">
-                                        <span class="false  mb-4 cursor-pointer">
-                                            <span class="link-chevron">
-                                                Sécurité
-                                            </span>
-                                            <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
+                                        <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="mt-4">
+                                <a class="text-decoration-none cursor-pointer">
+                                    <span class="false  mb-4 cursor-pointer">
+                                        <span class="link-chevron">
+                                            Sécurité
                                         </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                                        <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

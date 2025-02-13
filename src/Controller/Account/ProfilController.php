@@ -25,8 +25,10 @@ class ProfilController extends AbstractController
 
         $form = $this->createForm(ProfilFormType::class, $user);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            // Gestion de l'upload de l'image
             $file = $form->get('attachment')->getData();
             
             if ($file instanceof UploadedFile) {
@@ -44,7 +46,6 @@ class ProfilController extends AbstractController
                     );
                 }
             }
-            
             $em->persist($user);
             $em->flush();
 

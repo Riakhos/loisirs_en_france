@@ -5,11 +5,15 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -20,12 +24,16 @@ class RegisterUserType extends AbstractType
     {
         $builder        
             ->add('email', EmailType::class, [                
-                'label' => 'Votre adresse mail',
+                'label' => 'Votre adresse mail <span class="text-danger">*</span>',
+                    'label_html' => true,
                 'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez fournir une adresse mail.'
                     ]),
+                    new Email([
+                        'message' => 'Adresse email invalide.'
+                    ])
                 ],
                 'attr' => [
                     'class' => 'form-control',
@@ -45,12 +53,17 @@ class RegisterUserType extends AbstractType
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
                         'maxMessage' => 'Le mot de passe ne peut pas dépasser {{ limit }} caractères.'
                     ]),
+                    new Regex([
+                        'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/',
+                        'message' => 'Le mot de passe doit contenir au moins une lettre et un chiffre.',
+                    ])
                 ],
                 'first_options'  => [
                     'label' => 'Votre mot de passe',
                     'attr' => [
                         'class' => 'form-control',
-                        'placeholder' => 'Choisissez votre mot de passe'
+                        'placeholder' => 'Choisissez votre mot de passe',
+                        'autocomplete' => 'off'
                     ],
                     'hash_property_path' => 'password'
                 ],
@@ -58,16 +71,30 @@ class RegisterUserType extends AbstractType
                     'label' => 'Confirmer mot de passe',
                     'attr' => [
                         'class' => 'form-control',
-                        'placeholder' => 'Confirmez votre mot de passe'
+                        'placeholder' => 'Confirmez votre mot de passe',
+                        'autocomplete' => 'off'
                     ]
                 ],
                 'mapped' => false,
             ])
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-primary d-block mx-auto w-40'
+            ->add('captcha', CheckboxType::class, [
+                'label' => 'Vérifiez que vous êtes un humain.',
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Veuillez vérifier que vous êtes un humain.'
+                    ])
                 ],
-                'label' => 'Inscription'
+                'label_attr' => [
+                    'class' => 'form-label color-secondary-custom text-center'
+                ]
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Inscription',
+                'attr' => [
+                    'class' => 'btn btn-primary d-block mx-auto w-40',
+                    'data-loading-text' => 'Chargement...'
+                ],
             ])
         ;
     }

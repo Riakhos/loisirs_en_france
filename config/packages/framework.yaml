@@ -3,10 +3,26 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+
+        enabled: true
+        # configuration de la session
+        handler_id: null
+
+        # configuration des cookies
+        cookie_secure: true
+        cookie_httponly: true
+        cookie_lifetime: 3600 # Durée de vie de la session (en secondes)
 
     #esi: true
     #fragments: true
+
+    # Protection contre les attaques par force brute
+    # rate_limiter:
+    #     login_attempts:
+    #         policy: 'sliding_window'
+    #         limit: 5
+    #         interval: '1 minute'
 
 when@test:
     framework:
