@@ -6,102 +6,57 @@
     {# Barre de navigation #}
     {% include "account/navbar.html.twig" %}
 
-    <div class="d-flex justify-content-center align-items-center">
-        <div class="toast d-flex  m-3 p-3 justify-content-center align-items-center">
-            <form class="row p-3 g-3">
+    <div class="d-flex justify-content-center align-items-center gap-3">
+        <div class="col-md-8 toast d-flex m-3 p-3 justify-content-center align-items-center">
+            {{ form_start(profilForm, {'method': 'POST'}) }}
+
+                {# Section Informations Personnelles #}
                 <h1>Mes informations personnelles</h1>
-                <div class="col-md-6">
-                    <label for="firstname" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" id="firstname">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-md-6">
+                        {{ form_row(profilForm.firstname) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(profilForm.lastname) }}
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="lastname" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="lastname">
-                </div>
-                <div class="col-md-6">
-                    <label for="phone" class="form-label">Téléphone</label>
-                    <input type="text" class="form-control" id="phone">
-                </div>
-                <div class="col-6">
-                    <label for="birthdayDate" class="form-label">Date de naissance</label>
-                    <div class="row">
-                        {# Sélection du jour #}
-                        <div class="col-12 col-md-4 mb-2 mb-md-0">
-                            <select id="birthdayDay" class="form-select">
-                                <option selected>Jour</option>
-                                {% for day in 1..31 %}
-                                    <option value="{{ day }}">{{ day }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        {# Sélection du mois #}
-                        <div class="col-12 col-md-4 mb-2 mb-md-0">
-                            <select id="birthdayMonth" class="form-select">
-                                <option selected>Mois</option>
-                                {% for month in [
-                                    'Janvier', 'février', 'Mars', 'Avril', 'Mai', 'Juin', 
-                                    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-                                ] %}
-                                    <option value="{{ loop.index0 }}">{{ month }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        {# Sélection de l'année #}
-                        <div class="col-12 col-md-4 mb-2 mb-md-0">
-                            <select id="birthdayYear" class="form-select">
-                            <option selected>Années</option>
-                                {% set current_year = "now"|date("Y") %}
-                                {% for year in current_year..(current_year-100) %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                <div class="row d-flex justify-content-between">
+                    <div class="col-md-6">
+                        {{ form_row(profilForm.phone) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(profilForm.birthdayDate) }}
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <label for="email" class="form-label">Mail*</label>
-                    <input name="email" class="form-control" type="mail" placeholder=" ">
+                    {{ form_row(profilForm.email) }}
                 </div>
-                <div class="col-12">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="gridCheck">
-                        <label class="form-check-label" for="gridCheck">Vérifié</label>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </div>
-            </form>
+            {{ form_end(profilForm) }}
         </div>
-        
-        <div class="flex flex-sm-col mb-3 flex-sm-column-reverse">
-            
-            <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100" style="width: 415px;">
+        <div class="col-md-4 card bg-primaryBlue border-secondary-custom">
+            <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100">
                 <div class="p-4 flex">
-                    <div class="cursor-pointer">
-                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="#"></div>
-                        <div class="ml-4 flex flex-col content-center">
-                            <p class="mb-2 mb-2  font-weight-bold">
-                                Richard Bonnegent
-                            </p>
-                            <p class="mb-2">
-                                richard.bonnegent@gmail.com
-                            </p>
-                            <p class="m-0"></p>
-                        </div>
+                    <div class="text-center">
+                        {% if user.image %}
+                            <img class="rounded-circle" style="height: 88px; width: 88px;" src="{{ asset('uploads/profil_pictures/' ~ user.image) }}" alt="Photo de profil">
+                        {% else %}
+                            <i class="bi bi-person-circle color-secondary-custom" style="font-size: 88px;"></i>
+                        {% endif %}
                     </div>
-                    <hr class="m-0 border">
+                    <div class="ml-4 flex flex-col text-center">
+                        <p class="mb-2 mb-2 color-secondary-custom font-weight-bold">
+                            {{ user.firstname }} {{ user.lastname }}
+                        </p>
+                        <p class="mb-2 color-secondary-custom">
+                            {{ user.email }}
+                        </p>
+                    </div>
+                    </div>
+                    <hr class="m-0 border-secondary-custom">
                         <div class="pb-4 px-4 flex flex-col">
-                            <ul class="list-none p-0 m-0">
+                            <ul class="list-group list-unstyled p-0 m-0">
                                 <li class="mt-4">
-                                    <a class="text-decoration-none cursor-pointer">
-                                        <span class="text-primary border-primary  mb-4 cursor-pointer">
-                                            <span class="link-chevron">
-                                                Modifier mon profil
-                                            </span>
-                                            <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
-                                        </span>
-                                    </a>
+                                    <a  class="text-decoration-none" href="{{ path('app_account_modify_pwd') }}">Modifier mon mot de passe</a>
                                 </li>
                                 <li class="mt-4">
                                     <a class="text-decoration-none cursor-pointer">
@@ -126,27 +81,8 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="d-none-min-md flex items-center my-4">
-                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="#">
-                            <div class="select-input w-100 ml-4">
-                                <select>
-                                    <option value="/profil-utilisateur/editer-a-propos-de-moi">
-                                        Modifier mon profil
-                                    </option>
-                                    <option value="/profil-utilisateur/notifications">
-                                        Notifications
-                                    </option>
-                                    <option value="/profil-utilisateur/securite">
-                                        Sécurité
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-        <a href="{{ path('app_logout') }}">Me déconnecter</a>
-        <a href="{{ path('app_account_modify_pwd') }}">Modifier mon mot de passe</a>
     </div>
 {% endblock %}

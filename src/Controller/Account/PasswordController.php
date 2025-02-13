@@ -21,18 +21,18 @@ class PasswordController extends AbstractController
 	 * @return Response
 	 */
 	#[Route('/compte/modifier-mot-de-passe', name: 'app_account_modify_pwd')]
-	public function password(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, EntityManagerInterface $entityManagerInterface): Response
+	public function password(Request $request, UserPasswordHasherInterface $uphi, EntityManagerInterface $em): Response
 	{
 		$user = $this->getUser();
 		$form = $this->createForm(PasswordUserType::class, $user, [
-			'passwordHasher' => $userPasswordHasherInterface 
+			'passwordHasher' => $uphi 
 		]);
 		
 		$form->handleRequest(($request));
 
 		// Si le formulaire est soumis alors :
 		if ($form->isSubmitted() && $form->isValid()) {
-			$entityManagerInterface->flush();
+			$em->flush();
 			$this->addFlash(
 				'success',
 				'Votre mot de passe est correctement mis à jour.'

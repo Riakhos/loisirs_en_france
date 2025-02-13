@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class RegisterController extends AbstractController
 {
     #[Route('/inscription', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManagerInterface): Response
+    public function register(Request $request, EntityManagerInterface $em): Response
     {
         $user = new User();
         
@@ -24,8 +24,8 @@ class RegisterController extends AbstractController
         // Si le formulaire est soumis alors :
         if ($form->isSubmitted() && $form->isValid()) {
             // Tu enregistres les datas en BDD
-            $entityManagerInterface->persist($user);
-            $entityManagerInterface->flush();
+            $em->persist($user);
+            $em->flush();
             
             $this->addFlash(
                 'success',

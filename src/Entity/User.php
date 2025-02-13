@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?int $phone = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $image = null;
 
     public function getId(): ?int
     {
@@ -164,6 +167,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?int $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

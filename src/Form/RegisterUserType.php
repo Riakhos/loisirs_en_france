@@ -35,7 +35,7 @@ class RegisterUserType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'required' => true,
-                'constraints' => [
+                'constraints' => $options['is_edit'] ? [] : [
                     new NotBlank([
                         'message' => 'Veuillez fournir un mot de passe.'
                     ]),
@@ -82,6 +82,7 @@ class RegisterUserType extends AbstractType
                 ])
             ],
             'data_class' => User::class,
+            'is_edit' => false,
         ]);
     }
 }
