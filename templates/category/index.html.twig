@@ -12,10 +12,10 @@
 						<div class="fixed-square">
 							<picture>
 								{# WebP version #}
-								<source srcset="/uploads/{{ category.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+								<source srcset="/uploads/photos/{{ category.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
 								{# Fallback JPG/PNG #}
 								<img 
-									src="/uploads/{{ category.image }}" 
+									src="/uploads/photos/{{ category.image }}" 
 									class="figure-img img-fluid rounded border-secondary-custom" 
 									alt="Image de {{ category.name }}" 
 									aria-hidden="false" 

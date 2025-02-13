@@ -41,10 +41,10 @@
                                     <a href="{{ path('app_activity', { slug: activity.slug }) }}">
                                         <picture>
                                             {# WebP version #}
-                                            <source srcset="/uploads/{{ activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            <source srcset="/uploads/photos/{{ activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
                                             {# Fallback JPG/PNG #}
                                             <img 
-                                                src="/uploads/{{ activity.image }}"
+                                                src="/uploads/photos/{{ activity.image }}"
                                                 class="figure-img img-fluid rounded border-secondary-custom" 
                                                 alt="Image de {{ activity.name }}" 
                                                 style="object-fit: cover; width: 100%; height: 400px;"
@@ -187,7 +187,7 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="card bg-primaryBlue border-secondary-custom d-flex flex-column h-100">
                                         <a href="{{ path('app_activity', { slug: activity.slug }) }}">
-                                            <img src="/uploads/{{ activity.image }}" class="card-img-top" alt="{{ activity.name }}">
+                                            <img src="/uploads/photos/{{ activity.image }}" class="card-img-top" alt="{{ activity.name }}">
                                         </a>
                                         <div class="card-body text-center mt-auto">
                                             <h3 class="card-title color-secondary-custom">{{ activity.name }}</h3>
@@ -251,7 +251,7 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="card bg-primaryBlue border-secondary-custom d-flex flex-column h-100">
                                         <a href="{{ path('app_offer', { slug: offer.slug }) }}">
-                                            <img src="/uploads/{{ offer.image }}" class="card-img-top" alt="{{ offer.name }}">
+                                            <img src="/uploads/photos/{{ offer.image }}" class="card-img-top" alt="{{ offer.name }}">
                                         </a>
                                         <div class="card-body text-center mt-auto">
                                             <h3 class="card-title color-secondary-custom">{{ offer.name }}</h3>
@@ -315,7 +315,7 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="card bg-primaryBlue border-secondary-custom d-flex flex-column h-100">
                                         <a href="{{ path('app_event', { slug: event.slug }) }}">
-                                            <img src="/uploads/{{ event.image }}" class="card-img-top" alt="{{ event.name }}">
+                                            <img src="/uploads/photos/{{ event.image }}" class="card-img-top" alt="{{ event.name }}">
                                         </a>
                                         <div class="card-body text-center mt-auto">
                                             <h3 class="card-title color-secondary-custom">{{ event.name }}</h3>

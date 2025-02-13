@@ -51,9 +51,9 @@ class EventstrendCrudController extends AbstractCrudController
             ImageField::new('image')
                 ->setLabel('Image')
                 ->setHelp('Image de votre évènement tendance en 600*600px')
-                ->setUploadDir('/public/uploads')
+                ->setUploadDir('/public/uploads/photos')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
-                ->setBasePath('/uploads')
+                ->setBasePath('/uploads/photos')
                 ->setRequired($required)
             ,
             FormField::addFieldset('Description'),

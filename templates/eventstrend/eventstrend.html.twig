@@ -41,10 +41,10 @@
                                             <a href="{{ path(relation.route, { slug: item.slug }) }}" class="text-decoration-none">
                                                 <picture>
                                                     {# WebP version #}
-                                                    <source srcset="/uploads/{{ item.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                    <source srcset="/uploads/photos/{{ item.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
                                                     {# Fallback JPG/PNG #}
                                                     <img 
-                                                        src="/uploads/{{ item.image }}"
+                                                        src="/uploads/photos/{{ item.image }}"
                                                         class="figure-img img-fluid rounded border-secondary-custom" 
                                                         alt="{{ item.name }}" 
                                                         style="object-fit: cover; width: 100%; height: 400px;"

@@ -43,10 +43,10 @@
 									<a href="{{ path('app_activity', { slug: activity.slug }) }}">
                                         <picture>
                                             {# WebP version #}
-                                            <source srcset="/uploads/{{ activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            <source srcset="/uploads/photos/{{ activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
                                             {# Fallback JPG/PNG #}
                                             <img 
-                                                src="/uploads/{{ activity.image }}"
+                                                src="/uploads/photos/{{ activity.image }}"
                                                 class="figure-img img-fluid rounded border-secondary-custom" 
                                                 alt="Image de {{ activity.name }}" 
                                                 style="object-fit: cover; width: 100%; height: 400px;"

@@ -63,9 +63,9 @@ class TrendCrudController extends AbstractCrudController
             FormField::addFieldset('Image de l\'activité tendance'),
             ImageField::new('image', 'Image')
                 ->setHelp('Image de votre activité tendance en 600*600px')
-                ->setUploadDir('/public/uploads')
+                ->setUploadDir('/public/uploads/photos')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
-                ->setBasePath('/uploads')
+                ->setBasePath('/uploads/photos')
                 ->setRequired($required)
             ,
             FormField::addFieldset('Associations'),

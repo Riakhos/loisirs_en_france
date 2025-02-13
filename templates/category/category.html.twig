@@ -33,10 +33,10 @@
                                     <a href="{{ path('app_subcategory', { slug: subcategories.slug }) }}" aria-label="Voir la sous-catégorie {{ subcategories.name }}">
                                         <picture>
                                             {# WebP version #}
-                                            <source srcset="/uploads/{{ subcategories.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            <source srcset="/uploads/photos/{{ subcategories.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
                                             {# Fallback JPG/PNG #}
                                             <img 
-                                                src="/uploads/{{ subcategories.image }}"
+                                                src="/uploads/photos/{{ subcategories.image }}"
                                                 class="figure-img img-fluid rounded border-secondary-custom" 
                                                 alt="Image de la sous-catégorie {{ subcategories.name }}" 
                                                 style="object-fit: cover; width: 100%; height: 400px;"

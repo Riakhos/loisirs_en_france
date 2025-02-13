@@ -49,9 +49,9 @@ class SubcategoryCrudController extends AbstractCrudController
             FormField::addFieldset('Image de la sous-catégorie'),
             ImageField::new('image', 'Image')
                 ->setHelp('Image de votre activité en 600*600px')
-                ->setUploadDir('/public/uploads')
+                ->setUploadDir('/public/uploads/photos')
                 ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].webp')
-                ->setBasePath('/uploads')
+                ->setBasePath('/uploads/photos')
                 ->setRequired($required)
                 ->setColumns(6)
             ,
