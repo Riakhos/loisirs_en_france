@@ -37,6 +37,15 @@ services:
     App\Twig\GlobalVariables:
         arguments:
             $categoryRepository: '@App\Repository\CategoryRepository'
+            $subcategoryRepository: '@App\Repository\SubcategoryRepository'
+            $activityRepository: '@App\Repository\ActivityRepository'
+            $cart: '@App\Classe\Cart'
+            $eventstrendRepository: '@App\Repository\EventstrendRepository'
+            $trendRepository: '@App\Repository\TrendRepository'
+            $exclusiveRepository: '@App\Repository\ExclusiveRepository'
+            $formFactory: '@Symfony\Component\Form\FormFactoryInterface'
+            $em: '@Doctrine\ORM\EntityManagerInterface'
+            $partnerRepository: '@App\Repository\PartnerRepository'
         tags: ['twig.extension']
 
     # add more service definitions when explicit configuration is needed

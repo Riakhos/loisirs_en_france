@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -39,7 +40,7 @@ class UserCrudController extends AbstractCrudController
                 ->setHelp('Indiquer votre nom')
                 ->setColumns(6)
             ,
-            TextField::new('birthdayDate', 'Date de naissance')
+            DateField::new('birthdayDate', 'Date de naissance')
                 ->setHelp('Indiquer votre date de naissance')
                 ->onlyOnIndex()
                 ->setColumns(6)

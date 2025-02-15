@@ -33,9 +33,9 @@ class HomeController extends AbstractController
             'controller_name' => 'Tableau de bord',
             'user' => $user,
             // 'upcomingReservations' => $reservationRepository->findUpcomingByUser($user),
-            // 'ratings' => $ratingRepository->findBy([
-            //     'user' => $user
-            // ]),
+            'ratings' => $ratingRepository->findBy([
+                'user' => $user
+            ]),
             'cartItems' => $cartService->getCart(),
             'partners' => $partnerRepository->findAll(),
             // 'recentActivities' => $activityRepository->findRecentByUser($user),

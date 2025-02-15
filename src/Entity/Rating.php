@@ -34,6 +34,9 @@ class Rating
     #[ORM\ManyToOne(inversedBy: 'ratings')]
     private ?Partner $partner = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ratings')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -52,7 +55,7 @@ class Rating
 
     public function setScore(float $score): static
     {
-        $this->score = $score;
+        $this->score = round($score, 1); // ou (int) si vous voulez un entier
 
         return $this;
     }
@@ -118,6 +121,18 @@ class Rating
     public function setPartner(?Partner $partner): static
     {
         $this->partner = $partner;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

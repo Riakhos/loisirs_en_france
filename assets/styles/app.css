@@ -158,3 +158,23 @@ h1, h2, h3, h4, h5, h6 {
 #profil_form_birthdayDate, #personalize_birthday_card_when {
     color: #2984B4;
 }
+
+.rating-choices .form-check {
+    width: 32%;
+    margin-bottom: 10px;
+}
+
+/* Si vous souhaitez qu'il y ait une marge entre les éléments (espacement horizontal) */
+.rating-choices .form-check:nth-child(3n) {
+    margin-right: 0;
+}
+
+.rating-choices .form-check input[type="radio"] {
+    margin-right: 5px;
+}
+
+.rating-choices .form-check label {
+    display: inline-block;
+    width: auto;
+    white-space: normal;
+}

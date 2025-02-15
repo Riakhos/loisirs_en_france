@@ -120,6 +120,7 @@ class PartnerType extends AbstractType
                         'message' => 'L\'URL est obligatoire.'
                     ]),
                     new Url([
+                        'requireTld' => false,
                         'message' => 'Veuillez entrer une URL valide.'
                     ]),
                     new Length([

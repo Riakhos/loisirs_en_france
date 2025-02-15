@@ -1,0 +1,175 @@
+{# Modal pour afficher les avis avec filtres et pagination #}
+<div class="modal fade" id="modalAvis" tabindex="-1" aria-labelledby="modalAvisLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            {# En-tête du modal avec titre et champ de recherche #}
+            <div class="modal-header d-flex justify-content-between align-items-center">
+                <h2 class="modal-title" id="modalAvisLabel">Tous les avis</h2>
+
+                {# Bouton de fermeture #}
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+
+            {# Contenu principal du modal #}
+            <section class="modal-body">
+                <h2 class="visually-hidden">Liste des avis</h2>
+
+                {# Moteur de recherche avec filtres #}
+                {{ form_start(searchRatingForm, {'method': 'GET', 'attr': {'class': 'mb-3', 'action': "{{ path('app_search_rating') }}", 'id': 'searchRatingForm' } }) }}
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-8">
+                            {{ form_row(searchRatingForm.score) }}
+                            </div>
+                            <div class="col-md-4 text-center">
+                                {{ form_row(searchRatingForm.date) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-4">
+                                {{ form_row(searchRatingForm.activity) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_row(searchRatingForm.event) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_row(searchRatingForm.offer) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-6">
+                                {{ form_row(searchRatingForm.partner) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(searchRatingForm.user) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-md-8">
+                                {{ form_row(searchRatingForm.search) }}
+                            </div>
+                            <div class="col-md-4 d-block justify-content-end">
+                                {{ form_row(searchRatingForm.submit) }}
+                                {{ form_row(searchRatingForm.reset) }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                {{ form_end(searchRatingForm) }}
+
+                {# Zone d'affichage des avis #}
+                <div class="mt-4" id="ratingsContainer">
+                    <h5 class="color-primary-custom">Résultats :</h5>
+                    <div class="list-group" id="ratingsList"></div>
+                </div>
+
+                <div id="loadMoreContainer" class="text-center mt-3">
+                    <button id="loadMore" class="btn btn-primary">Charger plus</button>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+{# Script JavaScript pour charger les avis et ajouter la recherche en temps réel #}
+<script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        let page = 1; // Page initiale
+        const ratingsList = document.getElementById("ratingsList");
+        const loadMoreButton = document.getElementById("loadMore");
+        const searchRatingForm = document.getElementById("searchRatingForm");
+
+        // Fonction pour récupérer les filtres sous forme d'objet
+        function getFilters() {
+            const formData = new FormData(searchRatingForm);
+            let filters = {};
+            formData.forEach((value, key) => {
+                if (value.trim() !== "") { // Ne pas inclure les valeurs vides
+                    filters[key] = value;
+                }
+            });
+            filters["page"] = page;
+            return filters;
+        }
+
+        // Fonction pour charger les avis
+        function fetchRatings(reset = false) {
+            if (reset) {
+                page = 1;
+                ratingsList.innerHTML = ""; // Réinitialiser l'affichage
+            }
+
+            const filters = getFilters();
+            const queryString = new URLSearchParams(filters).toString();
+
+            fetch(`/recherche-avis?${queryString}`)
+                .then(response => response.json())
+                .then(data => {
+                    
+                    if (data.length === 0) {
+                        if (page === 1) {
+                            ratingsList.innerHTML = "<p>Aucun avis trouvé.</p>";
+                        }
+                        loadMoreButton.style.display = "none";
+                    } else {
+                        data.forEach(rating => {
+                            const item = document.createElement("div");
+                            item.classList.add("list-group-item", "bg-primaryBlue", "rounded", "p-3", "mb-2", "shadow-sm");
+
+                            let starsHTML = '★'.repeat(Math.floor(rating.score)) + 
+                                            (rating.score % 1 >= 0.5 ? '✩' : '') + 
+                                            '☆'.repeat(5 - Math.ceil(rating.score));
+
+                            item.innerHTML = `
+                                <h5 class="mb-1">Note : ${rating.score} ${starsHTML}</h5>
+                                <p class="mb-1">${rating.comment}</p>
+                                <small class="color-secondary-custom">Ajouté par ${rating.user.email ? rating.user.email : 'Utilisateur inconnu'} le ${rating.createdAt}</small>
+                                <div class="mt-2">
+                                    <small class="color-secondary-custom">
+                                        Partenaire: ${rating.partner || 'Inconnu'}, 
+                                        Activité: ${rating.activity || 'Inconnue'}
+                                    </small>
+                                </div>
+                            `;
+                            ratingsList.appendChild(item);
+                        });
+
+                        loadMoreButton.style.display = "block"; // Afficher le bouton "Charger plus"
+                    }
+                })
+                .catch(error => console.error("Erreur lors du chargement des avis :", error));
+        }
+
+        // Gestion de la recherche et des filtres
+        searchRatingForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            fetchRatings(true);
+        });
+
+        // Gestion du reset des filtres
+        searchRatingForm.addEventListener("reset", function () {
+            setTimeout(() => {
+                fetchRatings(true);
+            }, 100); // Petit délai pour laisser le reset s'effectuer
+        });
+
+        // Charger plus d'avis
+        loadMoreButton.addEventListener("click", function () {
+            page++;
+            fetchRatings();
+        });
+
+        // Charger les avis au chargement de la page
+        fetchRatings();
+    });
+</script>

@@ -13,6 +13,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\ExclusiveRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\EventstrendRepository;
+use App\Repository\PartnerRepository;
 use App\Repository\SubcategoryRepository;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -27,6 +28,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	private ExclusiveRepository $exclusiveRepository;
 	private FormFactoryInterface $formFactory;
 	private EntityManagerInterface $em;
+	private PartnerRepository $partnerRepository;
 
 	/**
 	 * __construct
@@ -48,6 +50,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 		ExclusiveRepository $exclusiveRepository,
 		FormFactoryInterface $formFactory, 
 		EntityManagerInterface $em,
+		PartnerRepository $partnerRepository,
 	)
 	
 	{
@@ -60,6 +63,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 		$this->exclusiveRepository = $exclusiveRepository;
 		$this->formFactory = $formFactory;
 		$this->em = $em;
+		$this->partnerRepository = $partnerRepository;
 	}
 
 	/**
@@ -87,6 +91,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 			'exclusives' => $this->exclusiveRepository->findAll(),
 			'fullCartQuantity' => $this->cart->fullQuantity(),
 			'partnerForm' => $partnerForm ->createView(),
+			'partners' => $this->partnerRepository->findAll(),
 		];
 	}
 }

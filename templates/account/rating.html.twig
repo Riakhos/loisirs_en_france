@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    {# Barre de navigation #}
+    {% include "account/navbar.html.twig" %}
+
+    <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
+        
+        {# Section : Vos Avis #}
+        <div class="col-md-8 toast d-flex m-3 p-3 flex-column">
+            <h1 class="mb-4">{{ controller_name }}</h1>
+            
+            {% if ratingsData is empty %}
+                <p>Aucun avis trouvé.</p>
+            {% else %}
+                <div class="list-group">
+                    {% for data in ratingsData|slice(0,5) %} {# Limite à 5 derniers avis #}
+                        <div class="list-group-item">
+                            <h5 class="mb-1">
+                                Note : <strong>({{ data.rating.score }}/5)</strong>
+
+                                {# Afficher les étoiles pleines #}
+                                {% for i in 1..data.fullStars %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% endfor %}
+                    
+                                {# Afficher la demi-étoile si nécessaire #}
+                                {% if data.hasHalfStar %}
+                                    <i class="bi bi-star-half"></i>
+                                {% endif %}
+                    
+                                {# Afficher les étoiles vides #}
+                                {% if data.emptyStars > 0 %}
+                                    {% for i in 1..data.emptyStars %}
+                                        <i class="bi bi-star"></i>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </h5>
+
+                            <p class="mb-1">{{ data.rating.comment }}</p>
+                            <small class="color-secondary-custom">Ajouté le {{ data.rating.createdAt|date('d/m/Y H:i') }}</small>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            {% endif %}
+
+            {# Bouton pour voir tous les avis (ouvre la modal) #}
+            <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvis">
+                Voir tous les avis
+            </button>
+        </div>
+
+        {# Section : Profil Utilisateur #}
+        <div class="col-md-4 card bg-primaryBlue border-secondary-custom m-3">
+            <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100">
+                <div class="p-4 flex text-center">
+                    {% if user.image %}
+                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="{{ asset('uploads/profil_pictures/' ~ user.image) }}" alt="Photo de profil">
+                    {% else %}
+                        <i class="bi bi-person-circle color-secondary-custom" style="font-size: 88px;"></i>
+                    {% endif %}
+                    <p class="mt-2 font-weight-bold">{{ user.firstname }} {{ user.lastname }}</p>
+                    <p class="color-secondary-custom">{{ user.email }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'modals/rating_modal.html.twig' with { searchRatingForm: searchRatingForm } %}
+{% endblock %}
