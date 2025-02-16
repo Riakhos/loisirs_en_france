@@ -3,12 +3,12 @@
 {% block title %}{{ controller_name }}{% endblock %}
 
 {% block body %}
-    {# Barre de navigation #}
+    {# 🔹 Barre de navigation #}
     {% include "account/navbar.html.twig" %}
 
     <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
-        
-        {# Section : Vos Avis #}
+
+        {# 🔹 Section : Vos Avis #}
         <div class="col-md-8 toast d-flex m-3 p-3 flex-column">
             <h1 class="mb-4">{{ controller_name }}</h1>
             
@@ -21,53 +21,118 @@
                             <h5 class="mb-1">
                                 Note : <strong>({{ data.rating.score }}/5)</strong>
 
-                                {# Afficher les étoiles pleines #}
+                                {# Affichage des étoiles avec accessibilité #}
+                                <span class="visually-hidden">Note : {{ data.rating.score }} sur 5</span>
+                                
                                 {% for i in 1..data.fullStars %}
-                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill" aria-hidden="true"></i>
                                 {% endfor %}
                     
-                                {# Afficher la demi-étoile si nécessaire #}
                                 {% if data.hasHalfStar %}
-                                    <i class="bi bi-star-half"></i>
+                                    <i class="bi bi-star-half" aria-hidden="true"></i>
                                 {% endif %}
                     
-                                {# Afficher les étoiles vides #}
                                 {% if data.emptyStars > 0 %}
                                     {% for i in 1..data.emptyStars %}
-                                        <i class="bi bi-star"></i>
+                                        <i class="bi bi-star" aria-hidden="true"></i>
                                     {% endfor %}
                                 {% endif %}
-
                             </h5>
 
+                            {# 🔹 Affichage du commentaire #}
                             <p class="mb-1">{{ data.rating.comment }}</p>
+
+                            {# 🔹 Affichage du partenaire si non nul #}
+                            {% if data.partner is not empty %}
+                                <p>{{ data.partner.name }}</p>
+                            {% endif %}
+
+                            {# 🔹 Affichage du loisir concerné #}
+                            <p>{{ data.loisir }}</p>
+
+                            {# 🔹 Affichage de la date du commentaire et de la note #}
                             <small class="color-secondary-custom">Ajouté le {{ data.rating.createdAt|date('d/m/Y H:i') }}</small>
                         </div>
                     {% endfor %}
-
                 </div>
             {% endif %}
 
-            {# Bouton pour voir tous les avis (ouvre la modal) #}
-            <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvis">
+            {# 🔹 Bouton pour afficher tous les avis #}
+            <button class="btn btn-primary mt-3" data-bs-toggle="collapse" data-bs-target="#collapseAvis">
                 Voir tous les avis
             </button>
+
+            {# 🔹 Collapse : Liste complète des avis avec filtres et pagination #}
+            <div class="collapse mt-3" id="collapseAvis">
+                <div class="card card-body bg-background border-0">
+
+                    {# 🔹 En-tête avec titre et bouton de fermeture #}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="me-auto color-primary-custom">Rechercher des avis</h2>
+                        <button class="btn-close" data-bs-toggle="collapse" data-bs-target="#collapseAvis" aria-label="Fermer"></button>
+                    </div>
+
+                    {# 🔹 Formulaire de recherche des avis #}
+                    <section class="p-2 overflow-auto" style="max-height: 75vh;">
+                        {{ form_start(searchRatingForm, {'method': 'GET', 'attr': {'class': 'mb-3', 'id': 'searchRatingForm', 'action': path('app_search_rating') } }) }}
+
+                            {# 🔹 Filtres par score et date #}
+                            <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                                <div class="row">
+                                    <div class="col-md-8">{{ form_row(searchRatingForm.score) }}</div>
+                                    <div class="col-md-4 text-center">{{ form_row(searchRatingForm.date) }}</div>
+                                </div>
+                            </div>
+
+                            {# 🔹 Filtres par activité, événement et offre #}
+                            <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                                <div class="row">
+                                    <div class="col-md-4">{{ form_row(searchRatingForm.activity) }}</div>
+                                    <div class="col-md-4">{{ form_row(searchRatingForm.event) }}</div>
+                                    <div class="col-md-4">{{ form_row(searchRatingForm.offer) }}</div>
+                                </div>
+                            </div>
+
+                            {# 🔹 Filtres par partenaire et utilisateur #}
+                            <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">{{ form_row(searchRatingForm.partner) }}</div>
+                                    <div class="col-md-6">{{ form_row(searchRatingForm.user) }}</div>
+                                </div>
+                            </div>
+
+                            {# 🔹 Recherche et boutons d'action #}
+                            <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                                <div class="row">
+                                    <div class="col-md-8">{{ form_row(searchRatingForm.search) }}</div>
+                                    <div class="col-md-4">
+                                        {{ form_row(searchRatingForm.submit) }}
+                                        {{ form_row(searchRatingForm.reset) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        {{ form_end(searchRatingForm) }}
+                    </section>
+                </div>
+            </div>
         </div>
 
-        {# Section : Profil Utilisateur #}
+        {# 🔹 Section : Profil Utilisateur #}
         <div class="col-md-4 card bg-primaryBlue border-secondary-custom m-3">
             <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100">
                 <div class="p-4 flex text-center">
+                    
                     {% if user.image %}
-                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="{{ asset('uploads/profil_pictures/' ~ user.image) }}" alt="Photo de profil">
+                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="{{ asset('uploads/profil_pictures/' ~ user.image) }}" alt="Photo de profil de {{ user.firstname }} {{ user.lastname }}">
                     {% else %}
-                        <i class="bi bi-person-circle color-secondary-custom" style="font-size: 88px;"></i>
+                        <i class="bi bi-person-circle color-secondary-custom" style="font-size: 88px;" aria-hidden="true"></i>
                     {% endif %}
+
                     <p class="mt-2 font-weight-bold">{{ user.firstname }} {{ user.lastname }}</p>
                     <p class="color-secondary-custom">{{ user.email }}</p>
                 </div>
             </div>
         </div>
     </div>
-    {% include 'modals/rating_modal.html.twig' with { searchRatingForm: searchRatingForm } %}
 {% endblock %}

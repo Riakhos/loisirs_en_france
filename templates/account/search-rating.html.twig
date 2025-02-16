@@ -1,0 +1,73 @@
+{# Toast pour afficher les avis avec filtres et pagination #}
+<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<div id="toastTemplate" class="toast align-items-center bg-background border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex flex-column">
+
+        {# En-tête du toast avec titre et champ de recherche #}
+        <div class="toast-header bg-primaryBlue border-secondary-custom m-2">
+            <h2 class="me-auto">Rechercher des avis</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+
+        {# Contenu principal avec scroll automatique #}
+        <section class="toast-body p-2 overflow-auto" style="max-height: 75vh;">
+            {# Formulaire de recherche des avis #}
+            {{ form_start(searchRatingForm, {'method': 'GET', 'attr': {'class': 'mb-3', 'id': 'searchRatingForm', 'action': path('app_search_rating') } }) }}
+                <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                    <div class="row">
+                        <div class="col-md-8">{{ form_row(searchRatingForm.score) }}</div>
+                        <div class="col-md-4 text-center">{{ form_row(searchRatingForm.date) }}</div>
+                    </div>
+                </div>
+
+                <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                    <div class="row">
+                        <div class="col-md-4">{{ form_row(searchRatingForm.activity) }}</div>
+                        <div class="col-md-4">{{ form_row(searchRatingForm.event) }}</div>
+                        <div class="col-md-4">{{ form_row(searchRatingForm.offer) }}</div>
+                    </div>
+                </div>
+
+                <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                    <div class="row">
+                        <div class="col-md-6">{{ form_row(searchRatingForm.partner) }}</div>
+                        <div class="col-md-6">{{ form_row(searchRatingForm.user) }}</div>
+                    </div>
+                </div>
+
+                <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                    <div class="row">
+                        <div class="col-md-8">{{ form_row(searchRatingForm.search) }}</div>
+                        <div class="col-md-4">
+                            {{ form_row(searchRatingForm.submit) }}
+                            {{ form_row(searchRatingForm.reset) }}
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(searchRatingForm) }}
+
+            {# Zone d'affichage des avis #}
+            <div id="ratingsContainer" class="mt-4">
+                <h3 class="color-primary-custom">Liste des Avis</h3>
+                <div class="list-group" id="ratingsList"></div>
+            </div>
+        </section>
+
+        {# Pagination  #}
+        <div id="paginationContainer" class="toast-footer d-flex justify-content-center mt-3">
+            <ul class="pagination">
+                <li class="page-item" id="prevPage">
+                    <a class="page-link" href="#">Précédent</a>
+                </li>
+                <li class="page-item disabled" id="pageNumber">
+                    <span class="page-link">1</span>
+                </li>
+                <li class="page-item" id="nextPage">
+                    <a class="page-link" href="#">Suivant</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>

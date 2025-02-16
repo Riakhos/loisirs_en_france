@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    {# Barre de navigation #}
+    {% include "account/navbar.html.twig" %}
+
+    <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
+        
+        {# Section : Vos Avis #}
+        <div class="col-md-8 toast d-flex m-3 p-3 flex-column">
+            <h1 class="mb-4">{{ controller_name }}</h1>
+            
+            {% if ratings is empty %}
+            <p>Aucun avis trouvé.</p>
+			{% else %}
+				<div class="list-group">
+					{% for data in ratings %}
+						<div class="list-group-item">
+							<h5 class="mb-1">
+								Note : <strong>({{ data.score }}/5)</strong>
+								{% for i in 1..(data.score|round) %}
+									<i class="bi bi-star-fill"></i>
+								{% endfor %}
+							</h5>
+							<p class="mb-1">{{ data.comment }}</p>
+							<small>Ajouté le {{ data.createdAt|date('d/m/Y H:i') }}</small>
+						</div>
+					{% endfor %}
+				</div>
+
+				{# Pagination #}
+				<div class="pagination d-flex justify-content-center mt-3">
+					{% if currentPage > 1 %}
+						<a href="{{ path('app_search_rating', filters|merge({'page': currentPage - 1})) }}" class="page-link">
+							← Précédent
+						</a>
+					{% endif %}
+
+					<span class="page-link disabled rounded">Page {{ currentPage }} sur {{ totalPages }}</span>
+
+					{% if currentPage < totalPages %}
+						<a href="{{ path('app_search_rating', filters|merge({'page': currentPage + 1})) }}" class="page-link">
+							Suivant →
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+        </div>
+    </div>
+{% endblock %}

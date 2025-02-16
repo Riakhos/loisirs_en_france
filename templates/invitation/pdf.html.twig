@@ -101,40 +101,42 @@
 	</div>
 </div>
 
-{# <script defer>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Sélection des champs du formulaire
-        const inputs = {
-            howOld: document.getElementById('input_howOld'),
-            theme: document.getElementById('input_theme'),
-            when: document.getElementById('input_when'),
-            where: document.getElementById('input_where'),
-            phone: document.getElementById('input_phone'),
-            firstName: document.getElementById('input_firstName')
-        };
+{# {% block scripts %}
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sélection des champs du formulaire
+            const inputs = {
+                howOld: document.getElementById('input_howOld'),
+                theme: document.getElementById('input_theme'),
+                when: document.getElementById('input_when'),
+                where: document.getElementById('input_where'),
+                phone: document.getElementById('input_phone'),
+                firstName: document.getElementById('input_firstName')
+            };
 
-        // Sélection des éléments d'aperçu
-        const previews = {
-            howOld: document.getElementById('preview_howOld'),
-            theme: document.getElementById('preview_theme'),
-            when: document.getElementById('preview_when'),
-            where: document.getElementById('preview_where'),
-            phone: document.getElementById('preview_phone'),
-            firstName: document.getElementById('preview_firstName')
-        };
+            // Sélection des éléments d'aperçu
+            const previews = {
+                howOld: document.getElementById('preview_howOld'),
+                theme: document.getElementById('preview_theme'),
+                when: document.getElementById('preview_when'),
+                where: document.getElementById('preview_where'),
+                phone: document.getElementById('preview_phone'),
+                firstName: document.getElementById('preview_firstName')
+            };
 
-        // Fonction pour mettre à jour l'aperçu
-        const updatePreview = (event) => {
-            const { id, value } = event.target;
-            const previewKey = id.replace('input_', '');
-            if (previews[previewKey]) {
-                previews[previewKey].textContent = value;
-            }
-        };
+            // Fonction pour mettre à jour l'aperçu
+            const updatePreview = (event) => {
+                const { id, value } = event.target;
+                const previewKey = id.replace('input_', '');
+                if (previews[previewKey]) {
+                    previews[previewKey].textContent = value;
+                }
+            };
 
-        // Écouteurs d'événements sur les champs du formulaire
-        Object.values(inputs).forEach(input => {
-            input.addEventListener('input', updatePreview);
+            // Écouteurs d'événements sur les champs du formulaire
+            Object.values(inputs).forEach(input => {
+                input.addEventListener('input', updatePreview);
+            });
         });
-    });
-</script> #}
+    </script>
+{% endblock %} #}

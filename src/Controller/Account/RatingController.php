@@ -16,7 +16,11 @@ class RatingController extends AbstractController
     {
         $user = $this->getUser();
 
-        $searchRatingForm = $this->createForm(SearchRatingType::class);
+        $searchRatingForm = $this->createForm(SearchRatingType::class, null, [
+            'attr' => [
+                'autocomplete' => 'off', // Ajout d'attribut global pour tout le formulaire
+            ]
+        ]);
         
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -40,12 +44,25 @@ class RatingController extends AbstractController
                 $emptyStars = 0;
             }
             
-            // Ajouter un tableau associatif avec les données nécessaires
+            // Récupérer le partenaire
+            $partner = $rating->getPartner();
+
+            // Déterminer le loisir concerné
+            $activity = $rating->getActivity() ? $rating->getActivity()->getName() : null;
+            $event = $rating->getEvent() ? $rating->getEvent()->getName() : null;
+            $Offer = $rating->getOffer() ? $rating->getOffer()->getName() : null;
+
+            // Identifier le type de loisir prioritaire
+            $loisir = $activity ?? $event ?? $Offer ?? 'Non spécifié';
+
+            // Ajouter les données préparées dans le tableau final
             $ratingsData[] = [
                 'rating' => $rating,
                 'fullStars' => $fullStars,
                 'hasHalfStar' => $hasHalfStar,
-                'emptyStars' => $emptyStars
+                'emptyStars' => $emptyStars,
+                'partner' => $partner,
+                'loisir' => $loisir,
             ];
         }
             

@@ -41,7 +41,8 @@ class SearchRatingType extends AbstractType
                     'class' => 'form-label color-secondary-custom'
                 ],
                 'attr' => [
-                    'class' => 'rating-choices d-flex flex-wrap justify-content-between color-secondary-custom mb-2'
+                    'class' => 'rating-choices d-flex flex-wrap justify-content-between color-secondary-custom mb-2',
+                    'autocomplete' => 'off'
                 ],
             ])
             ->add('activity', EntityType::class, [
@@ -50,7 +51,8 @@ class SearchRatingType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Choisir une activité',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'autocomplete' => 'off'
                 ],
                 'label_attr' => [
                     'class' => 'form-label color-secondary-custom'
@@ -62,7 +64,8 @@ class SearchRatingType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Choisir un événement spécial',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'autocomplete' => 'off'
                 ],
                 'label_attr' => [
                     'class' => 'form-label color-secondary-custom'
@@ -74,7 +77,8 @@ class SearchRatingType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Choisir une offre spéciale',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'autocomplete' => 'off'
                 ],
                 'label_attr' => [
                     'class' => 'form-label color-secondary-custom'
@@ -86,7 +90,8 @@ class SearchRatingType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Choisir un partenaire',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'autocomplete' => 'off'
                 ],
                 'label_attr' => [
                     'class' => 'form-label color-secondary-custom'
@@ -99,7 +104,8 @@ class SearchRatingType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Choisir un utilisateur',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'autocomplete' => 'off'
                 ],
                 'label_attr' => [
                     'class' => 'form-label color-secondary-custom'
@@ -117,7 +123,8 @@ class SearchRatingType extends AbstractType
                     'class' => 'form-label color-secondary-custom'
                 ],
                 'attr' => [
-                    'class' => 'd-flex flex-column align-items-center'
+                    'class' => 'd-flex flex-column align-items-center',
+                    'autocomplete' => 'off'
                 ]
             ])
             ->add('search', TextType::class, [
@@ -125,7 +132,8 @@ class SearchRatingType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Rechercher un avis...'
+                    'placeholder' => 'Rechercher un avis...',
+                    'autocomplete' => 'off'
                 ],
                 'label_attr' => [
                     'class' => 'form-label color-secondary-custom'
@@ -135,13 +143,15 @@ class SearchRatingType extends AbstractType
                 'label' => 'Filtrer',
                 'attr' => [
                     'class' => 'btn btn-primary d-block mx-auto w-100 color-primary-custom',
-                    'data-loading-text' => 'Chargement...'
+                    'data-loading-text' => 'Chargement...',
+                    'autocomplete' => 'off'
                 ]
             ])
             ->add('reset', ResetType::class, [
                 'label' => 'Réinitialiser',
                 'attr' => [
-                    'class' => 'btn btn-primary d-block mx-auto w-100 color-primary-custom'
+                    'class' => 'btn btn-primary d-block mx-auto w-100 color-primary-custom',
+                    'autocomplete' => 'off'
                 ]
             ])
         ;

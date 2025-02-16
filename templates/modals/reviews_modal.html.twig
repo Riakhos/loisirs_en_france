@@ -94,76 +94,78 @@
     </div>
 </div> #}
 
-{# <script defer>
-    document.addEventListener("DOMContentLoaded", function () {
-        let page = 1; // Paginé initiale
-        const ratingsList = document.getElementById("ratingsList");
-        const loadMoreButton = document.getElementById("loadMore");
+{#  {% block scripts %}
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function () {
+            let page = 1; // Paginé initiale
+            const ratingsList = document.getElementById("ratingsList");
+            const loadMoreButton = document.getElementById("loadMore");
 
-        // Fonction pour charger les avis
-        function fetchRatings() {
-            const search = document.getElementById("search").value;
-            const note = document.getElementById("note").value;
-            const partner = document.getElementById("partner").value;
-            const activity = document.getElementById("activity").value;
-            const date = document.getElementById("date").value;
+            // Fonction pour charger les avis
+            function fetchRatings() {
+                const search = document.getElementById("search").value;
+                const note = document.getElementById("note").value;
+                const partner = document.getElementById("partner").value;
+                const activity = document.getElementById("activity").value;
+                const date = document.getElementById("date").value;
 
-            fetch(`/compte/avis/tous?page=${page}&search=${search}&note=${note}&partner=${partner}&activity=${activity}&date=${date}`)
-                .then(response => response.json())
-                .then(data => {
-                    ratingsList.innerHTML = ""; // Réinitialiser les résultats
+                fetch(`/compte/avis/tous?page=${page}&search=${search}&note=${note}&partner=${partner}&activity=${activity}&date=${date}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        ratingsList.innerHTML = ""; // Réinitialiser les résultats
 
-                    if (data.length === 0 && page === 1) {
-                        ratingsList.innerHTML = "<p>Aucun avis trouvé.</p>";
+                        if (data.length === 0 && page === 1) {
+                            ratingsList.innerHTML = "<p>Aucun avis trouvé.</p>";
 
-                    } else {
+                        } else {
 
-                        data.forEach(rating => {
-                            const item = document.createElement("div");
-                            item.classList.add("list-group-item", "bg-background", "rounded", "p-3", "mb-2", "shadow-sm");
+                            data.forEach(rating => {
+                                const item = document.createElement("div");
+                                item.classList.add("list-group-item", "bg-background", "rounded", "p-3", "mb-2", "shadow-sm");
 
-                            let starsHTML = '★'.repeat(Math.floor(rating.score)) + (rating.score % 1 >= 0.5 ? '✩' : '') + '☆'.repeat(5 - Math.ceil(rating.score));
-                            
-                            item.innerHTML = `
-                                <h5 class="mb-1">Note : ${rating.score} ${starsHTML}</h5>
-                                <p class="mb-1">${rating.comment}</p>
-                                <small class="color-secondary-custom">Ajouté par ${rating.user} le ${rating.createdAt}</small>
-                                <div class="mt-2">
-                                    <small class="color-secondary-custom">Partenaire: ${rating.partner || 'Inconnu'}, Activité: ${rating.activity || 'Inconnue'}</small>
-                                </div>
-                            `;
-                            ratingsList.appendChild(item);
-                        });
-                    }
-                })
-                .catch(error => console.error("Erreur lors du chargement des avis :", error));
-        }
+                                let starsHTML = '★'.repeat(Math.floor(rating.score)) + (rating.score % 1 >= 0.5 ? '✩' : '') + '☆'.repeat(5 - Math.ceil(rating.score));
+                                
+                                item.innerHTML = `
+                                    <h5 class="mb-1">Note : ${rating.score} ${starsHTML}</h5>
+                                    <p class="mb-1">${rating.comment}</p>
+                                    <small class="color-secondary-custom">Ajouté par ${rating.user} le ${rating.createdAt}</small>
+                                    <div class="mt-2">
+                                        <small class="color-secondary-custom">Partenaire: ${rating.partner || 'Inconnu'}, Activité: ${rating.activity || 'Inconnue'}</small>
+                                    </div>
+                                `;
+                                ratingsList.appendChild(item);
+                            });
+                        }
+                    })
+                    .catch(error => console.error("Erreur lors du chargement des avis :", error));
+            }
 
-        // Recherche et reset des filtres
-        document.getElementById("searchForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            page = 1; // Réinitialiser la page
-            ratingsList.innerHTML = ""; // Réinitialiser les avis affichés
+            // Recherche et reset des filtres
+            document.getElementById("searchForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+                page = 1; // Réinitialiser la page
+                ratingsList.innerHTML = ""; // Réinitialiser les avis affichés
+                fetchRatings();
+            });
+
+            document.getElementById("resetFilters").addEventListener("click", function () {
+                document.getElementById("search").value = "";
+                document.getElementById("note").value = "";
+                document.getElementById("partner").value = "";
+                document.getElementById("activity").value = "";
+                document.getElementById("date").value = "desc";
+                page = 1; // Réinitialiser la page
+                ratingsList.innerHTML = ""; // Réinitialiser les avis affichés
+                fetchRatings();
+            });
+
+            loadMoreButton.addEventListener("click", function () {
+                page++; // Incrémenter la page pour la pagination
+                fetchRatings();
+            });
+
+            // Charger les avis par défaut au chargement de la page
             fetchRatings();
         });
-
-        document.getElementById("resetFilters").addEventListener("click", function () {
-            document.getElementById("search").value = "";
-            document.getElementById("note").value = "";
-            document.getElementById("partner").value = "";
-            document.getElementById("activity").value = "";
-            document.getElementById("date").value = "desc";
-            page = 1; // Réinitialiser la page
-            ratingsList.innerHTML = ""; // Réinitialiser les avis affichés
-            fetchRatings();
-        });
-
-        loadMoreButton.addEventListener("click", function () {
-            page++; // Incrémenter la page pour la pagination
-            fetchRatings();
-        });
-
-        // Charger les avis par défaut au chargement de la page
-        fetchRatings();
-    });
-</script> #}
+    </script>
+{% endblock %} #}

@@ -63,9 +63,11 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
-    {# Inclusion du script Google Sign-In (si vous réactivez cette fonctionnalité) #}
-    {# <script>
+{# Inclusion du script Google Sign-In (si vous réactivez cette fonctionnalité) #}
+{# {% block scripts %}
+    <script>
         window.onload = function () {
             google.accounts.id.initialize({
                 client_id: "305203962782-h9a7k49vu0gh27lt1i3bnaqq6halvkmg.apps.googleusercontent.com",
@@ -87,5 +89,5 @@
             console.log("Encoded JWT ID token: " + response.credential);
             // Envoyez le jeton au serveur pour vérification et connexion
         }
-    </script> #}
-{% endblock %}
+    </script> 
+{% endblock %} #}

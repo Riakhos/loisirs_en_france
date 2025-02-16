@@ -178,3 +178,20 @@ h1, h2, h3, h4, h5, h6 {
     width: auto;
     white-space: normal;
 }
+
+.pagination {
+    --bs-pagination-color: var(--secondary-color);
+    --bs-pagination-bg: var(--primary-color);
+    --bs-pagination-border-color: var(--secondary-color);
+    --bs-pagination-hover-color: var(--tertiary-color);
+    --bs-pagination-hover-bg: var(--primary-color);
+    --bs-pagination-hover-border-color: var(--secondary-color);
+    --bs-pagination-focus-color: var(--hover-color);
+    --bs-pagination-focus-bg: var(--primary-color);
+    --bs-pagination-active-color: var(--primary-color);
+    --bs-pagination-active-bg: var(--hover-color);
+    --bs-pagination-active-border-color: var(--primary-color);
+    --bs-pagination-disabled-color: var(--primary-color);
+    --bs-pagination-disabled-bg: var(--secondary-color);
+    --bs-pagination-disabled-border-color: var(--tertiary-color);
+}
