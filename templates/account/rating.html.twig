@@ -10,57 +10,14 @@
 
         {# 🔹 Section : Vos Avis #}
         <div class="col-md-8 toast d-flex m-3 p-3 flex-column">
-            <h1 class="mb-4">{{ controller_name }}</h1>
-            
-            {% if ratingsData is empty %}
-                <p>Aucun avis trouvé.</p>
-            {% else %}
-                <div class="list-group">
-                    {% for data in ratingsData|slice(0,5) %} {# Limite à 5 derniers avis #}
-                        <div class="list-group-item">
-                            <h5 class="mb-1">
-                                Note : <strong>({{ data.rating.score }}/5)</strong>
+            <div class="row d-flex justify-content-between align-items-center">
+                <h1 class="mb-4 col-md-6">{{ controller_name }}</h1>
 
-                                {# Affichage des étoiles avec accessibilité #}
-                                <span class="visually-hidden">Note : {{ data.rating.score }} sur 5</span>
-                                
-                                {% for i in 1..data.fullStars %}
-                                    <i class="bi bi-star-fill" aria-hidden="true"></i>
-                                {% endfor %}
-                    
-                                {% if data.hasHalfStar %}
-                                    <i class="bi bi-star-half" aria-hidden="true"></i>
-                                {% endif %}
-                    
-                                {% if data.emptyStars > 0 %}
-                                    {% for i in 1..data.emptyStars %}
-                                        <i class="bi bi-star" aria-hidden="true"></i>
-                                    {% endfor %}
-                                {% endif %}
-                            </h5>
-
-                            {# 🔹 Affichage du commentaire #}
-                            <p class="mb-1">{{ data.rating.comment }}</p>
-
-                            {# 🔹 Affichage du partenaire si non nul #}
-                            {% if data.partner is not empty %}
-                                <p>{{ data.partner.name }}</p>
-                            {% endif %}
-
-                            {# 🔹 Affichage du loisir concerné #}
-                            <p>{{ data.loisir }}</p>
-
-                            {# 🔹 Affichage de la date du commentaire et de la note #}
-                            <small class="color-secondary-custom">Ajouté le {{ data.rating.createdAt|date('d/m/Y H:i') }}</small>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            {# 🔹 Bouton pour afficher tous les avis #}
-            <button class="btn btn-primary mt-3" data-bs-toggle="collapse" data-bs-target="#collapseAvis">
-                Voir tous les avis
-            </button>
+                {# 🔹 Bouton pour afficher tous les avis avec filtre #}
+                <button class="col-auto btn btn-primary m-3" data-bs-toggle="collapse" data-bs-target="#collapseAvis" aria-expanded="false" aria-controls="collapseAvis">
+                    Voir tous les avis
+                </button>
+            </div>
 
             {# 🔹 Collapse : Liste complète des avis avec filtres et pagination #}
             <div class="collapse mt-3" id="collapseAvis">
@@ -76,11 +33,22 @@
                     <section class="p-2 overflow-auto" style="max-height: 75vh;">
                         {{ form_start(searchRatingForm, {'method': 'GET', 'attr': {'class': 'mb-3', 'id': 'searchRatingForm', 'action': path('app_search_rating') } }) }}
 
+                            {# 🔹 Recherche et boutons d'action #}
+                            <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+                                <div class="row">
+                                    <div class="col-md-8">{{ form_row(searchRatingForm.search) }}</div>
+                                    <div class="col-md-4">
+                                        {{ form_row(searchRatingForm.submit) }}
+                                        {{ form_row(searchRatingForm.reset) }}
+                                    </div>
+                                </div>
+                            </div>
+
                             {# 🔹 Filtres par score et date #}
                             <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
                                 <div class="row">
                                     <div class="col-md-8">{{ form_row(searchRatingForm.score) }}</div>
-                                    <div class="col-md-4 text-center">{{ form_row(searchRatingForm.date) }}</div>
+                                    <div class="col-md-4 text-center">{{ form_row(searchRatingForm.createdAt) }}</div>
                                 </div>
                             </div>
 
@@ -101,21 +69,77 @@
                                 </div>
                             </div>
 
-                            {# 🔹 Recherche et boutons d'action #}
-                            <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
-                                <div class="row">
-                                    <div class="col-md-8">{{ form_row(searchRatingForm.search) }}</div>
-                                    <div class="col-md-4">
-                                        {{ form_row(searchRatingForm.submit) }}
-                                        {{ form_row(searchRatingForm.reset) }}
-                                    </div>
-                                </div>
-                            </div>
-
                         {{ form_end(searchRatingForm) }}
                     </section>
                 </div>
             </div>
+            
+            {% if ratingsData is empty %}
+                <p>Aucun avis trouvé.</p>
+            {% else %}
+                <div class="list-group">
+                    {% for data in ratingsData %}
+                        <div class="list-group-item" aria-labelledby="rating-{{ loop.index }}">
+                            <div class="row">
+                                <h3 class="mb-1 col-md-6" id="rating-{{ loop.index }}">
+                                    <strong>Note : </strong>({{ data.rating.score }}/5)
+
+                                    {# 🔹 Affichage des étoiles avec accessibilité et de la note #}
+                                    <span class="visually-hidden">Note : {{ data.rating.score }} sur 5</span>
+                                    
+                                    {% for i in 1..data.fullStars %}
+                                        <i class="bi bi-star-fill" aria-hidden="true"></i>
+                                    {% endfor %}
+                        
+                                    {% if data.hasHalfStar %}
+                                        <i class="bi bi-star-half" aria-hidden="true"></i>
+                                    {% endif %}
+                        
+                                    {% if data.emptyStars > 0 %}
+                                        {% for i in 1..data.emptyStars %}
+                                            <i class="bi bi-star" aria-hidden="true"></i>
+                                        {% endfor %}
+                                    {% endif %}
+                                </h3>
+
+                                {# 🔹 Affichage de la date du commentaire #}
+                                <small class="color-secondary-custom col-md-6">Ajouté le {{ data.rating.createdAt|date('d/m/Y H:i') }}</small>
+                            </div>
+
+                            {# 🔹 Affichage du loisir concerné #}
+                            <p class="mb-1 col-md-6"><strong>{{ data.loisir }}</strong></p>
+
+                            <div class="row">
+                                {# 🔹 Affichage du commentaire #}
+                                <p class="mb-1 col-md-6">{{ data.rating.comment }}</p>
+
+                                {# 🔹 Affichage du partenaire si non nul #}
+                                {% if data.partner is not empty %}
+                                    <p>{{ data.partner.name }}</p>
+                                {% endif %}
+                            </div>
+                            <hr class="row border-secondary-custom-top w-50 mx-auto">
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {# 🔹 Pagination #}
+                <div class="pagination d-flex justify-content-center mt-3">
+                    {% if currentPage > 1 %}
+                        <a href="{{ path('app_search_rating', ({'page': currentPage - 1})) }}" class="page-link" aria-label="Page précédente">
+                            ← Précédent
+                        </a>
+                    {% endif %}
+
+                    <span class="page-link disabled rounded">Page {{ currentPage }} sur {{ totalPages }}</span>
+
+                    {% if currentPage < totalPages %}
+                        <a href="{{ path('app_search_rating', ({'page': currentPage + 1})) }}" class="page-link" aria-label="Page suivante">
+                            Suivant →
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
 
         {# 🔹 Section : Profil Utilisateur #}
@@ -124,12 +148,12 @@
                 <div class="p-4 flex text-center">
                     
                     {% if user.image %}
-                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="{{ asset('uploads/profil_pictures/' ~ user.image) }}" alt="Photo de profil de {{ user.firstname }} {{ user.lastname }}">
+                        <img class="rounded-circle" style="height: 88px; width: 88px;" src="{{ asset('uploads/profil_pictures/' ~ user.image) }}" alt="Photo de profil de {{ user.firstname }} {{ user.lastname }}" aria-describedby="user-name">
                     {% else %}
                         <i class="bi bi-person-circle color-secondary-custom" style="font-size: 88px;" aria-hidden="true"></i>
                     {% endif %}
 
-                    <p class="mt-2 font-weight-bold">{{ user.firstname }} {{ user.lastname }}</p>
+                    <p class="mt-2 font-weight-bold" id="user-name">{{ user.firstname }} {{ user.lastname }}</p>
                     <p class="color-secondary-custom">{{ user.email }}</p>
                 </div>
             </div>

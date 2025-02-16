@@ -8,6 +8,7 @@ use App\Entity\Offer;
 use App\Entity\Rating;
 use App\Entity\Partner;
 use App\Entity\Activity;
+use App\DTO\SearchRating;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -111,9 +112,10 @@ class SearchRatingType extends AbstractType
                     'class' => 'form-label color-secondary-custom'
                 ]
             ])
-            ->add('date', ChoiceType::class, [
+            ->add('createdAt', ChoiceType::class, [
                 'expanded' => true,
                 'multiple' => false,
+                'mapped' => false,
                 'label' => 'Choisir un tri',
                 'choices' => [
                     'Plus récent' => 'desc',
@@ -160,7 +162,7 @@ class SearchRatingType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Rating::class,
+            'data_class' => SearchRating::class,
         ]);
     }
 }

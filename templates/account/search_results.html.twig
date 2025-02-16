@@ -10,56 +10,122 @@
         
         {# 🔹 Section : Vos Avis #}
         <div class="col-md-8 toast d-flex m-3 p-3 flex-column">
-            <h1 class="mb-4">{{ controller_name }}</h1>
+			<div class="row d-flex justify-content-between align-items-center">
+				<h1 class="mb-4 col-md-6">{{ controller_name }}</h1>
+
+				{# 🔹 Bouton pour afficher tous les avis avec filtre #}
+				<button class="col-auto btn btn-primary m-3" data-bs-toggle="collapse" data-bs-target="#collapseAvis" aria-expanded="false" aria-controls="collapseAvis">
+					Filtrer les avis
+				</button>
+			</div>
+
+			{# 🔹 Collapse : Liste complète des avis avec filtres et pagination #}
+			<div class="collapse mt-3" id="collapseAvis" aria-labelledby="filterReviewsButton" aria-hidden="true">
+				<div class="card card-body bg-background border-0">
+
+					{# 🔹 En-tête avec titre et bouton de fermeture #}
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h2 class="me-auto color-primary-custom" id="filterReviewsButton">Rechercher des avis</h2>
+						<button class="btn-close" data-bs-toggle="collapse" data-bs-target="#collapseAvis" aria-label="Fermer" aria-expanded="false" aria-controls="collapseAvis"></button>
+					</div>
+
+					{# 🔹 Formulaire de recherche des avis #}
+					<section class="p-2 overflow-auto" style="max-height: 75vh;">
+						{{ form_start(searchRatingForm, {'method': 'GET', 'attr': {'class': 'mb-3 search-rating-form', 'id': 'searchRatingForm', 'action': path('app_search_rating') } }) }}
+
+							{# 🔹 Recherche et boutons d'action #}
+							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+								<div class="row">
+									<div class="col-md-8">{{ form_row(searchRatingForm.search, {'attr': {'aria-label': 'Recherche d\'avis'}}) }}</div>
+									<div class="col-md-4">
+										{{ form_row(searchRatingForm.submit, {'attr': {'aria-label': 'Soumettre la recherche'}}) }}
+										{{ form_row(searchRatingForm.reset, {'attr': {'aria-label': 'Réinitialiser la recherche'}}) }}
+									</div>
+								</div>
+							</div>
+							
+							{# 🔹 Filtres par score et date #}
+							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+								<div class="row">
+									<div class="col-md-8">{{ form_row(searchRatingForm.score, {'attr': {'aria-label': 'Filtrer par score'}}) }}</div>
+									<div class="col-md-4 text-center">{{ form_row(searchRatingForm.createdAt, {'attr': {'aria-label': 'Filtrer par date'}}) }}</div>
+								</div>
+							</div>
+
+							{# 🔹 Filtres par activité, événement et offre #}
+							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+								<div class="row">
+									<div class="col-md-4">{{ form_row(searchRatingForm.activity, {'attr': {'aria-label': 'Filtrer par activité'}}) }}</div>
+									<div class="col-md-4">{{ form_row(searchRatingForm.event, {'attr': {'aria-label': 'Filtrer par événement'}}) }}</div>
+									<div class="col-md-4">{{ form_row(searchRatingForm.offer, {'attr': {'aria-label': 'Filtrer par offre'}}) }}</div>
+								</div>
+							</div>
+
+							{# 🔹 Filtres par partenaire et utilisateur #}
+							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
+								<div class="row">
+									<div class="col-md-6">{{ form_row(searchRatingForm.partner, {'attr': {'aria-label': 'Filtrer par partenaire'}}) }}</div>
+									<div class="col-md-6">{{ form_row(searchRatingForm.user, {'attr': {'aria-label': 'Filtrer par utilisateur'}}) }}</div>
+								</div>
+							</div>
+						{{ form_end(searchRatingForm) }}
+					</section>
+				</div>
+			</div>
             
-            {% if ratings is empty %}
+            {% if ratingsData is empty %}
 				<p>Aucun avis trouvé.</p>
 			{% else %}
 				<div class="list-group">
-					{% for data in ratingsData|slice(0,5) %} {# Limite à 5 derniers avis #}
+					{% for data in ratingsData %}
 						<div class="list-group-item">
-							<h5 class="mb-1">
-								Note : <strong>({{ data.rating.score }}/5)</strong>
+							<div class="row">
+								<h3 class="mb-1 col-md-6">
+									<strong>Note : </strong>({{ data.rating.score }}/5)
 
-								{# 🔹 Affichage des étoiles avec accessibilité #}
-								<span class="visually-hidden">Note : {{ data.rating.score }} sur 5</span>
-								
-								{% for i in 1..data.fullStars %}
-									<i class="bi bi-star-fill" aria-hidden="true"></i>
-								{% endfor %}
-					
-								{% if data.hasHalfStar %}
-									<i class="bi bi-star-half" aria-hidden="true"></i>
-								{% endif %}
-					
-								{% if data.emptyStars > 0 %}
-									{% for i in 1..data.emptyStars %}
-										<i class="bi bi-star" aria-hidden="true"></i>
+									{# 🔹 Affichage des étoiles avec accessibilité et de la note #}
+									<span class="visually-hidden">Note : {{ data.rating.score }} sur 5</span>
+									
+									{% for i in 1..data.fullStars %}
+										<i class="bi bi-star-fill" aria-hidden="true"></i>
 									{% endfor %}
-								{% endif %}
-							</h5>
+						
+									{% if data.hasHalfStar %}
+										<i class="bi bi-star-half" aria-hidden="true"></i>
+									{% endif %}
+						
+									{% if data.emptyStars > 0 %}
+										{% for i in 1..data.emptyStars %}
+											<i class="bi bi-star" aria-hidden="true"></i>
+										{% endfor %}
+									{% endif %}
+								</h3>
 
-							{# 🔹 Affichage du commentaire #}
-							<p class="mb-1">{{ data.rating.comment }}</p>
-
-							{# 🔹 Affichage du partenaire si non nul #}
-							{% if data.partner is not empty %}
-								<p>{{ data.partner.name }}</p>
-							{% endif %}
-
+								{# 🔹 Affichage de la date du commentaire #}
+								<small class="color-secondary-custom col-md-6">Ajouté le {{ data.rating.createdAt|date('d/m/Y H:i') }}</small>
+							</div>
+							
 							{# 🔹 Affichage du loisir concerné #}
-							<p>{{ data.loisir }}</p>
+							<p class="mb-1 col-md-6"><strong>{{ data.loisir }}</strong></p>
 
-							{# 🔹 Affichage de la date du commentaire et de la note #}
-							<small class="color-secondary-custom">Ajouté le {{ data.rating.createdAt|date('d/m/Y H:i') }}</small>
+							<div class="row">
+								{# 🔹 Affichage du commentaire #}
+								<p class="mb-1 col-md-6">{{ data.rating.comment }}</p>
+
+								{# 🔹 Affichage du partenaire si non nul #}
+								{% if data.partner is not empty %}
+									<p>{{ data.partner.name }}</p>
+								{% endif %}
+							</div>
+							<hr class="row border-secondary-custom-top w-50 mx-auto">
 						</div>
 					{% endfor %}
 				</div>
 
 				{# 🔹 Pagination #}
-				{# <div class="pagination d-flex justify-content-center mt-3">
+				<div class="pagination d-flex justify-content-center mt-3">
 					{% if currentPage > 1 %}
-						<a href="{{ path('app_search_rating', filters|merge({'page': currentPage - 1})) }}" class="page-link">
+						<a href="{{ path('app_search_rating', ({'page': currentPage - 1})) }}" class="page-link" aria-label="Page précédente">
 							← Précédent
 						</a>
 					{% endif %}
@@ -67,66 +133,24 @@
 					<span class="page-link disabled rounded">Page {{ currentPage }} sur {{ totalPages }}</span>
 
 					{% if currentPage < totalPages %}
-						<a href="{{ path('app_search_rating', filters|merge({'page': currentPage + 1})) }}" class="page-link">
+						<a href="{{ path('app_search_rating', ({'page': currentPage + 1})) }}" class="page-link" aria-label="Page suivante">
 							Suivant →
 						</a>
 					{% endif %}
-				</div> #}
-			{% endif %}
-
-			{# 🔹 Collapse : Liste complète des avis avec filtres et pagination #}
-			<div class="collapse mt-3" id="collapseAvis">
-				<div class="card card-body bg-background border-0">
-
-					{# 🔹 En-tête avec titre et bouton de fermeture #}
-					<div class="d-flex justify-content-between align-items-center mb-3">
-						<h2 class="me-auto color-primary-custom">Rechercher des avis</h2>
-						<button class="btn-close" data-bs-toggle="collapse" data-bs-target="#collapseAvis" aria-label="Fermer"></button>
-					</div>
-
-					{# 🔹 Formulaire de recherche des avis #}
-					<section class="p-2 overflow-auto" style="max-height: 75vh;">
-						{{ form_start(searchRatingForm, {'method': 'GET', 'attr': {'class': 'mb-3', 'id': 'searchRatingForm', 'action': path('app_search_rating') } }) }}
-
-							{# 🔹 Filtres par score et date #}
-							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
-								<div class="row">
-									<div class="col-md-8">{{ form_row(searchRatingForm.score) }}</div>
-									<div class="col-md-4 text-center">{{ form_row(searchRatingForm.date) }}</div>
-								</div>
-							</div>
-
-							{# 🔹 Filtres par activité, événement et offre #}
-							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
-								<div class="row">
-									<div class="col-md-4">{{ form_row(searchRatingForm.activity) }}</div>
-									<div class="col-md-4">{{ form_row(searchRatingForm.event) }}</div>
-									<div class="col-md-4">{{ form_row(searchRatingForm.offer) }}</div>
-								</div>
-							</div>
-
-							{# 🔹 Filtres par partenaire et utilisateur #}
-							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
-								<div class="row">
-									<div class="col-md-6">{{ form_row(searchRatingForm.partner) }}</div>
-									<div class="col-md-6">{{ form_row(searchRatingForm.user) }}</div>
-								</div>
-							</div>
-
-							{# 🔹 Recherche et boutons d'action #}
-							<div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
-								<div class="row">
-									<div class="col-md-8">{{ form_row(searchRatingForm.search) }}</div>
-									<div class="col-md-4">
-										{{ form_row(searchRatingForm.submit) }}
-										{{ form_row(searchRatingForm.reset) }}
-									</div>
-								</div>
-							</div>
-						{{ form_end(searchRatingForm) }}
-					</section>
 				</div>
-			</div>
+			{% endif %}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+	<script>
+		document.querySelector('button[type="reset"]').addEventListener('click', function(event) {
+			event.preventDefault();
+			// Réinitialiser le formulaire
+			document.querySelector('.search-rating-form').reset();
+			
+			// Rediriger vers la page sans paramètres de filtre
+			window.location.href = '{{ path('app_search_rating') }}';
+		});
+	</script>
 {% endblock %}

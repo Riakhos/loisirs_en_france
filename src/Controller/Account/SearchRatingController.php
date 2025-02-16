@@ -3,8 +3,10 @@
 namespace App\Controller\Account;
 
 use App\Entity\Rating;
+use App\DTO\SearchRating;
 use App\Form\SearchRatingType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,56 +14,119 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class SearchRatingController extends AbstractController
 {
     #[Route('/recherche-avis', name: 'app_search_rating', methods: ['GET'])]
-    public function searchRating(EntityManagerInterface $em): Response
+    public function searchRating(Request $request, EntityManagerInterface $em): Response
     {
+        // Crée une instance de SearchRating (DTO)
+        $searchRatingData = new SearchRating();
+        
         $searchRatingForm = $this->createForm(SearchRatingType::class, null, [
+            'method' => 'GET',
             'attr' => [
                 'autocomplete' => 'off', // Ajout d'attribut global pour tout le formulaire
             ]
         ]);
 
-        // Récupérer tous les avis
-        $ratings = $em->getRepository(Rating::class)->findAll();
-        
-        // Préparer les données avec calcul des étoiles
-        $ratingsData = [];
-        foreach ($ratings as $rating) {
-            $score = $rating->getScore();
-            $fullStars = floor($score); // Arrondi inférieur (ex: 4.5 -> 4)
-            $hasHalfStar = ($score - $fullStars) === 0.5; // Vérifie si on a exactement 0.5
-            $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0); // Complète jusqu'à 5 étoiles
-            
-            // Assurez-vous que emptyStars n'est pas négatif (ce qui ne devrait pas arriver)
-            if ($emptyStars < 0) {
-                $emptyStars = 0;
-            }
-            
-            // Récupérer le partenaire
-            $partner = $rating->getPartner();
+        $searchRatingForm->handleRequest($request);
 
-            // Déterminer le loisir concerné
-            $activity = $rating->getActivity() ? $rating->getActivity()->getName() : null;
-            $event = $rating->getEvent() ? $rating->getEvent()->getName() : null;
-            $Offer = $rating->getOffer() ? $rating->getOffer()->getName() : null;
-
-            // Identifier le type de loisir prioritaire
-            $loisir = $activity ?? $event ?? $Offer ?? 'Non spécifié';
-
-            // Ajouter les données préparées dans le tableau final
-            $ratingsData[] = [
-                'rating' => $rating,
-                'fullStars' => $fullStars,
-                'hasHalfStar' => $hasHalfStar,
-                'emptyStars' => $emptyStars,
-                'partner' => $partner,
-                'loisir' => $loisir,
-            ];
+        // Si le formulaire est réinitialisé (reset), on réinitialise les filtres
+        if ($searchRatingForm->isSubmitted() && $searchRatingForm->isValid()) {
+            // Extraire les filtres si existants
+            $searchRatingData = $searchRatingForm->getData();
+        } else {
+            // Aucun filtre : retour à l'affichage de tous les avis
+            $searchRatingData = [];
         }
+        
+        // Récupérer tous les avis
+        $ratingRepository = $em->getRepository(Rating::class);
+
+        // Construire la requête avec filtres dynamiques
+        $queryBuilder = $ratingRepository->createQueryBuilder('r');
+
+        if (!empty($searchRatingData)) {
+    
+            if ($searchRatingData->score) {
+                $queryBuilder
+                    ->andWhere('r.score >= :score')
+                    ->setParameter('score', $searchRatingData->score);
+            }
+            if ($searchRatingData->activity) {
+                $queryBuilder
+                    ->andWhere('r.activity = :activity')
+                    ->setParameter('activity', $searchRatingData->activity);
+            }
+            if ($searchRatingData->event) {
+                $queryBuilder
+                    ->andWhere('r.event = :event')
+                    ->setParameter('event', $searchRatingData->event);
+            }
+            if ($searchRatingData->offer) {
+                $queryBuilder
+                    ->andWhere('r.offer = :offer')
+                    ->setParameter('offer', $searchRatingData->offer);
+            }
+            if ($searchRatingData->partner) {
+                $queryBuilder
+                    ->andWhere('r.partner = :partner')
+                    ->setParameter('partner', $searchRatingData->partner);
+            }
+            if ($searchRatingData->user) {
+                $queryBuilder
+                    ->andWhere('r.user = :user')
+                    ->setParameter('user', $searchRatingData->user);
+            }
+            if ($searchRatingData->createdAt) {
+                $queryBuilder->orderBy('r.createdAt', $searchRatingData->createdAt);
+            }
+            if ($searchRatingData->search) {
+                $queryBuilder
+                    ->andWhere('r.comment LIKE :search')
+                    ->setParameter('search', '%' . $searchRatingData->search . '%');
+            }
+        }
+
+        // Tri des avis par date (du plus récent au plus ancien)
+        $queryBuilder->orderBy('r.createdAt', 'DESC');
+
+        // Récupération du numéro de page (par défaut 1)
+        $currentPage = max(1, $request->query->getInt('page', 1));
+        $limit = 10; // Nombre d'avis par page
+        
+        // Compter le nombre total d'avis
+        $totalRatings = $ratingRepository->count([]);
+        
+        // Calcul du nombre total de pages
+        $totalPages = ceil($totalRatings / $limit);
+
+        // Récupérer les avis paginés
+        $ratings = $queryBuilder
+            ->setFirstResult(($currentPage - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+        
+        // Préparer les données des avis
+        $ratingsData = array_map(function (Rating $rating) {
+            $score = $rating->getScore();
+            return [
+                'rating' => $rating,
+                'fullStars' => floor($score), // Arrondi inférieur (ex: 4.5 -> 4)
+                'hasHalfStar' => ($score - floor($score)) === 0.5, // Vérifie si on a exactement 0.5
+                'emptyStars' => 5 - floor($score) - (($score - floor($score)) === 0.5 ? 1 : 0), // Complète jusqu'à 5 étoiles
+                'partner' => $rating->getPartner(),
+                'loisir' => $rating->getActivity()?->getName() ?? 
+                
+                $rating->getEvent()?->getName() ?? 
+                            $rating->getOffer()?->getName() ?? 'Non spécifié'
+            ];
+        }, $ratings);
         
         return $this->render('account/search_results.html.twig', [
             'controller_name' => 'Tous Vos Avis',
             'ratingsData' => $ratingsData,
             'searchRatingForm' => $searchRatingForm->createView(),
-        ]);
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+        ]); 
     }
-}
+}   
