@@ -6,16 +6,18 @@ use App\Classe\Cart;
 use App\Entity\Partner;
 use App\Form\PartnerType;
 use App\Repository\TrendRepository;
+use App\Repository\RatingRepository;
 use Twig\Extension\GlobalsInterface;
+use App\Repository\PartnerRepository;
 use Twig\Extension\AbstractExtension;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ExclusiveRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\EventstrendRepository;
-use App\Repository\PartnerRepository;
 use App\Repository\SubcategoryRepository;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class GlobalVariables extends AbstractExtension implements GlobalsInterface
 {
@@ -29,6 +31,8 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 	private FormFactoryInterface $formFactory;
 	private EntityManagerInterface $em;
 	private PartnerRepository $partnerRepository;
+	private RatingRepository $ratingRepository;
+	private RequestStack $requestStack;
 
 	/**
 	 * __construct
@@ -51,6 +55,8 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 		FormFactoryInterface $formFactory, 
 		EntityManagerInterface $em,
 		PartnerRepository $partnerRepository,
+		RatingRepository $ratingRepository,
+		RequestStack $requestStack
 	)
 	
 	{
@@ -64,6 +70,8 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 		$this->formFactory = $formFactory;
 		$this->em = $em;
 		$this->partnerRepository = $partnerRepository;
+		$this->ratingRepository = $ratingRepository;
+		$this->requestStack = $requestStack;
 	}
 
 	/**
@@ -81,7 +89,30 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 		// Création d'un formulaire Partner
 		$partner = new Partner();
 		$partnerForm  = $this->formFactory->create(PartnerType::class, $partner);
+	
+		// Récupération des évaluations triées par date (les plus récentes en premier)
+		$ratings = $this->ratingRepository->findBy([], ['createdAt' => 'DESC']);
+	
+		// Pagination des avis
+		$request = $this->requestStack->getCurrentRequest();
+		$page = max(1, $request ? $request->query->getInt('page', 1) : 1);
+		$totalRatings = count($ratings);
+		$totalPages = max(1, ceil($totalRatings / 1));
 		
+		$currentRating = ($page <= $totalRatings) ? $ratings[$page - 1] : null;
+	
+		// Calcul des étoiles pour l'avis courant
+		$fullStars = 0;
+		$hasHalfStar = false;
+		$emptyStars = 5;
+	
+		if ($currentRating) {
+			$score = $currentRating->getScore();
+			$fullStars = floor($score);
+			$hasHalfStar = ($score - $fullStars) >= 0.5;
+			$emptyStars = 5 - $fullStars - ($hasHalfStar === 0.5 ? 1 : 0);
+		}
+				
 		return [
 			'categories' => $this->categoryRepository->findAll(),
 			'subcategories' => $this->subcategoryRepository->findAll(),
@@ -92,6 +123,13 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 			'fullCartQuantity' => $this->cart->fullQuantity(),
 			'partnerForm' => $partnerForm ->createView(),
 			'partners' => $this->partnerRepository->findAll(),
+			'ratings' => $this->ratingRepository->findAll(),
+			'currentRating' => $currentRating,
+			'currentPage' => $page,
+			'totalPages' => $totalPages,
+			'fullStars' => $fullStars,
+			'hasHalfStar' => $hasHalfStar,
+			'emptyStars' => $emptyStars,
 		];
 	}
 }

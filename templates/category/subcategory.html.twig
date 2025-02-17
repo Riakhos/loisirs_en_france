@@ -106,6 +106,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     {# Description sur md #}
                                     <div class="d-none d-md-block">
                                         <div class="card card-body color-secondary-custom bg-primaryBlue border-secondary-custom">
@@ -115,9 +116,11 @@
                                 </div>
                             </div>
                         </div>
+
                         {# Section : Informations de la sous-catégorie #}
                         <div class="card-footer d-block justify-content-center align-items-center" style="border-top: none;">
                             <div class="row w-100">
+
                                 {# Section : Informations activité #}
                                 <div class="col-sm-6 col-md-4">
                                     <h2 class="visually-hidden">Informations Activités</h2>
@@ -131,6 +134,7 @@
                                                 </a>
                                             </p>
                                         </section>
+
                                         {# Section : localisation #}
                                         <section class="mb-1" role="region" aria-labelledby="location-header">
                                             <h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
@@ -140,6 +144,7 @@
                                                 </a>
                                             </p>
                                         </section>
+
                                         {# Section : partenaire #}
                                         <section class="mb-1" role="region" aria-labelledby="partner-header">
                                             <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
@@ -155,14 +160,16 @@
                                         </section>
                                     {% endfor %}
                                 </div>
+
                                 {# Section : Évaluations #}
                                 <div class="col-sm-6 col-md-4">
                                     {% for item in relation.items %}
                                         <h2 class="visually-hidden">Notes, Avis et Tags</h2>
+
                                         {# Section : Avis #}
                                         <section class="mb-1" role="region" aria-labelledby="reviews-header">
                                             <p>
-                                                <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
+                                                <a href="{{ path('app_search_rating', { 'activity': item.id }) }}" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
                                                     <h3 id="avis-header" class="visually-hidden">Avis des utilisateurs</h3>
                                                     {% for rating in item.ratings|slice(-1,1) %}
                                                         <p><strong>({{ rating.score }}/5)</strong> - {{ rating.comment ?: 'Pas de commentaire' }}</p>
@@ -172,10 +179,12 @@
                                                 </a>
                                             </p>
                                         </section>
+
                                         {# Section : Notes #}
                                         <section class="mb-1" role="region" aria-labelledby="rating-header">
                                             <h3 id="rating-header" class="visually-hidden">Notes</h3>
                                             <p class="card-text color-secondary-custom">
+                                            {% if app.user %}
                                                 <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note" data-bs-toggle="collapse" data-bs-target="#ratingForm">
                                                     {% if item.averageRating is not null %}
                                                         <span class="stars">
@@ -194,16 +203,37 @@
                                                         ✩✩✩✩✩ (0/5)
                                                     {% endif %}
                                                 </a>
-                                            </p>
-                                            <div class="collapse" id="ratingForm">
+
                                                 {# Afficher le formulaire de notation spécifique à l'activité #}
-                                                {{ form_start(ratingForms[item.id]) }}
-                                                    {{ form_row(ratingForms[item.id].score) }}
-                                                    {{ form_row(ratingForms[item.id].comment) }}
-                                                    {{ form_row(ratingForms[item.id].submit) }}
-                                                {{ form_end(ratingForms[item.id]) }}
-                                            </div>
+                                                <div class="collapse" id="ratingForm">
+                                                    {{ form_start(ratingForms[item.id]) }}
+                                                        {{ form_row(ratingForms[item.id].score) }}
+                                                        {{ form_row(ratingForms[item.id].comment) }}
+                                                        {{ form_row(ratingForms[item.id].submit) }}
+                                                    {{ form_end(ratingForms[item.id]) }}
+                                                </div>
+
+                                            {% else %}
+                                                <span class="stars color-secondary-custom">
+                                                    {% if item.averageRating is not null %}
+                                                        {% for i in 1..5 %}
+                                                            {% if i <= item.averageRating %}
+                                                                <i class="bi bi-star-fill"></i>
+                                                            {% elseif i > item.averageRating and i < item.averageRating + 1 %}
+                                                                <i class="bi bi-star-half"></i>
+                                                            {% else %}
+                                                                <i class="bi bi-star"></i>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        ({{ item.averageRating }}/5)
+                                                    {% else %}
+                                                        ✩✩✩✩✩ (0/5)
+                                                    {% endif %}
+                                                </span>
+                                            {% endif %}
+                                            </p>
                                         </section>
+                                        
                                         {# Section : Tag #}
                                         <section class="mb-1" role="region" aria-labelledby="tag-header">
                                             <h3 id="tag-header" class="visually-hidden">Tags</h3>

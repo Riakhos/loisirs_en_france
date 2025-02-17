@@ -151,14 +151,16 @@
 								</section>
 							{% endfor %}
 						</div>
+
 						{# Section : Évaluations #}
 						<div class="col-sm-6 col-md-4">
 							{% for activity in exclusive.activities %}
 								<h2 class="visually-hidden">Notes, Avis et Tags</h2>
+
 								{# Section : Avis #}
 								<section class="mb-1" role="region" aria-labelledby="reviews-header">
 									<p>
-										<a href="#" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
+										<a href="{{ path('app_search_rating', { 'activity': activity.id }) }}" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
 											<h3 id="avis-header" class="visually-hidden">Avis des utilisateurs</h3>
 											{% for rating in activity.ratings|slice(-1,1) %}
 												<p><strong>({{ rating.score }}/5)</strong> - {{ rating.comment ?: 'Pas de commentaire' }}</p>
@@ -168,13 +170,42 @@
 										</a>
 									</p>
 								</section>
+
 								{# Section : Notes #}
 								<section class="mb-1" role="region" aria-labelledby="rating-header">
 									<h3 id="rating-header" class="visually-hidden">Notes</h3>
 									<p class="card-text color-secondary-custom">
-										<a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note" data-bs-toggle="collapse" data-bs-target="#ratingForm">
-											{% if activity.averageRating is not null %}
-												<span class="stars">
+										{% if app.user %}
+											<a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note" data-bs-toggle="collapse" data-bs-target="#ratingForms">
+												{% if activity.averageRating is not null %}
+													<span class="stars">
+														{% for i in 1..5 %}
+															{% if i <= activity.averageRating %}
+																<i class="bi bi-star-fill"></i>
+															{% elseif i > activity.averageRating and i < activity.averageRating + 1 %}
+																<i class="bi bi-star-half"></i>
+															{% else %}
+																<i class="bi bi-star"></i>
+															{% endif %}
+														{% endfor %}
+													</span>
+													({{ activity.averageRating }}/5)
+												{% else %}
+													✩✩✩✩✩ (0/5)
+												{% endif %}
+											</a>
+
+											{# Afficher le formulaire de notation spécifique à l'activité #}
+											<div class="collapse" id="ratingForms">
+												{{ form_start(ratingForms[activity.id]) }}
+													{{ form_row(ratingForms[activity.id].score) }}
+													{{ form_row(ratingForms[activity.id].comment) }}
+													{{ form_row(ratingForms[activity.id].submit) }}
+												{{ form_end(ratingForms[activity.id]) }}
+											</div>
+										{% else %}
+											<span class="stars color-secondary-custom">
+												{% if activity.averageRating is not null %}
 													{% for i in 1..5 %}
 														{% if i <= activity.averageRating %}
 															<i class="bi bi-star-fill"></i>
@@ -184,22 +215,15 @@
 															<i class="bi bi-star"></i>
 														{% endif %}
 													{% endfor %}
-												</span>
-												({{ activity.averageRating }}/5)
-											{% else %}
-												✩✩✩✩✩ (0/5)
-											{% endif %}
-										</a>
+													({{ activity.averageRating }}/5)
+												{% else %}
+													✩✩✩✩✩ (0/5)
+												{% endif %}
+											</span>
+										{% endif %}
 									</p>
-									<div class="collapse" id="ratingForm">
-										{# Afficher le formulaire de notation spécifique à l'activité #}
-										{{ form_start(ratingForms[activity.id]) }}
-											{{ form_row(ratingForms[activity.id].score) }}
-											{{ form_row(ratingForms[activity.id].comment) }}
-											{{ form_row(ratingForms[activity.id].submit) }}
-										{{ form_end(ratingForms[activity.id]) }}
-									</div>
 								</section>
+
 								{# Section : Tag #}
 								<section class="mb-1" role="region" aria-labelledby="tag-header">
 									<h3 id="tag-header" class="visually-hidden">Tags</h3>

@@ -125,16 +125,10 @@
                             </div>
                         </div>
                     {% else %}
-                        {# Ajouter un design pour user_email et user_password même si connecté #}
+                        {# Sections pour l'utilisateur connecté #}
                         <div class="bg-primaryBlue border-secondary-custom p-2 mb-3">
-                            <div class="row d-flex justify-content-between">
-                                <div class="col-md-6">
-                                    {{ form_row(partnerForm.user_email, {'attr': {'aria-label': 'Email utilisateur'}}) }}
-                                </div>
-                                <div class="col-md-6">
-                                    {{ form_row(partnerForm.user_password, {'attr': {'aria-label': 'Mot de passe'}}) }}
-                                </div>
-                            </div>
+                            {{ form_row(partnerForm.user_email, {'attr': {'aria-label': 'Email utilisateur'}}) }}
+                            {{ form_row(partnerForm.user_password, {'attr': {'aria-label': 'Mot de passe'}}) }}
                         </div>
                     {% endif %}
 

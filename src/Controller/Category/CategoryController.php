@@ -16,7 +16,10 @@ class CategoryController extends AbstractController
 
         // Si la catégorie n'existe pas, redirigez vers la page d'accueil ou affichez une erreur
         if (!$category) {
-            $this->addFlash('error', "La catégorie demandée n'existe pas."); // Message flash
+            $this->addFlash(
+                'error',
+                "La catégorie demandée n'existe pas."
+            ); // Message flash
             return $this->redirectToRoute('app_home'); // Redirection vers la page d'accueil
         }
 

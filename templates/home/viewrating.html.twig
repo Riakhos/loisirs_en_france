@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-center align-items-center my-3">
+    <div class="card bg-primaryBlue border-secondary-custom shadow-sm w-100">
+        <div class="card-body text-center">
+            <h3 class="card-title fw-bold color-secondary-custom">Avis des Utilisateurs</h3>
+            <p class="card-text color-secondary-custom">
+                Découvrez ce que nos utilisateurs pensent de leurs expériences !
+            </p>
+
+            {# Début du carrousel #}
+            <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for rating in ratings %}
+                        <div class="carousel-item {% if loop.first %} active {% endif %}">
+                            <div class="row justify-content-center align-items-center">
+                            
+                                {# Profil Utilisateur #}
+                                <div class="card bg-primaryBlue border-secondary-custom m-md-3 mb-3 w-50">
+                                    <div class="shadow rounded w-sm-75-important d-none-md mt-4 h-100">
+                                        <div class="p-4 flex text-center">
+                                            {% if rating.user and rating.user.image %}
+                                                <img class="rounded-circle" style="height: 88px; width: 88px;" 
+                                                    src="{{ asset('uploads/profil_pictures/' ~ rating.user.image) }}" 
+                                                    alt="Photo de profil de {{ rating.user.firstname }} {{ rating.user.lastname }}" 
+                                                    role="img">
+                                            {% else %}
+                                                <i class="bi bi-person-circle color-secondary-custom" 
+                                                    style="font-size: 88px;" 
+                                                    aria-hidden="true"></i>
+                                            {% endif %}
+                                            <h5 class="mb-1">{{ rating.user ? rating.user.firstname : 'Utilisateur Anonyme' }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# Note et Commentaire #}
+                                <div class="card-body m-md-3 mb-3">
+
+                                    {# Informations du loisir #}
+                                    <h3 class="mt-3">
+                                        {# Vérification du type de loisir #}
+                                        {% if rating.activity %}
+                                            {{ rating.activity.name }}
+                                        {% elseif rating.offer %}
+                                            {{ rating.offer.name }}
+                                        {% elseif rating.event %}
+                                            {{ rating.event.name }}
+                                            Non spécifié
+                                        {% endif %}
+                                    </h3>
+
+                                    {# Note et Étoiles #}
+                                    <h3 class="mb-1">
+                                        ({{ rating.score }}/5)
+                                        <span class="visually-hidden">Note : {{ rating.score }} sur 5</span>
+
+                                        {% for i in 1..fullStars %}
+                                            <i class="bi bi-star-fill" aria-hidden="true"></i>
+                                        {% endfor %}
+
+                                        {% if hasHalfStar %}
+                                            <i class="bi bi-star-half" aria-hidden="true"></i>
+                                        {% endif %}
+
+                                        {% if emptyStars > 0 %}
+                                            {% for i in 1..emptyStars %}
+                                                <i class="bi bi-star" aria-hidden="true"></i>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </h3>
+
+                                    {# Commentaire et Date #}
+                                    <p class="mb-1 color-secondary-custom">{{ rating.comment }}</p>
+                                    <small class="color-secondary-custom">Publié le : {{ rating.createdAt|date('d/m/Y') }}</small>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {# Contrôles du carrousel #}
+                <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Précédent</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Suivant</span>
+                </button>
+            </div>
+            {# Fin du carrousel #}
+
+        </div>
+    </div>
+</div>

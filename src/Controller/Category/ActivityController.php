@@ -28,34 +28,29 @@ class ActivityController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        // Vérifier si l'utilisateur est connecté
+        $ratingForm = null;
         $user = $this->getUser();
-        if (!$user) {
-            $this->addFlash(
-                'error',
-                'Vous devez être connecté pour ajouter une note.'
-            );
-            return $this->redirectToRoute('app_login');
-        }
-
-        $rating = new Rating();
-        $form = $this->createForm(RatingType::class, $rating);
-        $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
-            $rating->setActivity($activity);
+        if ($user) {
+            $rating = new Rating();
+            $ratingForm = $this->createForm(RatingType::class, $rating);
+            $ratingForm->handleRequest($request);
             
-            $em->persist($rating);
-            $em->flush();
-            
-            $this->addFlash(
-                'success',
-                'Votre note a été ajoutée avec succès.'
-            );
-            
-            return $this->redirectToRoute('app_activity', [
-                'slug' => $activity->getSlug()
-            ]);
+            if ($ratingForm->isSubmitted() && $ratingForm->isValid()) {
+                $rating->setActivity($activity);
+                $rating->setUser($user); // Assurez-vous d'enregistrer l'auteur de la note
+                $em->persist($rating);
+                $em->flush();
+                
+                $this->addFlash(
+                    'success',
+                    'Votre note a été ajoutée avec succès.'
+                );
+                
+                return $this->redirectToRoute('app_activity', [
+                    'slug' => $activity->getSlug()
+                ]);
+            }
         }
         
         return $this->render('category/activity.html.twig', [
@@ -63,7 +58,7 @@ class ActivityController extends AbstractController
             'activity' => $activity,
             'ratings' => $activity->getRatings(),
             'averageRating' => $activity->getAverageRating(),
-            'ratingForm' => $form->createView(),
+            'ratingForm' => $ratingForm ? $ratingForm->createView() : null,
         ]);
     }
 }

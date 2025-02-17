@@ -30,43 +30,39 @@ class TrendController extends AbstractController
 
         // Vérifier si l'utilisateur est connecté
         $user = $this->getUser();
-        if (!$user) {
-            $this->addFlash(
-                'error',
-                'Vous devez être connecté pour ajouter une note.'
-            );
-            return $this->redirectToRoute('app_login');
-        }
-
+        
         // Créer un tableau pour stocker les formulaires de notation
         $ratingForms = [];
         
-        foreach ($trend->getActivities() as $activity) {
-            // Créer un formulaire de notation pour chaque activité
-            $rating = new Rating();
-            $form = $this->createForm(RatingType::class, $rating);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
+        if (!$user) {
+            foreach ($trend->getActivities() as $activity) {
+                // Créer un formulaire de notation pour chaque activité
+                $rating = new Rating();
                 // Lier la note à l'activité correspondante
                 $rating->setActivity($activity);
+                $rating->setUser($user);
                 
-                $em->persist($rating);
-                $em->flush();
-
-                $this->addFlash(
-                    'success',
-                    'Votre note a été ajoutée avec succès.'
-                );
-                
-                // Rediriger vers la même page pour éviter un double envoi du formulaire
-                return $this->redirectToRoute('app_trend', [
-                    'slug' => $trend->getSlug()
-                ]);
+                $form = $this->createForm(RatingType::class, $rating);
+                $form->handleRequest($request);
+    
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em->persist($rating);
+                    $em->flush();
+    
+                    $this->addFlash(
+                        'success',
+                        'Votre note a été ajoutée avec succès.'
+                    );
+                    
+                    // Rediriger vers la même page pour éviter un double envoi du formulaire
+                    return $this->redirectToRoute('app_trend', [
+                        'slug' => $trend->getSlug()
+                    ]);
+                }
+    
+                // Ajouter le formulaire de chaque activité au tableau
+                $ratingForms[$activity->getId()] = $form->createView();
             }
-
-            // Ajouter le formulaire de chaque activité au tableau
-            $ratingForms[$activity->getId()] = $form->createView();
         }
         
         return $this->render('eventstrend/trend.html.twig', [

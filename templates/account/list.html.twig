@@ -71,26 +71,27 @@
         </div>
     </div>
 </div>
+{% block javascript %}
+    {# Script JavaScript pour filtrer les partenaires en direct #}
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("searchPartner");
+            const partnerList = document.getElementById("partnerList");
+            const partners = document.querySelectorAll(".partner-item");
 
-{# Script JavaScript pour filtrer les partenaires en direct #}
-<script defer>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("searchPartner");
-        const partnerList = document.getElementById("partnerList");
-        const partners = document.querySelectorAll(".partner-item");
+            searchInput.addEventListener("input", function () {
+                const searchValue = searchInput.value.toLowerCase();
 
-        searchInput.addEventListener("input", function () {
-            const searchValue = searchInput.value.toLowerCase();
+                partners.forEach(partner => {
+                    const partnerName = partner.querySelector(".partner-name").textContent.toLowerCase();
 
-            partners.forEach(partner => {
-                const partnerName = partner.querySelector(".partner-name").textContent.toLowerCase();
-
-                if (partnerName.includes(searchValue)) {
-                    partner.style.display = "block";
-                } else {
-                    partner.style.display = "none";
-                }
+                    if (partnerName.includes(searchValue)) {
+                        partner.style.display = "block";
+                    } else {
+                        partner.style.display = "none";
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+{% endblock %}

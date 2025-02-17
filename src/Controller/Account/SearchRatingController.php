@@ -2,7 +2,10 @@
 
 namespace App\Controller\Account;
 
+use App\Entity\Event;
+use App\Entity\Offer;
 use App\Entity\Rating;
+use App\Entity\Activity;
 use App\DTO\SearchRating;
 use App\Form\SearchRatingType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +22,7 @@ final class SearchRatingController extends AbstractController
         // Crée une instance de SearchRating (DTO)
         $searchRatingData = new SearchRating();
         
-        $searchRatingForm = $this->createForm(SearchRatingType::class, null, [
+        $searchRatingForm = $this->createForm(SearchRatingType::class, $searchRatingData, [
             'method' => 'GET',
             'attr' => [
                 'autocomplete' => 'off', // Ajout d'attribut global pour tout le formulaire
@@ -28,13 +31,28 @@ final class SearchRatingController extends AbstractController
 
         $searchRatingForm->handleRequest($request);
 
+        // Vérification si un paramètre "activity" est passé dans l'URL
+        $activityId = $request->query->get('activity');
+        if ($activityId) {
+            $searchRatingData->activity = $em->getRepository(Activity::class)->find($activityId);
+        }
+        
+        // Vérification si un paramètre "offer" est passé dans l'URL
+        $offerId = $request->query->get('offer');
+        if ($offerId) {
+            $searchRatingData->offer = $em->getRepository(Offer::class)->find($offerId);
+        }
+        
+        // Vérification si un paramètre "event" est passé dans l'URL
+        $eventId = $request->query->get('event');
+        if ($eventId) {
+            $searchRatingData->event = $em->getRepository(Event::class)->find($eventId);
+        }
+
         // Si le formulaire est réinitialisé (reset), on réinitialise les filtres
         if ($searchRatingForm->isSubmitted() && $searchRatingForm->isValid()) {
             // Extraire les filtres si existants
             $searchRatingData = $searchRatingForm->getData();
-        } else {
-            // Aucun filtre : retour à l'affichage de tous les avis
-            $searchRatingData = [];
         }
         
         // Récupérer tous les avis

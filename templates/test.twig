@@ -1,52 +1,107 @@
-{% extends 'base.html.twig' %}
+<div class="container d-flex justify-content-center align-items-center m-3">
+    <div class="card bg-primaryBlue border-secondary-custom shadow-sm p-4 w-75">
+        <div class="card-body text-center">
+            <h3 class="card-title fw-bold color-secondary-custom">Avis des Utilisateurs</h3>
+            <p class="card-text color-secondary-custom">
+                Découvrez ce que nos utilisateurs pensent de leurs expériences !
+            </p>
 
-{% block title %}{{ controller_name }}{% endblock %}
+            <div class="card-text">
+                {% if currentRating %}
+                    <div id="review-container">
+                        <div class="list-group-item">
+                            <div class="row align-items-center">
+                                {# 🔹 Profil Utilisateur #}
+                                <div class="col-md-4 card bg-primaryBlue border-secondary-custom m-md-3 mb-3">
+                                    <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100">
+                                        <div class="p-4 flex text-center">
+                                            {% if currentRating.user and currentRating.user.image %}
+                                                <img class="rounded-circle" style="height: 88px; width: 88px;" 
+                                                    src="{{ asset('uploads/profil_pictures/' ~ currentRating.user.image) }}" 
+                                                    alt="Photo de profil de {{ currentRating.user.firstname }} {{ currentRating.user.lastname }}" 
+                                                    role="img">
+                                            {% else %}
+                                                <i class="bi bi-person-circle color-secondary-custom" 
+                                                    style="font-size: 88px;" 
+                                                    aria-hidden="true"></i>
+                                            {% endif %}
+                                            <h5 class="mb-1">{{ currentRating.user ? currentRating.user.firstname : 'Utilisateur Anonyme' }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
 
-{% block body %}
-    {# Barre de navigation #}
-    {% include "account/navbar.html.twig" %}
+                                {# 🔹 Note et Étoiles #}
+                                <h3 class="mb-1">
+                                    <strong>Note : </strong>({{ currentRating.score }}/5)
 
-    <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
-        
-        {# Section : Vos Avis #}
-        <div class="col-md-8 toast d-flex m-3 p-3 flex-column">
-            <h1 class="mb-4">{{ controller_name }}</h1>
-            
-            {% if ratings is empty %}
-            <p>Aucun avis trouvé.</p>
-			{% else %}
-				<div class="list-group">
-					{% for data in ratings %}
-						<div class="list-group-item">
-							<h5 class="mb-1">
-								Note : <strong>({{ data.score }}/5)</strong>
-								{% for i in 1..(data.score|round) %}
-									<i class="bi bi-star-fill"></i>
-								{% endfor %}
-							</h5>
-							<p class="mb-1">{{ data.comment }}</p>
-							<small>Ajouté le {{ data.createdAt|date('d/m/Y H:i') }}</small>
-						</div>
-					{% endfor %}
-				</div>
+                                    <span class="visually-hidden">Note : {{ currentRating.score }} sur 5</span>
 
-				{# Pagination #}
-				<div class="pagination d-flex justify-content-center mt-3">
-					{% if currentPage > 1 %}
-						<a href="{{ path('app_search_rating', filters|merge({'page': currentPage - 1})) }}" class="page-link">
-							← Précédent
-						</a>
-					{% endif %}
+                                    {# Étoiles pleines #}
+                                    {% for i in 1..fullStars %}
+                                        <i class="bi bi-star-fill" aria-hidden="true"></i>
+                                    {% endfor %}
 
-					<span class="page-link disabled rounded">Page {{ currentPage }} sur {{ totalPages }}</span>
+                                    {# Étoile à moitié #}
+                                    {% if hasHalfStar %}
+                                        <i class="bi bi-star-half" aria-hidden="true"></i>
+                                    {% endif %}
 
-					{% if currentPage < totalPages %}
-						<a href="{{ path('app_search_rating', filters|merge({'page': currentPage + 1})) }}" class="page-link">
-							Suivant →
-						</a>
-					{% endif %}
-				</div>
-			{% endif %}
+                                    {# Étoiles vides #}
+                                    {% if emptyStars > 0 %}
+                                        {% for i in 1..emptyStars %}
+                                            <i class="bi bi-star" aria-hidden="true"></i>
+                                        {% endfor %}
+                                    {% endif %}
+                                </h3>
+
+                                {# 🔹 Commentaire et Date #}
+                                <p class="mb-1 color-secondary-custom">{{ currentRating.comment }}</p>
+                                <small class="color-secondary-custom">Publié le : {{ currentRating.createdAt|date('d/m/Y') }}</small>
+
+                                {# 🔹 Lien pour envoyer un avis #}
+                                <a href="{{ path('app_search_rating') }}" class="btn btn-primary mt-3" aria-label="Envoyer un avis">
+                                    Envoyer un avis
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Aucun avis disponible pour le moment.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {# 🔹 Pagination #}
+        <div class="card-footer border-secondary-custom-top">
+            <div class="pagination d-flex justify-content-center mt-3">
+                {% if currentPage > 1 %}
+                    <a href="#" class="page-link" onclick="loadReview({{ currentPage - 1 }}); return false;">
+                        ← Précédent
+                    </a>
+                {% endif %}
+
+                <span class="page-link disabled rounded">Avis {{ currentPage }} sur {{ totalPages }}</span>
+
+                {% if currentPage < totalPages %}
+                    <a href="#" class="page-link" onclick="loadReview({{ currentPage + 1 }}); return false;">
+                        Suivant →
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
+</div>
+{% block javascripts %}
+    <script>
+        function loadReview(page) {
+            if (page < 1 || page > {{ totalPages }}) return; // Empêche de sortir des bornes de pages
+
+            fetch(`/reviews?page=${page}`, { method: 'GET' })
+                .then(response => response.text())
+                .then(html => {
+                    document.querySelector("#review-container").innerHTML = html;
+                })
+                .catch(error => console.error("Erreur de chargement des avis :", error));
+        }
+    </script>
 {% endblock %}

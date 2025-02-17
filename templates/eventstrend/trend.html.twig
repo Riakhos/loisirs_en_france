@@ -6,6 +6,7 @@
     <div class="d-flex justify-content-center align-items-center">
         <div class="card w-auto border-secondary-custom bg-primaryBlue mb-5 p-3" style="max-width: 1000px;">
             <div class="row g-0 d-flew justify-content-center align-items-center">
+
                 {# Section : Navigation et titre #}
                 <small class="card-header color-secondary-custom" style="border-bottom: none;">
                     <i>
@@ -16,10 +17,12 @@
                         </a> > {{ trend.name }}
                     </i>
                 </small>
+
                 {# Section : Carrousel d'images #}
                 <div class="col-md-6">
                     <h2 class="visually-hidden">Galerie d'images</h2>
                     <div id="carouselTrend" class="carousel carousel-light slide card-img-top" data-bs-ride="carousel">
+
                         {# Indicateurs du carrousel #}
                         <div class="carousel-indicators">
                             {% for activity in trend.activities %}
@@ -33,6 +36,7 @@
                                 </button>
                             {% endfor %}
                         </div>
+
                         {# Slides du carrousel #}
                         <div class="carousel-inner" data-bs-interval="10000">
                             {% for activity in trend.activities %}
@@ -44,8 +48,10 @@
                                 >
                                     <a href="{{ path('app_activity', { slug: activity.slug } ) }}" aria-label="Voir l'activité {{ activity.name }}">
                                         <picture>
+
                                             {# WebP version #}
                                             <source srcset="/uploads/photos/{{ activity.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+
                                             {# Fallback JPG/PNG #}
                                             <img 
                                                 src="/uploads/photos/{{ activity.image }}"
@@ -63,6 +69,7 @@
                                 </div>
                             {% endfor %}
                         </div>
+
                         {# Boutons de navigation #}
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselTrend" data-bs-slide="prev" aria-label="Image précédente">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -74,12 +81,14 @@
                         </button>
                     </div>
                 </div>
+
                 {# Section : Description #}
                 <div class="col-md-6">
                     <div class="card-body text-center">
                         <h2 class="card-title color-secondary-custom fs-1">{{ trend.name }}</h2>
                         <h3 class="visually-hidden">Description</h3>
                         <div>
+
 							{# Collapse sur mobile  #}
                             <p class="d-sm-block d-md-none">
                                 <a 
@@ -104,6 +113,7 @@
                                     </div>
                                 </div>
                             </div>
+
 							{# Description sur md #}
                             <div class="d-none d-md-block">
                                 <div 
@@ -114,12 +124,14 @@
                         </div>
                     </div>
                 </div>
+
 				{# Section : Informations de l'activité tendance #}
                 <div class="card-footer d-block justify-content-center align-items-center" style="border-top: none;">
                     <div class="row w-100">
                         <div class="col-sm-6 col-md-4">
                             <h2 class="visually-hidden">Informations Activité</h2>
                             {% for activity in trend.activities %}
+
                                 {# Section : Informations activité concernée #}
                                 <section class="mb-1">
                                     <h3 class="visually-hidden">Activité concernée</h3>
@@ -130,6 +142,7 @@
                                         </a>
                                     </p>
                                 </section>
+
                                 {# Section : localisation #}
                                 <section class="mb-1" role="region" aria-labelledby="location-header">
                                     <h3 id="location-header" class="visually-hidden">Lieu de l'activité</h3>
@@ -139,6 +152,7 @@
                                         </a>
                                     </p>
                                 </section>
+
                                 {# Section : partenaire #}
                                 <section class="mb-1" role="region" aria-labelledby="partner-header">
                                     <h3 id="partner-header" class="visually-hidden">Partenaire</h3>
@@ -154,14 +168,16 @@
                                 </section>
                             {% endfor %}
                         </div>
+
                         {# Section : Évaluations #}
                         <div class="col-sm-6 col-md-4">
                             {% for activity in trend.activities %}
                                 <h2 class="visually-hidden">Notes, Avis et Tags</h2>
+
                                 {# Section : Avis #}
                                 <section class="mb-1" role="region" aria-labelledby="reviews-header">
                                     <p>
-                                        <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
+                                        <a href="{{ path('app_search_rating', { 'activity': activity.id }) }}" class="text-decoration-none color-secondary-custom" aria-label="Voir les avis">
                                             <h3 id="avis-header" class="visually-hidden">Avis des utilisateurs</h3>
                                             {% for rating in activity.ratings|slice(-1,1) %}
                                                 <p><strong>({{ rating.score }}/5)</strong> - {{ rating.comment ?: 'Pas de commentaire' }}</p>
@@ -171,37 +187,60 @@
                                         </a>
                                     </p>
                                 </section>
+
                                 {# Section : Notes #}
                                 <section class="mb-1" role="region" aria-labelledby="rating-header">
                                     <h3 id="rating-header" class="visually-hidden">Notes</h3>
                                     <p class="card-text color-secondary-custom">
-                                        <a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note" data-bs-toggle="collapse" data-bs-target="#ratingForm">
-                                            {% if activity.averageRating is not null %}
-                                                <span class="stars">
-                                                    {% for i in 1..5 %}
-                                                        {% if i <= activity.averageRating %}
-                                                            <i class="bi bi-star-fill"></i>
-                                                        {% elseif i > activity.averageRating and i < activity.averageRating + 1 %}
-                                                            <i class="bi bi-star-half"></i>
-                                                        {% else %}
-                                                            <i class="bi bi-star"></i>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </span>
-                                                ({{ activity.averageRating }}/5)
-                                            {% else %}
-                                                ✩✩✩✩✩ (0/5)
-                                            {% endif %}
-                                        </a>
-                                    </p>
-                                    <div class="collapse" id="ratingForm">
-                                        {{ form_start(ratingForms[activity.id]) }}
-                                            {{ form_row(ratingForms[activity.id].score) }}
-                                            {{ form_row(ratingForms[activity.id].comment) }}
-                                            {{ form_row(ratingForms[activity.id].submit) }}
-                                        {{ form_end(ratingForms[activity.id]) }}
-                                    </div>
+										{% if app.user %}
+											<a href="#" class="text-decoration-none color-secondary-custom" aria-label="Ajouter une note" data-bs-toggle="collapse" data-bs-target="#ratingForms">
+												{% if activity.averageRating is not null %}
+													<span class="stars">
+														{% for i in 1..5 %}
+															{% if i <= activity.averageRating %}
+																<i class="bi bi-star-fill"></i>
+															{% elseif i > activity.averageRating and i < activity.averageRating + 1 %}
+																<i class="bi bi-star-half"></i>
+															{% else %}
+																<i class="bi bi-star"></i>
+															{% endif %}
+														{% endfor %}
+													</span>
+													({{ activity.averageRating }}/5)
+												{% else %}
+													✩✩✩✩✩ (0/5)
+												{% endif %}
+											</a>
+
+											{# Afficher le formulaire de notation spécifique à l'activité #}
+											<div class="collapse" id="ratingForms">
+												{{ form_start(ratingForms[activity.id]) }}
+													{{ form_row(ratingForms[activity.id].score) }}
+													{{ form_row(ratingForms[activity.id].comment) }}
+													{{ form_row(ratingForms[activity.id].submit) }}
+												{{ form_end(ratingForms[activity.id]) }}
+											</div>
+										{% else %}
+											<span class="stars color-secondary-custom">
+												{% if activity.averageRating is not null %}
+													{% for i in 1..5 %}
+														{% if i <= activity.averageRating %}
+															<i class="bi bi-star-fill"></i>
+														{% elseif i > activity.averageRating and i < activity.averageRating + 1 %}
+															<i class="bi bi-star-half"></i>
+														{% else %}
+															<i class="bi bi-star"></i>
+														{% endif %}
+													{% endfor %}
+													({{ activity.averageRating }}/5)
+												{% else %}
+													✩✩✩✩✩ (0/5)
+												{% endif %}
+											</span>
+										{% endif %}
+									</p>
                                 </section>
+
                                 {# Section : Tag #}
                                 <section class="mb-1" role="region" aria-labelledby="tag-header">
                                     <h3 id="tag-header" class="visually-hidden">Tags</h3>

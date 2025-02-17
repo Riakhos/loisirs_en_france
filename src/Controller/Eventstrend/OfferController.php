@@ -28,34 +28,30 @@ class OfferController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
         
-        // Vérifier si l'utilisateur est connecté
+        $ratingForm = null;
         $user = $this->getUser();
-        if (!$user) {
-            $this->addFlash(
-                'error',
-                'Vous devez être connecté pour ajouter une note.'
-            );
-            return $this->redirectToRoute('app_login');
-        }
+    
+        if ($user) {
+            $rating = new Rating();
+            $ratingForm = $this->createForm(RatingType::class, $rating);
+            $ratingForm->handleRequest($request);
+    
+            if ($ratingForm->isSubmitted() && $ratingForm->isValid()) {
+                $rating->setOffer($offer);
+                $rating->setUser($user); // Assurez-vous d'enregistrer l'auteur de la note
+                $em->persist($rating);
+                $em->flush();
+    
+                $this->addFlash(
+                    'success',
+                    'Votre note a été ajoutée avec succès.'
+                );
 
-        $rating = new Rating();
-        $form = $this->createForm(RatingType::class, $rating);
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $rating->setOffer($offer);
-            
-            $em->persist($rating);
-            $em->flush();
-            
-            $this->addFlash(
-                'success',
-                'Votre note a été ajoutée avec succès.'
-            );
-            
-            return $this->redirectToRoute('app_offer', [
-                'slug' => $offer->getSlug()
-            ]);
+                // Rediriger vers la même page pour éviter un double envoi du formulaire
+                return $this->redirectToRoute('app_offer', [
+                    'slug' => $offer->getSlug()
+                ]);
+            }
         }
         
         return $this->render('eventstrend/offer.html.twig', [
@@ -63,7 +59,7 @@ class OfferController extends AbstractController
             'offer' => $offer,
             'ratings' => $offer->getRatings(),
             'averageRating' => $offer->getAverageRating(),
-            'ratingForm' => $form->createView(),
+            'ratingForm' => $ratingForm ? $ratingForm->createView() : null,
         ]);
     }
 }
