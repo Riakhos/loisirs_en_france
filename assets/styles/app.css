@@ -149,13 +149,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Modifier la couleur de l'icône du sélecteur de date */
-#profil_form_birthdayDate::-webkit-calendar-picker-indicator, #personalize_birthday_card_when::-webkit-calendar-picker-indicator {
+#profil_form_birthdayDate::-webkit-calendar-picker-indicator, #personalize_birthday_card_when::-webkit-calendar-picker-indicator, input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(35%) sepia(50%) saturate(500%) hue-rotate(165deg);
     opacity: 1;
 }
 
 /* Firefox - Pas de support direct pour l'icône, donc on applique la couleur au texte */
-#profil_form_birthdayDate, #personalize_birthday_card_when {
+#order_items_0_dateStart, #profil_form_birthdayDate, #personalize_birthday_card_when, input[type="date"], input[type="time"] {
     color: #2984B4;
 }
 

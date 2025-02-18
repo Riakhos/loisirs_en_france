@@ -257,7 +257,7 @@
                     {# Section : Boutons d'actions #}
                     <div class="btn-group d-flex justify-content-center align-items-center" role="group" aria-label="Options de réservation" style="border-top: none;">
                         <a href="{{ path('app_cart_add', { type: 'event', id: event.id } ) }}" class="btn btn-primary" aria-label="Ajouter cette offre au panier">Ajouter au panier</a>
-                        <button type="button" class="btn" aria-label="Réserver cette activité">Réserver</button>
+                        <a href="{{ path('app_order_date_time') }}" type="button" class="btn btn-primary" aria-label="Réserver cette activité">Réserver</a>
                     </div>
                 </div>
             </div>

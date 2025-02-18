@@ -1,107 +1,123 @@
-<div class="container d-flex justify-content-center align-items-center m-3">
-    <div class="card bg-primaryBlue border-secondary-custom shadow-sm p-4 w-75">
-        <div class="card-body text-center">
-            <h3 class="card-title fw-bold color-secondary-custom">Avis des Utilisateurs</h3>
-            <p class="card-text color-secondary-custom">
-                Découvrez ce que nos utilisateurs pensent de leurs expériences !
-            </p>
+{% extends 'base.html.twig' %}
 
-            <div class="card-text">
-                {% if currentRating %}
-                    <div id="review-container">
-                        <div class="list-group-item">
-                            <div class="row align-items-center">
-                                {# 🔹 Profil Utilisateur #}
-                                <div class="col-md-4 card bg-primaryBlue border-secondary-custom m-md-3 mb-3">
-                                    <div class="shadow rounded w-sm-100-important d-none-md mt-4 h-100">
-                                        <div class="p-4 flex text-center">
-                                            {% if currentRating.user and currentRating.user.image %}
-                                                <img class="rounded-circle" style="height: 88px; width: 88px;" 
-                                                    src="{{ asset('uploads/profil_pictures/' ~ currentRating.user.image) }}" 
-                                                    alt="Photo de profil de {{ currentRating.user.firstname }} {{ currentRating.user.lastname }}" 
-                                                    role="img">
-                                            {% else %}
-                                                <i class="bi bi-person-circle color-secondary-custom" 
-                                                    style="font-size: 88px;" 
-                                                    aria-hidden="true"></i>
-                                            {% endif %}
-                                            <h5 class="mb-1">{{ currentRating.user ? currentRating.user.firstname : 'Utilisateur Anonyme' }}</h5>
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+
+    {# Barre de navigation #}
+    {% include "account/navbar.html.twig" %}
+
+    <h2 class="text-center color-primary-custom my-4">Passer une commande</h2>
+
+    {# Conteneur principal de la commande #}
+    <div class="container my-5">
+
+        <div class="row">
+
+            <div class="col-md-8">
+
+                {% if order is empty %}
+                    <p class="text-center color-primary-custom" role="alert">Vous n'avez pas de commande en cours.</p>
+                {% else %}
+                    <section role="region" aria-labelledby="title-order">
+                        <h2 id="title-order" class="text-center color-primary-custom my-4">Détails de la commande</h2>
+                        {% for item in order %}
+                            <article class="card mb-4 shadow-sm border-1" role="group" aria-labelledby="order-{{ item.activityName ?? item.eventName ?? item.offerName }}">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <picture>
+                                            <source srcset="/uploads/photos/{{ item.activityImage ?? item.eventImage ?? item.offerImage | replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            <img 
+                                                src="/uploads/photos/{{ item.activityImage ?? item.eventImage ?? item.offerImage }}" 
+                                                class="img-fluid rounded-start h-100 object-fit-cover" 
+                                                alt="{{ item.activityName ?? item.eventName ?? item.offerName }} - Commande"
+                                                loading="lazy"
+                                                width="200" height="150"
+                                            >
+                                        </picture>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h3 id="order-{{ item.activityName ?? item.eventName ?? item.offerName }}" class="card-title fw-bold">{{ item.activityName ?? item.eventName ?? item.offerName }}</h3>
+                                            <div class="d-flex">
+                                                <div class="col-sm-6 col-md-6 pe-2">
+                                                    <p class="card-text">
+                                                        <strong>Partenaire :</strong> {{ item.partners.name }}
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <strong>Adresse :</strong>
+                                                        <a href="{{ item.partners.getGoogleMapsLink() }}" target="_blank" class="text-decoration-none color-primary-custom">
+                                                            {{ item.partners.address }}
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-6 col-md-6">
+                                                    <p class="card-text"><span><strong>Prix unitaire :</strong></span>
+                                                        <strong>{{ item.price|price }}</strong>
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <i class="bi bi-person-fill me-2"></i>
+                                                        Pour <strong>x{{ item.peopleCount }}</strong> personne(s)
+                                                    </p>
+                                                    <p class="card-text d-flex align-items-center gap-3">
+                                                        <span class="fw-semibold">Quantité :</span>
+                                                        <a href="{{ path('app_order_decrease', { id: item.id } ) }}" class="btn shadow-sm rounded-circle p-0">
+                                                            <i class="bi bi-dash-lg color-primary-custom"></i>
+                                                        </a>
+                                                        <span id="quantity-{{ item.id }}" class="badge bg-primaryBlue">{{ item.qty }}</span>
+                                                        <a href="{{ path('app_order_add', { id: item.id } ) }}" class="btn shadow-sm rounded-circle p-0">
+                                                            <i class="bi bi-plus-lg color-primary-custom"></i>
+                                                        </a>
+                                                    </p>
+                                                    <p class="card-text"><strong>Total :</strong>
+                                                        <span class="text-success">{{ (item.qty * item.price)|price }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </article>
+                        {% endfor %}
+                    </section>
 
-                                {# 🔹 Note et Étoiles #}
-                                <h3 class="mb-1">
-                                    <strong>Note : </strong>({{ currentRating.score }}/5)
-
-                                    <span class="visually-hidden">Note : {{ currentRating.score }} sur 5</span>
-
-                                    {# Étoiles pleines #}
-                                    {% for i in 1..fullStars %}
-                                        <i class="bi bi-star-fill" aria-hidden="true"></i>
-                                    {% endfor %}
-
-                                    {# Étoile à moitié #}
-                                    {% if hasHalfStar %}
-                                        <i class="bi bi-star-half" aria-hidden="true"></i>
-                                    {% endif %}
-
-                                    {# Étoiles vides #}
-                                    {% if emptyStars > 0 %}
-                                        {% for i in 1..emptyStars %}
-                                            <i class="bi bi-star" aria-hidden="true"></i>
-                                        {% endfor %}
-                                    {% endif %}
-                                </h3>
-
-                                {# 🔹 Commentaire et Date #}
-                                <p class="mb-1 color-secondary-custom">{{ currentRating.comment }}</p>
-                                <small class="color-secondary-custom">Publié le : {{ currentRating.createdAt|date('d/m/Y') }}</small>
-
-                                {# 🔹 Lien pour envoyer un avis #}
-                                <a href="{{ path('app_search_rating') }}" class="btn btn-primary mt-3" aria-label="Envoyer un avis">
-                                    Envoyer un avis
-                                </a>
-                            </div>
-                        </div>
+                    {# Formulaire de commande #}
+                    <div class="card shadow-sm border-1 p-4">
+                        <h3 class="text-center color-primary-custom">Finaliser votre commande</h3>
+                        {{ form_start(orderForm) }}
+                            {{ form_row(orderForm.dateStart) }}
+                            {{ form_row(orderForm.time) }}
+                            {{ form_row(orderForm.submit, { 'attr': {'class': 'btn btn-primary d-block mx-auto w-40'} }) }}
+                        {{ form_end(orderForm) }}
                     </div>
-                {% else %}
-                    <p>Aucun avis disponible pour le moment.</p>
+
                 {% endif %}
+            </div>
+
+            {# Colonne de droite pour les informations récapitulatives ou autres détails #}
+            <div class="col-md-4">
+                <div class="card p-3 shadow-sm">
+                    <h3 class="color-primary-custom">Résumé de votre commande</h3>
+                    <ul class="list-group list-group-flush">
+                        {% for item in order %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ item.activityName ?? item.eventName ?? item.offerName }}
+                                <span class="badge bg-primaryBlue">{{ item.qty }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="mt-3 text-center">
+                        <strong>Total :</strong>
+                        <span class="text-success fs-5">{{ order.cartPrice|price }}</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        {# 🔹 Pagination #}
-        <div class="card-footer border-secondary-custom-top">
-            <div class="pagination d-flex justify-content-center mt-3">
-                {% if currentPage > 1 %}
-                    <a href="#" class="page-link" onclick="loadReview({{ currentPage - 1 }}); return false;">
-                        ← Précédent
-                    </a>
-                {% endif %}
-
-                <span class="page-link disabled rounded">Avis {{ currentPage }} sur {{ totalPages }}</span>
-
-                {% if currentPage < totalPages %}
-                    <a href="#" class="page-link" onclick="loadReview({{ currentPage + 1 }}); return false;">
-                        Suivant →
-                    </a>
-                {% endif %}
-            </div>
+        <div class="text-center mt-4">
+            <a href="{{ path('app_cart') }}" class="btn btn-primary">Retour au panier</a>
         </div>
+
     </div>
-</div>
-{% block javascripts %}
-    <script>
-        function loadReview(page) {
-            if (page < 1 || page > {{ totalPages }}) return; // Empêche de sortir des bornes de pages
 
-            fetch(`/reviews?page=${page}`, { method: 'GET' })
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector("#review-container").innerHTML = html;
-                })
-                .catch(error => console.error("Erreur de chargement des avis :", error));
-        }
-    </script>
 {% endblock %}

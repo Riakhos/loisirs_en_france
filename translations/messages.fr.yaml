@@ -50,3 +50,21 @@ Rechercher un avis: 'Rechercher un avis'
 "Rechercher un avis...": "Rechercher un avis..."
 Filtrer: 'Filtrer'
 Réinitialiser: 'Réinitialiser'
+Note:	'Note'
+"1 ★":	"1 ★"
+"1.5 ★✩":	"1.5 ★✩"
+"2 ★★":	"2 ★★"
+"2.5 ★★✩":	"2.5 ★★✩"
+"3 ★★★":	"3 ★★★"
+"3.5 ★★★✩":	"3.5 ★★★✩"
+"4 ★★★★":	"4 ★★★★"
+"4.5 ★★★★✩":	"4.5 ★★★★✩"
+"5 ★★★★★": "5 ★★★★★"
+Commentaire <span class="text-danger">*</span>:	'Commentaire <span class="text-danger">*</span>'
+Laissez nous un commentaire: 'Laissez nous un commentaire'
+Ajouter une note: 'Ajouter une note'
+Date du loisir <span class="text-danger">*</span>:	'Date du loisir <span class="text-danger">*</span>'
+Heure du loisir <span class="text-danger">*</span>:	'Heure du loisir <span class="text-danger">*</span>'
+Confirmer la commande: 'Confirmer la commande'
+Date:	'Date'
+Heure: 'Heure'

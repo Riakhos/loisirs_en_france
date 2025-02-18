@@ -275,7 +275,7 @@
                             <div class="btn-group d-flex justify-content-center align-items-center" role="group" aria-label="Options d'achat" style="border-top: none;">
                                 {% for item in relation.items %}
                                     <a href="{{ path('app_cart_add', { type: (relation.route == 'app_activity' ? 'activity' : 'event'), id: item.id }) }}" type="button" class="btn" aria-label="Ajouter cette activité au panier">Ajouter au panier</a>
-                                    <a href="#" class="btn" aria-label="Réserver cette activité">Réserver</a>
+                                    <a href="{{ path('app_order_date_time') }}" class="btn" aria-label="Réserver cette activité">Réserver</a>
                                 {% endfor %}
                             </div>
                         </div>

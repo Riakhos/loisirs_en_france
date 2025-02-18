@@ -123,21 +123,30 @@ class CartController extends AbstractController
         ];
 
         if (!isset($repositories[$type])) {
-            $this->addFlash('error', "Type d'élément invalide spécifié.");
+            $this->addFlash(
+                'error',
+                "Type d'élément invalide spécifié."
+            );
             return $this->redirect($request->headers->get('referer'));
         }
 
         $object = $repositories[$type]->find($id);
 
         if (!$object) {
-            $this->addFlash('error', ucfirst($type) . " avec l'ID $id n'existe pas.");
+            $this->addFlash(
+                'error',
+                ucfirst($type) . " avec l'ID $id n'existe pas."
+            );
             return $this->redirect($request->headers->get('referer'));
         }
 
         $addMethod = 'add' . ucfirst($type);
         $this->cart->$addMethod($object);
 
-        $this->addFlash('success', ucfirst($type) . " a été ajouté à votre panier.");
+        $this->addFlash(
+            'success',
+            ucfirst($type) . " a été ajouté à votre panier."
+        );
 
         return $this->redirect($request->headers->get('referer'));
     }

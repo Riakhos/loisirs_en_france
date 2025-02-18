@@ -38,6 +38,8 @@ class ProfilController extends AbstractController
 
                 try {
                     $file->move($this->getParameter('profil_pictures_directory'), $newFilename);
+                    /** @var \App\Entity\User $user */
+                    $user = $this->getUser();
                     $user->setImage($newFilename);
                 } catch (FileException $e) {
                     $this->addFlash(

@@ -2,17 +2,46 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Order;
+use App\Form\OrderType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
-final class ViewRatingController extends AbstractController
+final class OrderController extends AbstractController
 {
-    #[Route('/view/rating', name: 'app_view_rating')]
-    public function index(): Response
+    /**
+     * order()
+     * fonction pour passer une commande
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    #[Route('/commande', name: 'app_order')]
+    public function order(Request $request, EntityManagerInterface $em ): Response
     {
-        return $this->render('home/viewrating.html.twig', [
-            'controller_name' => 'ViewRatingController',
+        $order = new Order();
+        $order->setCreateAt(new \DateTime());
+
+        $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($order);
+            $em->flush();
+
+            $this->addFlash('success', 'Commande créée avec succès.');
+
+            return $this->redirectToRoute('order_list');
+        }
+        
+        return $this->render('cart/order.html.twig', [
+            'controller_name' => 'Passer une commande',
+            'orderForm' =>$form->createView(),
+            'order' => $order,
         ]);
     }
 }
