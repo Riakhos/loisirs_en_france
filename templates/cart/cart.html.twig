@@ -39,11 +39,13 @@
                     {% if hasActivity %}
                         <section role="region" aria-labelledby="title-activities">
                             <h2 id="title-activities" class="text-center color-primary-custom my-4">Activités</h2>
+
                             {% for item in cart %}
                                 {% if item.type == 'activity' %}
+                                
                                     {# Carte affichant une activité ajoutée au panier #}
                                     <article class="card mb-4 shadow-sm border-1" role="group" aria-labelledby="activity-{{ item.object.id }}">
-                                        <div class="row g-0">
+                                        <div class="row g-0 text-center">
                                             <div class="col-md-4">
                                                 <picture>
                                                     <source srcset="/uploads/photos/{{ item.object.image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">

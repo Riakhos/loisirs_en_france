@@ -3,12 +3,8 @@
 namespace App\Controller;
 
 use App\Classe\Cart;
-use App\Entity\Event;
-use App\Entity\Offer;
-use App\Entity\Order;
 use App\Form\OrderType;
-use App\Entity\Activity;
-use App\Entity\OrderDetail;
+use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,58 +13,75 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class OrderController extends AbstractController
 {
+    private $orderService;
+    private $cart;
+
+    public function __construct(OrderService $orderService, Cart $cart)
+    {
+        $this->orderService = $orderService;
+        $this->cart = $cart;
+    }
+
+    public function processOrder(Request $request, Cart $cart, OrderService $orderService): Response
+    {
+        $session = $request->getSession();  // Récupérer la session
+        $orderData = $orderService->prepareOrderData($cart->getCart());
+
+        // Passer la session et les autres données nécessaires à votre service
+        $orderService->processOrder($orderData, $this->getUser(), $session);
+
+        return $this->redirectToRoute('app_order_success');
+    }
+
     /**
      * 1ère Étape du tunnel d'achat
      * chooseDateTime()
      * fonction pour passer une commande
-     *
+     * 
      * @param Request $request
      * @param Cart $cart
-     * @param EntityManagerInterface $em
      * @return Response
      */
-    #[Route('/commande/date-et-heure', name: 'app_order_date_time')]
-    public function chooseDateTime(Request $request, Cart $cart, EntityManagerInterface $em): Response
+    #[Route('/commande/date-et-heure', name: 'app_order_date_time', methods: ['GET', 'POST'])]
+    public function chooseDateTime(Request $request ,Cart $cart): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        $products = $cart->getCart(); // Récupérer les produits du panier (Activités, Événements, Offres)
-
-        // Création des données pour le formulaire
-        $orderData = ['items' => []];
-        
-        foreach ($products as $product) {
-            $orderData['items'][] = [
-                'itemId' => $product['object']->getId(),
-                'name' => $product['object']->getName(),
-                'dateStart' => new \DateTime(), // Date par défaut (ajustable)
-                'time' => new \DateTime(), // Heure par défaut
-            ];
+        if (!$user) {
+            $this->addFlash(
+                'error',
+                'Vous devez être connecté pour ajouter une note.'
+            );
+            return $this->redirectToRoute('app_login');
         }
         
-        $orderForm = $this->createForm(OrderType::class, $orderData);
+        $products = $cart->getCart(); // Récupérer les produits du panier (Activités, Événements, Offres)
 
+        if (!$products) {
+            $this->addFlash(
+                'warning',
+                'Votre panier est vide.'
+            );
+            return $this->redirectToRoute('app_cart');
+        }
+        
+        // Préparation des données de commande
+        $orderData = $this->orderService->prepareOrderData($products);
+        
+        // Calcul des détails de la commande
+        $orderDetails = $this->orderService->calculateOrderDetails($this->cart);
+        
+        // Création du formulaire
+        $orderForm = $this->createForm(OrderType::class, $orderData);
         $orderForm->handleRequest($request);
 
+        // Vérification si le formulaire est soumis et valide
         if ($orderForm->isSubmitted() && $orderForm->isValid()) {
-            // Créer un objet Order pour enregistrer ces informations
-            $order = new Order();
-            $order->setUser($user);
-            
-            foreach ($orderForm->get('items')->getData() as $itemData) {
-                $orderDetail = new OrderDetail();
-                $orderDetail->setItemId($itemData['itemId']);
-                $orderDetail->setDateStart($itemData['dateStart']);
-                $orderDetail->setTime($itemData['time']);
-                $orderDetail->setMyOrder($order);
-    
-                $em->persist($orderDetail);
-            }
-            
-            $em->persist($order);
-            $em->flush();
-            
-            // Rediriger vers la page suivante (révision de la commande, paiement, etc.)
+            // Récupérer la session via l'objet Request
+            $session = $request->getSession();
+            $session->set('orderData', $orderForm->getData());
+
+            // Rediriger vers la deuxième étape du processus
             return $this->redirectToRoute('app_order_summary');
         }
 
@@ -76,7 +89,65 @@ final class OrderController extends AbstractController
             'controller_name' => 'Passer une commande',
             'orderForm' => $orderForm->createView(),
             'cart' => $products,
+            'subtotal' => $orderDetails['subtotal'],
+            'tvaDetails' => $orderDetails['tvaDetails'],
+            'totalTva' => $orderDetails['totalTva'],
+            'total' => $orderDetails['total'],
         ]);
     }
+    
+    /**
+     * 2ème Étape du tunnel d'achat : Récapitulatif + Validation finale
+     * orderSummaryAndConfirm()
+     * fonction pour résumer la commande et l'enregistrer
+     *
+     * @param Request $request
+     * @param Cart $cart
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    #[Route('/commande/recapitulatif-et-validation', name: 'app_order_summary', methods: ['POST', 'GET'])]
+    public function orderSummaryAndConfirm(Request $request, Cart $cart): Response
+    {
+        $session = $request->getSession();
+        $orderData = $session->get('orderData');
 
+        if (!$orderData) {
+            $this->addFlash(
+                'error',
+                'Aucune commande en attente.'
+            );
+            return $this->redirectToRoute('app_order_date_time');
+        }
+
+        // Calcul des détails de la commande
+        $orderDetails = $this->orderService->calculateOrderDetails($this->cart);
+        
+        $orderForm = $this->createForm(OrderType::class, $orderData);
+        $orderForm->handleRequest($request);
+
+        if ($orderForm->isSubmitted() && $orderForm->isValid()) {
+            // Récupérer la session depuis la requête
+            $session = $request->getSession();
+        
+            // Processus de création de la commande
+            $this->orderService->processOrder($orderForm->getData(), $this->getUser(), $session);
+
+            $this->addFlash(
+                'success',
+                'Votre commande a bien été enregistrée.'
+            );
+            return $this->redirectToRoute('app_account_reservation');
+        }
+
+        return $this->render('cart/summary.html.twig', [
+            'controller_name' => 'Confirmer ma commande',
+            'orderForm' => $orderForm->createView(),
+            'cart' => $cart->getCart(),
+            'subtotal' => $orderDetails['subtotal'],
+            'tvaDetails' => $orderDetails['tvaDetails'],
+            'totalTva' => $orderDetails['totalTva'],
+            'total' => $orderDetails['total'],
+        ]);
+    }
 }

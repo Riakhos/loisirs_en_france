@@ -24,7 +24,8 @@ class OrderType extends AbstractType
             ->add('submit', SubmitType::class, [
                 'label' => 'Confirmer la commande',
                 'attr' => [
-                    'class' => 'btn btn-primary d-block mx-auto w-40'
+                    'class' => 'btn btn-primary d-block mx-auto w-40',
+                    'data-loading-text' => 'Chargement...'
                 ]
             ])
         ;

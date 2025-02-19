@@ -8,39 +8,152 @@
     {% include "account/navbar.html.twig" %}
 
     {# Conteneur principal de la commande #}
-    <div class="container-fluid bg-background d-flex justify-content-center align-items-center my-3">
-        <div class="row g-4">
-            {# Section principale de la commande #}
+    <div class="container-fluid bg-background d-flex justify-content-center align-items-center my-3" style="max-width: 1200px">
+        <div class="row g-4" style="max-width: 1200px; width: 100%;">
+
+            {# Section : principale de la commande #}
             <div class="col-md-8">
 
                 <section role="region" aria-labelledby="title-order">
-                    <h2 id="title-order" class="text-center color-primary-custom my-4">Détails de la commande</h2>
+                    <h2 id="title-order" class="text-center color-primary-custom my-4">Récapitulatif de votre commande</h2>
                 </section>
 
                 {# Formulaire de commande #}
-                <div class="card shadow-sm border-1 p-4"
-                >
-                    <h3 class="text-center color-primary-custom">Choisissez la date et l'heure de votre loisir</h3>
-                    
-                    
+                <div class="card shadow-sm border-1 p-4">
+                    <h3 class="text-center color-primary-custom">Vérifiez votre commande</h3>
+
+                    {% for itemForm in orderForm.items %}
+                        <div class="card mb-3 p-3 shadow-sm border-1 rounded d-flex flex-column flex-md-row align-items-center">
+                            
+                            {# Image de l'élément #}
+                            <div class="col-12 col-md-4 text-center">
+                                <picture>
+                                    {% if itemForm.vars.data.activityImage %}
+                                        <source srcset="/uploads/photos/{{ itemForm.vars.data.activityImage|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                        <img 
+                                            src="/uploads/photos/{{ itemForm.vars.data.activityImage }}" 
+                                            class="img-fluid rounded object-fit-cover" 
+                                            alt="{{ itemForm.vars.data.name }} - Activité"
+                                            loading="lazy"
+                                            width="150" height="100"
+                                        >
+                                    {% elseif itemForm.vars.data.eventImage %}
+                                        <source srcset="/uploads/photos/{{ itemForm.vars.data.eventImage|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                        <img 
+                                            src="/uploads/photos/{{ itemForm.vars.data.eventImage }}" 
+                                            class="img-fluid rounded object-fit-cover" 
+                                            alt="{{ itemForm.vars.data.name }} - Activité"
+                                            loading="lazy"
+                                            width="150" height="100"
+                                        >
+                                    {% elseif itemForm.vars.data.offerImage %}
+                                        <source srcset="/uploads/photos/{{ itemForm.vars.data.offerImage|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                        <img 
+                                            src="/uploads/photos/{{ itemForm.vars.data.offerImage }}" 
+                                            class="img-fluid rounded object-fit-cover" 
+                                            alt="{{ itemForm.vars.data.name }} - Activité"
+                                            loading="lazy"
+                                            width="150" height="100"
+                                        >
+                                    {% else %}
+                                        <p>Aucune image disponible</p>
+                                    {% endif %}
+                                </picture>
+                            </div>
+                            
+                            {# Formulaire de l'élément #}
+                            <div class="col-12 col-md-8 text-center text-md-start mt-3 mt-md-0">
+                                <h4 class="color-primary-custom">{{ itemForm.vars.data.name }}</h4>
+                                <div>
+                                    <strong>Date du loisir</strong> {{ itemForm.vars.data.dateStart|date('d/m/Y') }}
+                                </div>
+                                {% if itemForm.vars.data.time is defined %}
+                                    <div>
+                                        <strong>Heure du loisir</strong> {{ itemForm.vars.data.time|date('H:i') }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    {% endfor %}
                 </div>
+
             </div>
 
-            {# Colonne de droite pour les informations récapitulatives #}
+            {# Section : informations récapitulatives #}
             <div class="col-md-4">
-                <div class="card p-3 shadow-sm">
-                    <h3 class="color-primary-custom">Résumé de votre commande</h3>
-                    <ul class="list-group list-group-flush">
-                        
-                    </ul>
-                    <div class="mt-3 text-center">
-                        <strong>Total :</strong>
-                        
+                <div class="card shadow-sm border-1 p-3 sticky-top mb-3" role="complementary" aria-labelledby="summary-order">
+                    <div class="row">
+                        <h3 class="col-md-10 text-center color-primary-custom">Résumé de votre commande</h3>
+                        <a href="{{ path('app_cart_remove') }}" class="col-md-2" aria-label="Vider le panier">
+                            <i class="bi bi-trash color-primary-custom" aria-hidden="true"></i>
+                        </a>
                     </div>
+
+                    <hr>
+
+                    <ul class="list-unstyled text-center">
+                        {# Boucle à travers les produits de la commande (cart) #}
+                        {% for product in cart %}
+                            <li class="color-primary-custom">
+                                <strong>{{ product.object.name }}</strong> x{{ product.qty }} 
+                                <strong aria-label="Prix total">{{ (product.object.price * product.qty)|price }}</strong>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <hr>
+
+                    {# Sous-total hors taxes #}
+                    <p class="d-flex justify-content-between">
+                        <span aria-label="Sous-total HT">Sous-total HT :</span> 
+                        <strong>{{ subtotal|price }}</strong>
+                    </p>
+
+                    {# Détails des TVA par taux appliqué #}
+                    {% for rate, amount in tvaDetails %}
+                        <p class="d-flex justify-content-between">
+                            <span aria-label="TVA au taux de {{ rate }}%">TVA ({{ rate }}%) :</span> 
+                            <strong>{{ amount|price }}</strong>
+                        </p>
+                    {% endfor %}
+
+                    {# Total des TVA #}
+                    <p class="d-flex justify-content-between">
+                        <span aria-label="Total TVA">Total TVA :</span> 
+                        <strong>{{ totalTva|price }}</strong>
+                    </p>
+
+                    <hr>
+
+                    {# Afficher le total TTC #}
+                    <p class="d-flex justify-content-between">
+                        <span aria-label="Total TTC">Total TTC :</span> 
+                        <strong class="text-success">{{ total|price }}</strong>
+                    </p>
                 </div>
-                
+
                 <div class="text-center mt-4">
-                    <a href="{{ path('app_cart') }}" class="btn btn-primary">Retour au panier</a>
+                    <div class="gap-2" role="group">
+                        {# <form method="post" action="{{ path('app_order_summary') }}"> #}
+                        {{ form_start(orderForm) }}
+
+                            {# Rendre les champs cachés (ils restent soumis dans le formulaire) #}
+                            {% for itemForm in orderForm.items %}
+                                <div style="display: none;">
+                                    {{ form_widget(itemForm.dateStart) }}
+                                    {{ form_widget(itemForm.time) }}
+                                </div>
+                            {% endfor %}
+                        
+                            {# Afficher uniquement le bouton #}
+                            {{ form_row(orderForm.submit) }}
+                        
+                        {{ form_end(orderForm) }}
+                            {# <button type="submit" class="btn btn-primary">Enregistrer ma commande</button> #}
+                        {# </form> #}
+                        <a href="{{ path('app_cart') }}" class="btn btn-primary">Retour au panier</a>
+                    </div>
                 </div>
             </div>
         </div>
