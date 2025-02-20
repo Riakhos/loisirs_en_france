@@ -31,6 +31,7 @@ class OrderService
         $order->setActivityName(implode(', ', $orderData['activityName']));
         $order->setOfferName(implode(', ', $orderData['offerName']));
         $order->setEventName(implode(', ', $orderData['eventName']));
+        $order->setPartnerName(implode(', ', $orderData['partnerName']));
 
         foreach ($orderData['items'] as $itemData) {
             $orderDetail = new OrderDetail();
@@ -52,6 +53,14 @@ class OrderService
         if (!empty($itemData['time'])) {
             $orderDetail->setTime($itemData['time']);
         }
+        
+        // Pour les noms
+        $orderDetail->setActivityName(isset($itemData['activityName']) ? $itemData['activityName'] : 'Inconnu');
+        $orderDetail->setEventName(isset($itemData['eventName']) ? $itemData['eventName'] : 'Inconnu');
+        $orderDetail->setOfferName(isset($itemData['offerName']) ? $itemData['offerName'] : 'Inconnu');
+
+        
+        // Pour les images
         $orderDetail->setActivityImage($itemData['activityImage']);
         $orderDetail->setEventImage($itemData['eventImage']);
         $orderDetail->setOfferImage($itemData['offerImage']);
@@ -74,6 +83,9 @@ class OrderService
         $orderDetail->setPartnerCity($itemData['partnerCity']);
         $orderDetail->setPartnerName($itemData['partnerName']);
         $orderDetail->setPartnerPostal($itemData['partnerPostal']);
+        $orderDetail->setPartnerWebsite($itemData['partnerWebsite']);
+        $orderDetail->setPartnerPhone($itemData['partnerPhone']);
+        $orderDetail->setPartnerEmail($itemData['partnerEmail']);
         $orderDetail->setMyOrder($order);
     }
 
@@ -138,6 +150,9 @@ class OrderService
         $orderData['partnerCity'][] = $partner ? $partner->getCity() : 'Ville inconnue';
         $orderData['partnerName'][] = $partner ? $partner->getName() : 'Nom inconnu';
         $orderData['partnerPostal'][] = $partner ? $partner->getPostal() : 'Code postal inconnu';
+        $orderData['partnerWebsite'][] = $partner ? $partner->getWebsite() : 'Website inconnu';
+        $orderData['partnerPhone'][] = $partner ? $partner->getPhone() : 'Téléphone inconnu';
+        $orderData['partnerEmail'][] = $partner ? $partner->getEmail() : 'Adresse mail inconnu';
 
         // Ajouter les éléments dans items en vérifiant le type
 		$orderData['items'][] = [
@@ -145,6 +160,9 @@ class OrderService
             'name' => $product['object']->getName(),
             'dateStart' => new \DateTime('+1 day'),
             'time' => null,
+            'activityName' => ($product['type'] === 'activity') ? $name : null,
+            'eventName' => ($product['type'] === 'event') ? $name : null,
+            'offerName' => ($product['type'] === 'offer') ? $name : null,
             'activityImage' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
             'eventImage' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
             'offerImage' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
@@ -161,6 +179,9 @@ class OrderService
             'partnerCity' => $partner ? $partner->getCity() : 'Ville inconnue',
             'partnerName' => $partner ? $partner->getName() : 'Nom inconnu',
             'partnerPostal' => $partner ? $partner->getPostal() : 'Code postal inconnu',
+            'partnerWebsite' => $partner ? $partner->getWebsite() : 'Website inconnu',
+            'partnerPhone' => $partner ? $partner->getPhone() : 'Téléphone inconnu',
+            'partnerEmail' => $partner ? $partner->getEmail() : 'Adresse mail inconnu',
         ];
     }
 

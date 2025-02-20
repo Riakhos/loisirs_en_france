@@ -1,0 +1,127 @@
+{# {% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block main %} #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande{% endblock %}
+
+{% block body %}
+    <div class="container my-4">
+        <h2 class="text-center my-4 color-primary-custom">Détails de la commande n°{{ order.id }}</h2>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <p><strong>Passée le :</strong> {{ order.createAt|date('d/m/Y H:i') }}</p>
+                <p><strong>Statut :</strong> {{ include('admin/status.html.twig', { field: {'value': order.state } }) }}</p>
+                <p><strong>Prix total :</strong> {{ order.cartPrice|price }}</p>
+                <p><strong>Partenaire :</strong> {{ order.partnerName }}</p>
+            </div>
+        </div>
+
+        <h3 class="text-center my-4 color-primary-custom">Contenu de la commande</h3>
+
+        <table class="table table-bordered text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Quantité</th>
+					<th scope="col">Prix H.T</th>
+					<th scope="col">TVA</th>
+					<th scope="col">Total T.T.C</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detail in order.orderDetails %}
+                    <tr>
+                        <td>
+                            {% if detail.activityImage %}
+								<picture>
+									<source srcset="/uploads/photos/{{ detail.activityImage|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+									<img src="/uploads/photos/{{ detail.activityImage }}" class="img-fluid rounded" width="100" alt="{{ detail.activityName }}">
+								</picture>
+							{% elseif detail.offerImage %}
+								<picture>
+									<source srcset="/uploads/photos/{{ detail.offerImage|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+									<img src="/uploads/photos/{{ detail.offerImage }}" class="img-fluid rounded" width="100" alt="{{ detail.offerName }}">
+								</picture>
+							{% elseif detail.eventImage %}
+								<picture>
+									<source srcset="/uploads/photos/{{ detail.eventImage|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+									<img src="/uploads/photos/{{ detail.eventImage }}" class="img-fluid rounded" width="100" alt="{{ detail.eventName }}">
+								</picture>
+							{% else %}
+								<span>Aucune image</span>
+							{% endif %}
+                        </td>
+                        <td>
+							{% if detail.activityName %}
+								{{ detail.activityName }}
+							{% elseif detail.offerName %}
+								{{ detail.offerName }}
+							{% elseif detail.eventName %}
+								{{ detail.eventName }}
+							{% else %}
+								<span>Nom inconnu</span>
+							{% endif %}
+						</td>
+                        <td>
+							{% if detail.activityQuantity %}
+								x{{ detail.activityQuantity }}
+							{% elseif detail.offerQuantity %}
+								x{{ detail.offerQuantity }}
+							{% elseif detail.eventQuantity %}
+								x{{ detail.eventQuantity }}
+							{% else %}
+								<span>0</span>
+							{% endif %}
+						</td>
+                        <td>
+							{% if detail.activityPrice %}
+								{{ (detail.activityPrice / (1 + (detail.activityTva / 100)))|price }}
+							{% elseif detail.offerPrice %}
+								{{ (detail.offerPrice / (1 + (detail.offerTva / 100)))|price }}
+							{% elseif detail.eventPrice %}
+								{{ (detail.eventPrice / (1 + (detail.eventTva / 100)))|price }}
+							{% else %}
+								<span>Prix inconnu</span>
+							{% endif %}
+						</td>
+                        <td>
+							{% if detail.activityTva is defined %}
+								{{ detail.activityTva }}%
+							{% elseif detail.offerTva is defined %}
+								{{ detail.offerTva }}%
+							{% elseif detail.eventTva is defined %}
+								{{ detail.eventTva }}%
+							{% else %}
+								<span>0%</span>
+							{% endif %}
+						</td>
+                        <td>
+							{% if detail.activityPrice is defined and detail.activityQuantity is defined %}
+								{{ (detail.activityPrice * detail.activityQuantity)|price }}
+							{% elseif detail.offerPrice is defined and detail.offerQuantity is defined %}
+								{{ (detail.offerPrice * detail.offerQuantity)|price }}
+							{% elseif detail.eventPrice is defined and detail.eventQuantity is defined %}
+								{{ (detail.eventPrice * detail.eventQuantity)|price }}
+							{% else %}
+								<span>0€</span>
+							{% endif %}
+						</td>
+                    </tr>
+            </tbody>
+        </table>
+
+        <div class="text-end mt-4">
+			<p><strong>Total H.T :</strong> {{ detail.getTotalHt|price }}</p>
+			<p><strong>Total TVA :</strong> {{ detail.getTotalTva|price }}</p>
+			<p class="fs-4"><strong>Total T.T.C :</strong> {{ detail.getTotalTtc|price }}</p>
+        </div>
+	{% endfor %}
+
+        <div class="text-center mt-4">
+            <a href="{{ path('admin', { crudController: 'App\\Controller\\Admin\\OrderCrudController' }) }}" class="btn btn-primary">Retour à la liste</a>
+        </div>
+    </div>
+{% endblock %}

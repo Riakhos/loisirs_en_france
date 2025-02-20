@@ -28,6 +28,10 @@
     background-color: var(--secondary-color);
 }
 
+.bg-secondaryRed {
+    background-color: var(--tertiary-color);
+}
+
 .bg-background {
     background-color: var(--background-color);
 }
@@ -194,4 +198,13 @@ h1, h2, h3, h4, h5, h6 {
     --bs-pagination-disabled-color: var(--primary-color);
     --bs-pagination-disabled-bg: var(--secondary-color);
     --bs-pagination-disabled-border-color: var(--tertiary-color);
+}
+
+.table>:not(caption)>*>* {
+    --bs-table-color: var(--primary-color);
+    --bs-table-bg: var(--bg-background);
+}
+
+.table-dark {
+    --bs-table-border-color: rgba(0, 0, 0, 0.175);
 }

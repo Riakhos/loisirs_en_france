@@ -1,9 +1,9 @@
-{% if order.state == 0 %}
+{% if field.value == 0 %}
 	<span class="badge badge bg-background color-primary-custom border-hover-custom">En attente de paiement</span>
-{% elseif order.state == 1 %}
+{% elseif field.value == 1 %}
 	<span class="badge bg-primaryBlue color-secondary-custom border-secondary-custom">Paiement validé</span>
-{% elseif order.state == 3 %}
+{% elseif field.value == 2 %}
 	<span class="badge bg-secondaryYellow color-primary-custom border-hover-custom">En cours</span>
-{% elseif order.state == 3 %}
+{% elseif field.value == 3 %}
 	<span class="badge bg-secondaryRed color-primary-custom border-hover-custom">Terminée</span>
 {% endif %}

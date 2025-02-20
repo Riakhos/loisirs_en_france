@@ -83,6 +83,21 @@ class OrderDetail
     #[ORM\Column]
     private ?int $itemId = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $partnerWebsite = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $partnerPhone = null;
+
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $partnerEmail = null;
+
+    #[ORM\Column]
+    private ?float $productPrice = null;
+
+    #[ORM\Column]
+    private ?float $productTva = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -363,4 +378,95 @@ class OrderDetail
 
         return $this;
     }
+
+    public function getPartnerWebsite(): ?string
+    {
+        return $this->partnerWebsite;
+    }
+
+    public function setPartnerWebsite(?string $partnerWebsite): static
+    {
+        $this->partnerWebsite = $partnerWebsite;
+
+        return $this;
+    }
+
+    public function getPartnerPhone(): ?string
+    {
+        return $this->partnerPhone;
+    }
+
+    public function setPartnerPhone(?string $partnerPhone): static
+    {
+        $this->partnerPhone = $partnerPhone;
+
+        return $this;
+    }
+
+    public function getPartnerEmail(): ?string
+    {
+        return $this->partnerEmail;
+    }
+
+    public function setPartnerEmail(?string $partnerEmail): static
+    {
+        $this->partnerEmail = $partnerEmail;
+
+        return $this;
+    }
+
+    public function getProductPrice(): ?float
+    {
+        return $this->getActivityPrice() + $this->getEventPrice() + $this->getOfferPrice();
+    }
+
+    public function getProductTva(): ?float
+    {
+        return $this->getActivityTva() + $this->getEventTva() + $this->getOfferTva();
+    }
+
+    public function getTotalHt()
+    {
+        $totalHT = 0;
+        
+        // Récupération des quantités
+        $totalQuantity = $this->getActivityQuantity() + $this->getEventQuantity() + $this->getOfferQuantity();
+
+        if ($this->getProductTva() > 0) {
+            $coeff = 1 + ($this->getProductTva() / 100);
+            $priceHT = $this->getProductPrice() / $coeff; // Conversion du prix TTC en HT
+        } else {
+            $priceHT = $this->getProductPrice(); // Pas de TVA, donc prix HT = prix TTC
+        }
+
+        $totalHT += $priceHT * $totalQuantity;
+        
+        return $totalHT;
+    }
+
+    public function getTotalTva()
+    {
+        $totalTva = 0;
+
+        // Récupération des quantités
+        $totalQuantity = $this->getActivityQuantity() + $this->getEventQuantity() + $this->getOfferQuantity();
+
+        if ($this->getProductTva() > 0) {
+            $coeff = 1 + ($this->getProductTva() / 100);
+            $priceHT = $this->getProductPrice() / $coeff; // Prix HT
+            $tva = $this->getProductPrice() - $priceHT; // TVA = Prix TTC - Prix HT
+        } else {
+            $tva = 0; // Pas de TVA
+        }
+
+        $totalTva += $tva * $totalQuantity;
+        
+        return $totalTva;
+    }
+
+    public function getTotalTtc()
+    {
+        return $this->getTotalHt() + $this->getTotalTva();
+    }
+
 }

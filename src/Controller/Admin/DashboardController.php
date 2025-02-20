@@ -15,6 +15,7 @@ use App\Entity\Category;
 use App\Entity\Exclusive;
 use App\Entity\Eventstrend;
 use App\Entity\Subcategory;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\Admin\UserCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,6 +26,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+    
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
@@ -32,8 +40,8 @@ class DashboardController extends AbstractDashboardController
 
         // Option 1. Vous pouvez faire en sorte que votre tableau de bord soit redirigé vers une page commune de votre backend
         
-        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
+        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        // return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
 
         // Option 2. Vous pouvez faire en sorte que votre tableau de bord redirige vers différentes pages en fonction de l'utilisateur
         //
@@ -45,6 +53,21 @@ class DashboardController extends AbstractDashboardController
         // (astuce : il est plus facile d'utiliser un modèle qui s'étend à partir de @EasyAdmin/page/content.html.twig)
         //
         // return $this->render('some/path/my-dashboard.html.twig');
+        
+        // Utilisez $this->entityManager pour accéder à Doctrine
+        $userCount = $this->entityManager->getRepository(User::class)->count([]);
+        $orderCount = $this->entityManager->getRepository(Order::class)->count([]);
+        $totalRevenue = $this->entityManager->getRepository(Order::class)
+            ->createQueryBuilder('o')
+            ->select('SUM(o.cartPrice)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $this->render('admin/dashboard.html.twig', [
+            'userCount' => $userCount,
+            'orderCount' => $orderCount,
+            'totalRevenue' => $totalRevenue,
+        ]);
     }
 
     public function configureDashboard(): Dashboard
@@ -55,6 +78,8 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::linkToRoute('Tableau de bord', 'fa fa-chart-line', 'admin');
+        
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
         // 📌 Espace Membres et Partenaires
@@ -90,5 +115,4 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Commandes', 'fas fa-list', Order::class)
         ]);
     }
-
 }

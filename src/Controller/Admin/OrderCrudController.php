@@ -10,7 +10,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -48,7 +47,7 @@ class OrderCrudController extends AbstractCrudController
     {
         $order = $context->getEntity()->getInstance();
 
-        return $this->render('cart/reservation.html.twig', [
+        return $this->render('admin/reservation.html.twig', [
             'order' => $order
         ]);
     }
@@ -64,7 +63,7 @@ class OrderCrudController extends AbstractCrudController
                 ->setColumns(6)
             ,
             NumberField::new('state', 'Statut')
-                ->setTemplatePath('cart/state.html.twig')
+                ->setTemplatePath('admin/status.html.twig')
                 ->setColumns(6)
             ,
             FormField::addPanel('Informations du client'),
@@ -87,8 +86,8 @@ class OrderCrudController extends AbstractCrudController
             TextField::new('eventName', 'Événement')
                 ->setColumns(6)
             ,
-            MoneyField::new('cartPrice', 'Prix total')
-                ->setCurrency('EUR')
+            NumberField::new('cartPrice', 'Prix total')
+                ->setNumDecimals(2) // Force l'affichage de 2 décimales
                 ->setColumns(6)
             ,
         ];
