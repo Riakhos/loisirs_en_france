@@ -6,6 +6,7 @@ use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Offer;
+use App\Entity\Order;
 use App\Entity\Trend;
 use App\Entity\Rating;
 use App\Entity\Partner;
@@ -82,6 +83,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Critères & Avis', 'fas fa-star')->setSubItems([
             MenuItem::linkToCrud('Tags', 'fas fa-tags', Tag::class),
             MenuItem::linkToCrud('Notes et avis', 'fas fa-star-half-alt', Rating::class),
+        ]);
+        
+        // 📌 Commandes
+        yield MenuItem::subMenu('Commandes', 'fas fa-star')->setSubItems([
+            MenuItem::linkToCrud('Commandes', 'fas fa-list', Order::class)
         ]);
     }
 

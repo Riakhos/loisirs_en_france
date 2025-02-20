@@ -49,7 +49,7 @@ class Offer
     #[ORM\ManyToMany(targetEntity: Activity::class, inversedBy: 'offers')]
     private Collection $activity;
 
-    #[ORM\ManyToOne(inversedBy: 'offers')]
+    #[ORM\ManyToOne(targetEntity: Partner::class, inversedBy: 'offers', fetch: 'EAGER')]
     private ?Partner $partners = null;
 
     #[ORM\Column]

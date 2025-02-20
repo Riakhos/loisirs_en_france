@@ -4,7 +4,9 @@ namespace App\Service;
 
 use App\Classe\Cart;
 use App\Entity\Order;
+use App\Entity\Partner;
 use App\Entity\OrderDetail;
+use Doctrine\Persistence\Proxy;
 use Doctrine\ORM\EntityManagerInterface;
 
 class OrderService
@@ -20,6 +22,7 @@ class OrderService
 
     public function processOrder(array $orderData, $user)
     {
+        // dd($orderData);
         $order = new Order();
         $order->setUser($user);
         $order->setCreateAt(new \DateTime());
@@ -52,15 +55,21 @@ class OrderService
         $orderDetail->setActivityImage($itemData['activityImage']);
         $orderDetail->setEventImage($itemData['eventImage']);
         $orderDetail->setOfferImage($itemData['offerImage']);
-        $orderDetail->setActivityQuantity($itemData['activityQuantity']);
-        $orderDetail->setEventQuantity($itemData['eventQuantity']);
-        $orderDetail->setOfferQuantity($itemData['offerQuantity']);
-        $orderDetail->setActivityPrice($itemData['activityPrice']);
-        $orderDetail->setEventPrice($itemData['eventPrice']);
-        $orderDetail->setOfferPrice($itemData['offerPrice']);
-        $orderDetail->setActivityTva($itemData['activityTva']);
-        $orderDetail->setEventTva($itemData['eventTva']);
-        $orderDetail->setOfferTva($itemData['offerTva']);
+        
+        // Pour chaque quantité, vérifiez si c'est un tableau avant d'y accéder
+        $orderDetail->setActivityQuantity(is_array($itemData['activityQuantity']) ? (int) $itemData['activityQuantity'][0] : (int) $itemData['activityQuantity']);
+        $orderDetail->setEventQuantity(is_array($itemData['eventQuantity']) ? (int) $itemData['eventQuantity'][0] : (int) $itemData['eventQuantity']);
+        $orderDetail->setOfferQuantity(is_array($itemData['offerQuantity']) ? (int) $itemData['offerQuantity'][0] : (int) $itemData['offerQuantity']);
+
+        // Pour les prix et TVA
+        $orderDetail->setActivityPrice(is_array($itemData['activityPrice']) ? (float) $itemData['activityPrice'][0] : (float) $itemData['activityPrice']);
+        $orderDetail->setEventPrice(is_array($itemData['eventPrice']) ? (float) $itemData['eventPrice'][0] : (float) $itemData['eventPrice']);
+        $orderDetail->setOfferPrice(is_array($itemData['offerPrice']) ? (float) $itemData['offerPrice'][0] : (float) $itemData['offerPrice']);
+
+        $orderDetail->setActivityTva(is_array($itemData['activityTva']) ? (float) $itemData['activityTva'][0] : (float) $itemData['activityTva']);
+        $orderDetail->setEventTva(is_array($itemData['eventTva']) ? (float) $itemData['eventTva'][0] : (float) $itemData['eventTva']);
+        $orderDetail->setOfferTva(is_array($itemData['offerTva']) ? (float) $itemData['offerTva'][0] : (float) $itemData['offerTva']);
+
         $orderDetail->setPartnerAddress($itemData['partnerAddress']);
         $orderDetail->setPartnerCity($itemData['partnerCity']);
         $orderDetail->setPartnerName($itemData['partnerName']);
@@ -70,98 +79,89 @@ class OrderService
 
     public function prepareOrderData($cart)
     {
-        $orderData = ['items' => []];
+        $orderData = [
+            'items' => [],
+            'activityName' => [],
+            'offerName' => [],
+            'eventName' => [],
+            'partner' => []
+        ];
+        
         $totalPrice = 0;
-
+        
         foreach ($cart as $product) {
             $totalPrice += $product['object']->getPrice() * $product['qty'];
-
+        
             // Récupérer les différentes informations produits pour l'ordre
             $this->populateOrderData($product, $orderData);
         }
-
+        // dd($orderData);
         $orderData['cartPrice'] = $totalPrice;
-
+        
         return $orderData;
     }
 
     private function populateOrderData($product, &$orderData)
     {
-        if (method_exists($product['object'], 'getActivityName')) {
-			$orderData['activityName'][] = $product['object']->getActivityName();
-		} else {
-			$orderData['activityName'][] = ''; // Valeur par défaut si non définie
-		}
-		
-		if (method_exists($product['object'], 'getOfferName')) {
-			$orderData['offerName'][] = $product['object']->getOfferName();
-		} else {
-			$orderData['offerName'][] = ''; // Valeur par défaut si non définie
-		}
-		
-		if (method_exists($product['object'], 'getEventName')) {
-			$orderData['eventName'][] = $product['object']->getEventName();
-		} else {
-			$orderData['eventName'][] = ''; // Valeur par défaut si non définie
-		}
+        // Vérification si le nom existe pour chaque type de produit
+        $name = !empty($product['object']->getName()) ? $product['object']->getName() : 'Inconnu';
 
-		if (method_exists($product['object'], 'getActivityImage')) {
-			$orderData['activityImage'][] = $product['object']->getActivityImage();
-		} else {
-			$orderData['activityImage'][] = ''; // Valeur par défaut si non définie
-		}
+        // Pour les noms
+        $orderData['activityName'][] = ($product['type'] === 'activity') ? $name : 'Inconnu';
+        $orderData['offerName'][] = ($product['type'] === 'offer') ? $name : 'Inconnu';
+        $orderData['eventName'][] = ($product['type'] === 'event') ? $name : 'Inconnu';
 
-		if (method_exists($product['object'], 'getEventImage')) {
-			$orderData['eventImage'][] = $product['object']->getEventImage();
-		} else {
-			$orderData['eventImage'][] = ''; // Valeur par défaut si non définie
-		}
+        // Pour les images
+        $image = !empty($product['object']->getImage()) ? $product['object']->getImage() : 'Inconnu';
+        $orderData['activityImage'][] = ($product['type'] === 'activity') ? $image : 'Inconnu';
+        $orderData['eventImage'][] = ($product['type'] === 'event') ? $image : 'Inconnu';
+        $orderData['offerImage'][] = ($product['type'] === 'offer') ? $image : 'Inconnu';
 
-		if (method_exists($product['object'], 'getOfferImage')) {
-			$orderData['offerImage'][] = $product['object']->getImage();
-		} else {
-			$orderData['offerImage'][] = ''; // Valeur par défaut si non définie
-		}
+        // Quantités
+        $orderData['activityQuantity'][] = ($product['type'] === 'activity') ? $product['qty'] : 0;
+        $orderData['eventQuantity'][] = ($product['type'] === 'event') ? $product['qty'] : 0;
+        $orderData['offerQuantity'][] = ($product['type'] === 'offer') ? $product['qty'] : 0;
 
-		$orderData['activityQuantity'][] = method_exists($product['object'], 'getActivityQuantity') ? $product['object']->getActivityQuantity() : 1;
-		$orderData['eventQuantity'][] = method_exists($product['object'], 'getEventQuantity') ? $product['object']->getEventQuantity() : 1;
-		$orderData['offerQuantity'][] = method_exists($product['object'], 'getOfferQuantity') ? $product['object']->getOfferQuantity() : 1;
+        // Prix
+        $orderData['activityPrice'][] = ($product['type'] === 'activity') ? $product['object']->getPrice() : 0;
+        $orderData['eventPrice'][] = ($product['type'] === 'event') ? $product['object']->getPrice() : 0;
+        $orderData['offerPrice'][] = ($product['type'] === 'offer') ? $product['object']->getPrice() : 0;
 
-		$orderData['activityPrice'][] = method_exists($product['object'], 'getActivityPrice') ? $product['object']->getActivityPrice() : 0;
-		$orderData['eventPrice'][] = method_exists($product['object'], 'getEventPrice') ? $product['object']->getEventPrice() : 0;
-		$orderData['offerPrice'][] = method_exists($product['object'], 'getOfferPrice') ? $product['object']->getOfferPrice() : 0;
+        // TVA
+        $orderData['activityTva'][] = ($product['type'] === 'activity') ? $product['object']->getTva() : 0;
+        $orderData['eventTva'][] = ($product['type'] === 'event') ? $product['object']->getTva() : 0;
+        $orderData['offerTva'][] = ($product['type'] === 'offer') ? $product['object']->getTva() : 0;
 
-		$orderData['activityTva'][] = method_exists($product['object'], 'getActivityTva') ? $product['object']->getActivityTva() : 0;
-		$orderData['eventTva'][] = method_exists($product['object'], 'getEventTva') ? $product['object']->getEventTva() : 0;
-		$orderData['offerTva'][] = method_exists($product['object'], 'getOfferTva') ? $product['object']->getOfferTva() : 0;
+        // Récupération des données de partenaire
+        $partner = $this->entityManager->getRepository(Partner::class)->find($product['object']->getPartners()->getId());
+        $orderData['partnerAddress'][] = $partner ? $partner->getAddress() : 'Adresse inconnue';
+        $orderData['partnerCity'][] = $partner ? $partner->getCity() : 'Ville inconnue';
+        $orderData['partnerName'][] = $partner ? $partner->getName() : 'Nom inconnu';
+        $orderData['partnerPostal'][] = $partner ? $partner->getPostal() : 'Code postal inconnu';
 
-		$orderData['partnerAddress'][] = method_exists($product['object'], 'getPartnerAddress') ? $product['object']->getPartnerAddress() : '';
-		$orderData['partnerCity'][] = method_exists($product['object'], 'getPartnerCity') ? $product['object']->getPartnerCity() : '';
-		$orderData['partnerName'][] = method_exists($product['object'], 'getPartnerName') ? $product['object']->getPartnerName() : '';
-		$orderData['partnerPostal'][] = method_exists($product['object'], 'getPartnerPostal') ? $product['object']->getPartnerPostal() : '';
-
+        // Ajouter les éléments dans items en vérifiant le type
 		$orderData['items'][] = [
-			'itemId' => $product['object']->getId(),
-			'name' => $product['object']->getName(),
-			'dateStart' => new \DateTime('+1 day'), // Date par défaut (ajustable)
-			'time' => null, // Optionnel en fonction du loisir
-			'activityImage' => $product['object']->getImage() ?? '',
-            'eventImage' => $product['object']->getImage() ?? '',
-            'offerImage' => $product['object']->getImage() ?? '',
-			'activityQuantity' => !empty($orderData['activityQuantity']) ? implode(', ', $orderData['activityQuantity']) : 1,
-			'eventQuantity' => !empty($orderData['eventQuantity']) ? implode(', ', $orderData['eventQuantity']) : 1,
-			'offerQuantity' => !empty($orderData['offerQuantity']) ? implode(', ', $orderData['offerQuantity']) : 1,
-			'activityPrice' => !empty($orderData['activityPrice']) ? implode(', ', $orderData['activityPrice']) : 0,
-			'eventPrice' => !empty($orderData['eventPrice']) ? implode(', ', $orderData['eventPrice']) : 0,
-			'offerPrice' => !empty($orderData['offerPrice']) ? implode(', ', $orderData['offerPrice']) : 0,
-			'activityTva' => !empty($orderData['activityTva']) ? implode(', ', $orderData['activityTva']) : 0,
-			'eventTva' => !empty($orderData['eventTva']) ? implode(', ', $orderData['eventTva']) : 0,
-			'offerTva' => !empty($orderData['offerTva']) ? implode(', ', $orderData['offerTva']) : 0,
-			'partnerAddress' => !empty($orderData['partnerAddress']) ? implode(', ', $orderData['partnerAddress']) : '',
-			'partnerCity' => !empty($orderData['partnerCity']) ? implode(', ', $orderData['partnerCity']) : '',
-			'partnerName' => !empty($orderData['partnerName']) ? implode(', ', $orderData['partnerName']) : '',
-			'partnerPostal' => !empty($orderData['partnerPostal']) ? implode(', ', $orderData['partnerPostal']) : '',
-		];
+            'itemId' => $product['object']->getId(),
+            'name' => $product['object']->getName(),
+            'dateStart' => new \DateTime('+1 day'),
+            'time' => null,
+            'activityImage' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
+            'eventImage' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
+            'offerImage' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
+            'activityQuantity' => ($product['type'] === 'activity') ? $product['qty'] : 0,
+            'eventQuantity' => ($product['type'] === 'event') ? $product['qty'] : 0,
+            'offerQuantity' => ($product['type'] === 'offer') ? $product['qty'] : 0,
+            'activityPrice' => ($product['type'] === 'activity') ? $product['object']->getPrice() : 0,
+            'eventPrice' => ($product['type'] === 'event') ? $product['object']->getPrice() : 0,
+            'offerPrice' => ($product['type'] === 'offer') ? $product['object']->getPrice() : 0,
+            'activityTva' => ($product['type'] === 'activity') ? $product['object']->getTva() : 0,
+            'eventTva' => ($product['type'] === 'event') ? $product['object']->getTva() : 0,
+            'offerTva' => ($product['type'] === 'offer') ? $product['object']->getTva() : 0,
+            'partnerAddress' => $partner ? $partner->getAddress() : 'Adresse inconnue',
+            'partnerCity' => $partner ? $partner->getCity() : 'Ville inconnue',
+            'partnerName' => $partner ? $partner->getName() : 'Nom inconnu',
+            'partnerPostal' => $partner ? $partner->getPostal() : 'Code postal inconnu',
+        ];
     }
 
     public function calculateOrderDetails(Cart $cart)
