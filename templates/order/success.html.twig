@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container my-5 text-center">
+		<picture>
+			<source srcset="/icon/sac-de-courses.webp" type="image/webp">
+			<img 
+				src="/icon/sac-de-courses.png" 
+				class="img-fluid rounded object-fit-cover" 
+				alt="sacs de courses"
+				loading="lazy"
+				width="150" height="100"
+			>
+		</picture>
+		<h1 class="color-primary-custom">Merci pour votre commande</h1>
+
+		<a href="{{ path('app_account_reservation') }}" class="btn btn-primary">Consulter ma commande</a>
+
+    </div>
+{% endblock %}

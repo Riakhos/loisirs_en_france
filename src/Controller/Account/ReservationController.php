@@ -18,15 +18,15 @@ class ReservationController extends AbstractController
     {
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
-
+        
         // Récupérer le numéro de page depuis l'URL (défaut : 1)
         $currentPage = max(1, $request->query->getInt('page', 1));
         $limit = 10; // Nombre de commandes par page
         
-        // Récupérer l'état choisi dans l'URL
-        $state = $request->query->getInt('state');
-
-        // Construire le critère de recherche
+        // Récupérer l'état choisi dans l'URL (par défaut toutes les commandes)
+        $state = $request->query->getInt('state', 1);
+        
+        // Construire le critère de recherche de commandes
         $criteria = ['user' => $user];
         if ($state !== null) {
             $criteria['state'] = $state;
@@ -37,18 +37,43 @@ class ReservationController extends AbstractController
         $totalPages = ceil($totalOrders / $limit);
         
         // Récupérer les commandes avec pagination
-        $orders = $em->getRepository(Order::class)->findBy(
-            $criteria,
-            ['createAt' => 'DESC'], 
-            $limit, 
-            ($currentPage - 1) * $limit
-        );
+        $orders = $em->getRepository(Order::class)
+            ->createQueryBuilder('o')
+            ->leftJoin('o.orderDetails', 'od') // Jointure avec OrderDetails
+            ->addSelect('od') // Récupère également les details de commande
+            ->where('o.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('o.state = :state') // Applique un filtre sur l'état de la commande
+            ->setParameter('state', $state)
+            ->orderBy('o.createAt', 'DESC')
+            ->setFirstResult(($currentPage - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
 
+         // Vérifier si la dateStart est passée et mettre à jour l'état
+        $today = new \DateTime(); // Date actuelle
+        foreach ($orders as $order) {
+            // Parcourir les OrderDetails de chaque commande
+            foreach ($order->getOrderDetails() as $orderDetail) {
+                // Vérifier si dateStart est passée et si l'état est '2' (validée)
+                if ($orderDetail->getDateStart() < $today && $order->getState() == 2) {
+                    // Mettre à jour l'état de la commande
+                    $order->setState(3); // Passer l'état à 3 (expédiée)
+                    $em->persist($order); // Persister la commande mise à jour
+                }
+            }
+        }
+        
+        // Enregistrer les modifications dans la base de données
+        $em->flush();
+        
         // Calculer le nombre de commandes par état
-        $totalPending = $em->getRepository(Order::class)->count(['user' => $user, 'state' => 0]);
-        $totalValidated = $em->getRepository(Order::class)->count(['user' => $user, 'state' => 1]);
-        $totalShipped = $em->getRepository(Order::class)->count(['user' => $user, 'state' => 2]);
+        $totalPending = $em->getRepository(Order::class)->count(['user' => $user, 'state' => 1]);
+        $totalValidated = $em->getRepository(Order::class)->count(['user' => $user, 'state' => 2]);
         $totalCompleted = $em->getRepository(Order::class)->count(['user' => $user, 'state' => 3]);
+        $totalCancelled = $em->getRepository(Order::class)->count(['user' => $user, 'state' => 4]);
         
         return $this->render('account/reservation.html.twig', [
             'controller_name' => 'Vos Réservations',
@@ -56,12 +81,48 @@ class ReservationController extends AbstractController
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
             'totalOrders' =>$totalOrders,
-            'state' => $state,
             'totalOrders' => $totalOrders,
+            'state' => $state,
             'totalPending' => $totalPending,
             'totalValidated' => $totalValidated,
-            'totalShipped' => $totalShipped,
             'totalCompleted' => $totalCompleted,
+            'totalCancelled' => $totalCancelled,
         ]);
+    }
+
+    #[Route('/compte/reservation/annuler/{id_order}', name: 'app_account_cancel_order')]
+    public function cancelOrder(int $id_order, EntityManagerInterface $em): Response
+    {
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+        
+        // Récupérer la commande à partir de son ID
+        $order = $em->getRepository(Order::class)->find([
+            'id' => $id_order
+        ]);
+        
+        // Vérifier si la commande existe et si son état est '1' (en attente de paiement)
+        if (!$order || $order->getState() !== 1) {
+            // Si la commande n'existe pas ou n'est pas dans l'état attendu, rediriger avec un message d'erreur
+            $this->addFlash(
+                'error',
+                'Commande invalide ou déjà traitée.'
+            );
+            return $this->redirectToRoute('app_account_reservation');
+        }
+
+        // Mettre à jour l'état de la commande à '4' (annulée)
+        $order->setState(4); // '4' correspond à l'état annulé
+        $em->persist($order);
+        $em->flush(); // Enregistrer les modifications
+
+        // Ajouter un message de succès
+        $this->addFlash(
+            'success',
+            'Commande annulée avec succès.'
+        );
+        
+        // Rediriger l'utilisateur vers la page des réservations
+        return $this->redirectToRoute('app_account_reservation');
     }
 }

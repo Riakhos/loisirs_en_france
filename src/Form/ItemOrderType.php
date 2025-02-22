@@ -33,6 +33,7 @@ class ItemOrderType extends AbstractType
                 'label' => 'Choisissez la date de votre visite',
                 'required' => true,
                 'widget' => 'single_text',
+                'data' => new \DateTime('+1 day'),
                 'constraints' => [
                     new NotBlank(['message' => 'Veuillez choisir une date.']),
                     new GreaterThanOrEqual([
@@ -42,8 +43,8 @@ class ItemOrderType extends AbstractType
                 ]
             ])
             ->add('time', TimeType::class, [
-                'label' => "Choisissez l'heure de votre visite si nécessaire",
-                'required' => false,
+                'label' => "Choisissez l'heure de votre visite.",
+                'required' => true,
                 'widget' => 'single_text',
                 'constraints' => [
                     new Optional()

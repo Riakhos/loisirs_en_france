@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choisissez la date et l'heure{% endblock %}
+
+{% block body %}
+
+    {# Barre de navigation #}
+    {% include "account/navbar.html.twig" %}
+
+    <div class="container-fluid bg-background d-flex justify-content-center align-items-center my-3" style="max-width: 1200px">
+        <div class="row g-4" style="max-width: 1200px; width: 100%;"> 
+
+            {# Section principale de la commande #}
+            <div class="col-md-8">
+                <section role="region" aria-labelledby="title-order">
+                    <h2 id="title-order" class="text-center color-primary-custom my-4">Détails de la commande</h2>
+                </section>
+
+                <div class="card shadow-sm border-1 p-4">
+                    <h3 class="text-center color-primary-custom">Choisissez la date et l'heure de votre loisir</h3>
+
+                    {{ form_start(orderForm, { 'method': 'POST' }) }}
+                    
+                        {# Itération à travers les items du formulaire #}
+                        {% for itemForm in orderForm.items %}
+                            <div class="card mb-3 p-3 shadow-sm border-1 rounded d-flex flex-row align-items-center">
+                                {# Affichage de l'image si disponible #}
+                                <div class="col-md-4">
+                                    <picture>
+                                        {% set image = itemForm.vars.data.activityImage ?? itemForm.vars.data.eventImage ?? itemForm.vars.data.offerImage %}
+                                        {% if image %}
+                                            <source srcset="/uploads/photos/{{ image|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                            <img 
+                                                src="/uploads/photos/{{ image }}" 
+                                                class="img-fluid rounded object-fit-cover" 
+                                                alt="{{ itemForm.vars.data.name }} - Image"
+                                                loading="lazy"
+                                                width="150" height="100"
+                                            >
+                                        {% else %}
+                                            <p>Aucune image disponible</p>
+                                        {% endif %}
+                                    </picture>
+                                </div>
+
+                                {# Détails du produit #}
+                                <div class="col-md-8">
+                                    <h4 class="color-primary-custom">{{ itemForm.name.vars.value }}</h4>
+                                    
+                                    <div>
+                                        {{ form_row(itemForm.dateStart) }}
+                                    </div>
+                                    
+                                    {# Affichage de l'heure si disponible #}
+                                    {% if itemForm.time is defined %}
+                                        <div>
+                                            {{ form_row(itemForm.time) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="text-center">
+                            {{ form_row(orderForm.submit) }}
+                        </div>
+
+                    {{ form_end(orderForm) }}
+                </div>
+            </div>
+
+            {# Section récapitulative de la commande #}
+            <div class="col-md-4">
+                <div class="card shadow-sm border-1 p-3 sticky-top" role="complementary" aria-labelledby="summary-order">
+                    <div class="row">
+                        <h3 class="col-md-10 text-center color-primary-custom">Résumé de votre commande</h3>
+                        <a href="{{ path('app_cart_remove') }}" class="col-md-2" aria-label="Vider le panier">
+                            <i class="bi bi-trash color-primary-custom" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                    <hr>
+
+                    <ul class="list-unstyled text-center">
+                        {% for product in products %}
+                            <li class="color-primary-custom">
+                                <strong>{{ product.object.name }}</strong> x{{ product.qty }} 
+                                <strong aria-label="Prix total">{{ (product.object.price * product.qty)|price }}</strong>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <hr>
+
+                    <p class="d-flex justify-content-between">
+                        <span aria-label="Sous-total HT">Sous-total HT :</span> 
+                        <strong>{{ orderDetails.subtotalHT|price }}</strong>
+                    </p>
+
+                    {% for rate, amount in orderDetails.tvaDetails %}
+                        <p class="d-flex justify-content-between">
+                            <span aria-label="TVA au taux de {{ rate }}%">TVA ({{ rate }}%) :</span> 
+                            <strong>{{ amount|price }}</strong>
+                        </p>
+                    {% endfor %}
+
+                    <p class="d-flex justify-content-between">
+                        <span aria-label="Total TVA">Total TVA :</span> 
+                        <strong>{{ orderDetails.totalTva|price }}</strong>
+                    </p>
+
+                    <hr>
+
+                    <p class="d-flex justify-content-between">
+                        <span aria-label="Total TTC">Total TTC :</span> 
+                        <strong class="text-success">{{ orderDetails.totalTTC|price }}</strong>
+                    </p>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ path('app_cart') }}" class="btn btn-primary">Retour au panier</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

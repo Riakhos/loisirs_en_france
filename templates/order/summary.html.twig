@@ -21,7 +21,6 @@
                 {# Formulaire de commande #}
                 <div class="card shadow-sm border-1 p-4">
                     <h3 class="text-center color-primary-custom">Vérifiez votre commande</h3>
-
                     {% for itemForm in orderForm.items %}
                         <div class="card mb-3 p-3 shadow-sm border-1 rounded d-flex flex-column flex-md-row align-items-center">
                             
@@ -94,7 +93,7 @@
 
                     <ul class="list-unstyled text-center">
                         {# Boucle à travers les produits de la commande (cart) #}
-                        {% for product in cart %}
+                        {% for product in products %}
                             <li class="color-primary-custom">
                                 <strong>{{ product.object.name }}</strong> x{{ product.qty }} 
                                 <strong aria-label="Prix total">{{ (product.object.price * product.qty)|price }}</strong>
@@ -107,11 +106,11 @@
                     {# Sous-total hors taxes #}
                     <p class="d-flex justify-content-between">
                         <span aria-label="Sous-total HT">Sous-total HT :</span> 
-                        <strong>{{ subtotal|price }}</strong>
+                        <strong>{{ orderDetails.subtotalHT|price }}</strong>
                     </p>
 
                     {# Détails des TVA par taux appliqué #}
-                    {% for rate, amount in tvaDetails %}
+                    {% for rate, amount in orderDetails.tvaDetails %}
                         <p class="d-flex justify-content-between">
                             <span aria-label="TVA au taux de {{ rate }}%">TVA ({{ rate }}%) :</span> 
                             <strong>{{ amount|price }}</strong>
@@ -121,7 +120,7 @@
                     {# Total des TVA #}
                     <p class="d-flex justify-content-between">
                         <span aria-label="Total TVA">Total TVA :</span> 
-                        <strong>{{ totalTva|price }}</strong>
+                        <strong>{{ orderDetails.totalTva|price }}</strong>
                     </p>
 
                     <hr>
@@ -129,30 +128,16 @@
                     {# Afficher le total TTC #}
                     <p class="d-flex justify-content-between">
                         <span aria-label="Total TTC">Total TTC :</span> 
-                        <strong class="text-success">{{ total|price }}</strong>
+                        <strong class="text-success">{{ orderDetails.totalTTC|price }}</strong>
                     </p>
                 </div>
 
                 <div class="text-center mt-4">
                     <div class="gap-2" role="group">
-                        {# <form method="post" action="{{ path('app_order_summary') }}"> #}
-                        {{ form_start(orderForm) }}
-
-                            {# Rendre les champs cachés (ils restent soumis dans le formulaire) #}
-                            {% for itemForm in orderForm.items %}
-                                <div style="display: none;">
-                                    {{ form_widget(itemForm.dateStart) }}
-                                    {{ form_widget(itemForm.time) }}
-                                </div>
-                            {% endfor %}
-                        
-                            {# Afficher uniquement le bouton #}
-                            {{ form_row(orderForm.submit) }}
-                        
-                        {{ form_end(orderForm) }}
-                            {# <button type="submit" class="btn btn-primary">Enregistrer ma commande</button> #}
-                        {# </form> #}
-                        <a href="{{ path('app_cart') }}" class="btn btn-primary">Retour au panier</a>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="{{ path('app_payment', { 'id_order': order.id }) }}" class="btn btn-primary">Payer</a>
+                            <a href="{{ path('app_cart') }}" class="btn btn-primary">Retour au panier</a>
+                        </div>
                     </div>
                 </div>
             </div>

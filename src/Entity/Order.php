@@ -44,11 +44,14 @@ class Order
     /**
      * @var Collection<int, OrderDetail>
      */
-    #[ORM\OneToMany(targetEntity: OrderDetail::class, mappedBy: 'myOrder')]
+    #[ORM\OneToMany(targetEntity: OrderDetail::class, mappedBy: 'myOrder', cascade: ['persist'])]
     private Collection $orderDetails;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?User $user = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $stripe_session_id = null;
 
     public function __construct()
     {
@@ -194,6 +197,18 @@ class Order
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripe_session_id;
+    }
+
+    public function setStripeSessionId(?string $stripe_session_id): static
+    {
+        $this->stripe_session_id = $stripe_session_id;
 
         return $this;
     }

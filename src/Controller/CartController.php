@@ -42,9 +42,16 @@ class CartController extends AbstractController
      *
      * @return Response Retourne une réponse HTTP contenant la vue du panier.
      */
-    #[Route('/mon-panier', name: 'app_cart')]
-    public function cart(): Response
+    #[Route('/mon-panier/{motif}', name: 'app_cart', defaults: ['motif' => null])]
+    public function cart($motif): Response
     {
+        if ($motif == 'annulation') {
+            $this->addFlash(
+                'info',
+                'Vous pouvez mettre à jour votre panier et votre commande.'
+            );
+        }
+        
         // Calcul des sous-totaux, TVA et total
         $subtotal = $this->cart->getSubtotal();
         $tva = $this->cart->getTva();

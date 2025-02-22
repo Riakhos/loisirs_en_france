@@ -12,6 +12,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <p><strong>Passée le :</strong> {{ order.createAt|date('d/m/Y H:i') }}</p>
+				<p><strong>Stripe Session Id : </strong>{{ order.stripeSessionId }}</p>
                 <p><strong>Statut :</strong> {{ include('admin/status.html.twig', { field: {'value': order.state } }) }}</p>
                 <p><strong>Prix total :</strong> {{ order.cartPrice|price }}</p>
                 <p><strong>Partenaire :</strong> {{ order.partnerName }}</p>

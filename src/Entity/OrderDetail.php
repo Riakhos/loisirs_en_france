@@ -14,7 +14,7 @@ class OrderDetail
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orderDetails')]
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'orderDetails')]
     private ?Order $myOrder = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -91,12 +91,6 @@ class OrderDetail
 
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $partnerEmail = null;
-
-    #[ORM\Column]
-    private ?float $productPrice = null;
-
-    #[ORM\Column]
-    private ?float $productTva = null;
 
     public function getId(): ?int
     {
@@ -360,7 +354,7 @@ class OrderDetail
         return $this->time;
     }
 
-    public function setTime(\DateTimeInterface $time): static
+    public function setTime(?\DateTimeInterface $time): static
     {
         $this->time = $time;
 
@@ -415,6 +409,32 @@ class OrderDetail
         return $this;
     }
 
+    public function getProductName(): ?string
+    {
+        if ($this->getActivityName()) {
+            return $this->getActivityName();
+        } elseif ($this->getEventName()) {
+            return $this->getEventName();
+        } elseif ($this->getOfferName()) {
+            return $this->getOfferName();
+        }
+
+        return null;
+    }
+    
+    public function getProductImage(): ?string
+    {
+        if ($this->getActivityImage()) {
+            return $this->getActivityImage();
+        } elseif ($this->getEventImage()) {
+            return $this->getEventImage();
+        } elseif ($this->getOfferImage()) {
+            return $this->getOfferImage();
+        }
+
+        return null;
+    }
+
     public function getProductPrice(): ?float
     {
         return $this->getActivityPrice() + $this->getEventPrice() + $this->getOfferPrice();
@@ -423,6 +443,11 @@ class OrderDetail
     public function getProductTva(): ?float
     {
         return $this->getActivityTva() + $this->getEventTva() + $this->getOfferTva();
+    }
+    
+    public function getProductQuantity(): ?float
+    {
+        return $this->getActivityQuantity() + $this->getEventQuantity() + $this->getOfferQuantity();
     }
 
     public function getTotalHt()

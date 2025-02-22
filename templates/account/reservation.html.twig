@@ -10,11 +10,11 @@
     {# 🔹 Conteneur principal #}
     <div class="container my-4">
 
-        {% if orders is empty %}
-            <p class="text-center">Vous n'avez encore aucune réservation.</p>
-        {% else %}
+        <div class="row">
+            {% if orders is empty %}
+                <p class="text-center">Vous n'avez encore aucune réservation.</p>
+            {% else %}
 
-            <div class="row">
 
                 {# 🔹 Section principale des commandes #}
                 <div class="col-md-8">
@@ -39,28 +39,40 @@
                                     </div>
 
                                     <div class="card-body">
-
+                                    
                                         <p><strong>Activité :</strong> 
-                                            {% if order.activityName != 'Inconnu' %}
+                                            {% if order.activityName != '' %}
                                                 {{ order.activityName }}
-                                            {% elseif order.eventName != 'Inconnu' %}
+                                            {% elseif order.eventName != '' %}
                                                 {{ order.eventName }}
-                                            {% elseif order.offerName != 'Inconnu' %}
+                                            {% elseif order.offerName != '' %}
                                                 {{ order.offerName }}
+                                            {% else %}
+                                                Aucune activité, événement ou offre disponible
                                             {% endif %}
                                         </p>
                                         <p><strong>Partenaire :</strong> {{ order.partnerName }}</p>
-                                        <p>{% include "cart/state.html.twig" %}</p>
+
+                                        <p>{% include "order/state.html.twig" %}</p>
                                         <p><strong>Prix :</strong> {{ order.cartPrice|price }}</p>
+                                        
+                                        {# 🔹 Ajouter le bouton pour valider le paiement si la commande est en attente de paiement #}
+                                        {% if order.state == 1 %}
+                                            <div class="text-center mt-3">
+                                                <a href="{{ path('app_payment', { 'id_order': order.id }) }}" class="btn btn-primary">Valider le paiement</a>
+                                                <form action="{{ path('app_account_cancel_order', { 'id_order': order.id }) }}" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-primary">Annuler la commande</button>
+                                                </form>
+                                            </div>
+                                        {% endif %}
 
                                     </div>
-
                                     {# 🔹 Collapse des détails de la commande sous forme de carte #}
                                     <div id="orderDetails{{ loop.index }}" class="collapse" data-bs-parent="#orderAccordion">
                                         <div class="card mb-4 shadow-sm border-1">
                                             <div class="card-body">
                                                 <h4 class="text-center color-primary-custom">Détails de la commande</h4>
-
+                                                
                                                 {% for detail in order.orderDetails %}
                                                     <article class="card mb-3 shadow-sm border-1">
                                                         {# Responsive : colonne sur sm, ligne sur md et plus #}
@@ -68,11 +80,14 @@
                                                             <div class="col-md-4 d-flex justify-content-center justify-content-md-start">
                                                                 {# Image centrée sur sm, à gauche sur md+ #}
                                                                 <picture>
-                                                                    <source srcset="/uploads/photos/{{ detail.activityImage|replace({'.jpg': '.webp', '.png': '.webp'}) }}" type="image/webp">
+                                                                    {# Vérifier l'existence de l'image selon l'ordre et choisir l'image appropriée à afficher #}
+                                                                    <source 
+                                                                        srcset="/uploads/photos/{{ detail.activityImage is not empty ? detail.activityImage|replace({'.jpg': '.webp', '.png': '.webp'}) : (detail.eventImage is not empty ? detail.eventImage|replace({'.jpg': '.webp', '.png': '.webp'}) : detail.offerImage|replace({'.jpg': '.webp', '.png': '.webp'})) }}" 
+                                                                        type="image/webp">
                                                                     <img 
-                                                                        src="/uploads/photos/{{ detail.activityImage }}" 
+                                                                        src="/uploads/photos/{{ detail.activityImage is not empty ? detail.activityImage : (detail.eventImage is not empty ? detail.eventImage : detail.offerImage) }}" 
                                                                         class="img-fluid rounded h-100 object-fit-cover" 
-                                                                        alt="{{ detail.activityName }} - Activité"
+                                                                        alt="{{ detail.activityName is not empty ? detail.activityName : (detail.eventName is not empty ? detail.eventName : detail.offerName) }} - Image"
                                                                         loading="lazy"
                                                                         width="200" height="150"
                                                                     >
@@ -81,10 +96,11 @@
 
                                                             <div class="col-md-8">
                                                                 <div class="card-body">
-                                                                    <div class="d-flex justify-content-between flex-column flex-md-row">
-                                                                        <p class="card-text"><strong>Quantité :</strong> x{{ detail.activityQuantity }}</p>
-                                                                        <p class="card-text"><strong>Prix :</strong> {{ detail.activityPrice|price }}</p>
-                                                                    </div>
+                                                                <div class="d-flex justify-content-between flex-column flex-md-row">
+                                                                    <p class="card-text"><strong>Quantité :</strong> x{{ detail.activityQuantity is not empty ? detail.activityQuantity : (detail.eventQuantity is not empty ? detail.eventQuantity : detail.offerQuantity) }}</p>
+                                                                    <p class="card-text"><strong>Prix :</strong> {{ detail.activityPrice is not empty ? detail.activityPrice|price : (detail.eventPrice is not empty ? detail.eventPrice|price : detail.offerPrice|price) }}</p>
+                                                                </div>
+                                                        
                                                                     
                                                                     <div class="d-flex justify-content-between flex-column flex-md-row">
                                                                         <p class="card-text"><strong>Date de début :</strong></p>
@@ -123,8 +139,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             {% endfor %}
                         </div>
@@ -148,45 +162,43 @@
 
                     </section>
                 </div>
+            {% endif %}
 
-                {# 🔹 Section résumé des commandes passées #}
-                <div class="col-md-4">
-                    <div class="card shadow-sm border-1 p-3 sticky-top">
-                        {% if orders is not empty %}
-                            <h3 class="text-center color-primary-custom"><strong>Total des commandes </strong> {{ totalOrders }}</h3>
-                            <hr>
-                            <h4 class="text-center color-primary-custom">Nombre de commandes par état</h4>
-                            <hr>
-                            <ul>
-                                <li class="list-group-item">
-                                    <a href="{{ path('app_account_reservation', {'state': 0}) }}" class="text-decoration-none">
-                                        <span class="badge bg-background color-primary-custom border-hover-custom" >En attente de paiement ({{ totalPending }})</span>
-                                    </a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a href="{{ path('app_account_reservation', {'state': 1}) }}" class="text-decoration-none">
-                                        <span class="badge bg-primaryBlue color-secondary-custom border-secondary-custom">Paiement validé ({{ totalValidated }})</span>
-                                    </a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a href="{{ path('app_account_reservation', {'state': 2}) }}" class="text-decoration-none">
-                                        <span class="badge bg-secondaryYellow color-primary-custom border-hover-custom">En cours ({{ totalShipped }})</span>
-                                    </a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a href="{{ path('app_account_reservation', {'state': 3}) }}" class="text-decoration-none">
-                                        <span class="badge bg-secondaryRed color-primary-custom border-hover-custom">Terminée ({{ totalCompleted }})</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        {% else %}
-                            <p class="text-center">Aucune commande enregistrée.</p>
-                        {% endif %}
-                    </div>
+            {# 🔹 Section résumé des commandes passées #}
+            <div class="col-md-4">
+                <div class="card shadow-sm border-1 p-3 sticky-top">
+                    <h3 class="text-center color-primary-custom"><strong>Total des commandes </strong> {{ totalOrders }}</h3>
+                    <hr>
+                    <h4 class="text-center color-primary-custom">Nombre de commandes par état</h4>
+                    <hr>
+                    <ul>
+                        <li class="list-group-item">
+                            <a href="{{ path('app_account_reservation', {'state': 1}) }}" class="text-decoration-none">
+                                <span class="badge bg-background color-primary-custom border-hover-custom">En attente de paiement ({{ totalPending }})</span>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ path('app_account_reservation', {'state': 2}) }}" class="text-decoration-none">
+                                <span class="badge bg-primaryBlue color-secondary-custom border-secondary-custom">Paiement validé ({{ totalValidated }})</span>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ path('app_account_reservation', {'state': 3}) }}" class="text-decoration-none">
+                                <span class="badge bg-secondaryYellow color-primary-custom border-hover-custom">Terminée ({{ totalCompleted }})</span>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ path('app_account_reservation', {'state': 4}) }}" class="text-decoration-none">
+                                <span class="badge bg-secondaryRed color-primary-custom border-hover-custom">Annulée ({{ totalCancelled }})</span>
+                            </a>
+                        </li>
+                    </ul>
+                    {% if orders is empty %}
+                        <p class="text-center">Aucune commande enregistrée.</p>
+                    {% endif %}
                 </div>
-
             </div>
-        {% endif %}
+        </div>
     </div>
 
 {% endblock %}

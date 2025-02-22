@@ -25,7 +25,6 @@
                     {{ form_start(orderForm, { 'method': 'POST' }) }}
                         {% for itemForm in orderForm.items %}
                             <div class="card mb-3 p-3 shadow-sm border-1 rounded d-flex flex-row align-items-center">
-                            
                                 {# Image de l'élément #}
                                 <div class="col-md-4">
                                     <picture>
@@ -82,6 +81,7 @@
                         </div>
 
                     {{ form_end(orderForm) }}
+                    
                 </div>
             </div>
 
@@ -100,7 +100,7 @@
 
                     <ul class="list-unstyled text-center">
                         {# Boucle à travers les produits de la commande (cart) #}
-                        {% for product in cart %}
+                        {% for product in products %}
                             <li class="color-primary-custom">
                                 <strong>{{ product.object.name }}</strong> x{{ product.qty }} 
                                 <strong aria-label="Prix total">{{ (product.object.price * product.qty)|price }}</strong>
@@ -113,11 +113,11 @@
                     {# Sous-total hors taxes #}
                     <p class="d-flex justify-content-between">
                         <span aria-label="Sous-total HT">Sous-total HT :</span> 
-                        <strong>{{ subtotal|price }}</strong>
+                        <strong>{{ orderDetails.subtotal|price }}</strong>
                     </p>
 
                     {# Détails des TVA par taux appliqué #}
-                    {% for rate, amount in tvaDetails %}
+                    {% for rate, amount in orderDetails.tvaDetails %}
                         <p class="d-flex justify-content-between">
                             <span aria-label="TVA au taux de {{ rate }}%">TVA ({{ rate }}%) :</span> 
                             <strong>{{ amount|price }}</strong>
@@ -127,7 +127,7 @@
                     {# Total des TVA #}
                     <p class="d-flex justify-content-between">
                         <span aria-label="Total TVA">Total TVA :</span> 
-                        <strong>{{ totalTva|price }}</strong>
+                        <strong>{{ orderDetails.totalTva|price }}</strong>
                     </p>
 
                     <hr>
@@ -135,7 +135,7 @@
                     {# Afficher le total TTC #}
                     <p class="d-flex justify-content-between">
                         <span aria-label="Total TTC">Total TTC :</span> 
-                        <strong class="text-success">{{ total|price }}</strong>
+                        <strong class="text-success">{{ orderDetails.total|price }}</strong>
                     </p>
                 </div>
                 

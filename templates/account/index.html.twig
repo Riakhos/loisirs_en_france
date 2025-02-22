@@ -3,6 +3,7 @@
 {% block title %}{{ controller_name }}{% endblock %}
 
 {% block body %}
+
     {# Barre de navigation #}
     {% include "account/navbar.html.twig" %}
 
@@ -23,19 +24,28 @@
                 </div>
             </div>
 		
-            {# Historique des Activités #}
+            {# Historique des Loisirs #}
             <div class="card mb-3 bg-background border-secondary-custom">
                 <div class="card-header">
-                    <h4 class="color-primary-custom">Historique des Activités
+                    <h4 class="color-primary-custom">Historique des Loisirs
                 </div>
                 <div class="card-body border-secondary-custom-top">
                     <ul class="list-unstyled">
-                        {# {% for activity in recentActivities %}
-                            <li>{{ activity.description }} - <small>{{ activity.date|date('d/m/Y') }}</small></li>
-                        {% else %} #}
+                        {% for activity in recentActivities %}
+                            <li>
+                                {% if activity.activityName != '' %}
+                                    {{ activity.activityName }} - <small>{{ activity.createAt|date('d/m/Y') }}</small>
+                                {% elseif activity.eventName != '' %}
+                                    {{ activity.eventName }} - <small>{{ activity.createAt|date('d/m/Y') }}</small>
+                                {% elseif activity.offerName != '' %}
+                                    {{ activity.offerName }} - <small>{{ activity.createAt|date('d/m/Y') }}</small>
+                                {% endif %}
+                            </li>
+                        {% else %}
                             <li>Aucune activité récente</li>
-                        {# {% endfor %} #}
+                        {% endfor %}
                     </ul>
+                    <a href="{{ path('app_account_reservation', {'state': 3}) }}"  class="btn btn-primary">Voir les loisirs</a>
                 </div>
             </div>
 		
@@ -45,7 +55,7 @@
                     <h4 class="color-primary-custom">Réservations</h4>
                 </div>
                 <div class="card-body border-secondary-custom-top">
-                    {# <p class="card-title">Vous avez {{ upcomingReservations|length }} réservations à venir.</p> #}
+                    <p class="card-title">Vous avez {{ upcomingReservations|length }} réservations à venir.</p>
                     <a href="{{ path('app_account_reservation') }}" class="btn btn-primary">Voir les réservations</a>
                 </div>
             </div>
