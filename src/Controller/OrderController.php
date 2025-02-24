@@ -59,7 +59,7 @@ final class OrderController extends AbstractController
         $subtotal = 0;
         $tvaDetails = [];
 
-        foreach ($products as &$product) {
+        foreach ($products as $product) {
             $priceTTC = $product['object']->getPrice(); // Prix TTC
             $tvaRate = $product['object']->getTva(); // TVA en %
             $qty = $product['qty'];
@@ -103,28 +103,73 @@ final class OrderController extends AbstractController
         // Stockage dans la session
         $session = $request->getSession();
         $session->set('orderDetails', $orderDetails);
-        
-        // Initialiser les données de commande
+
+        // Initialisation des données de commande par type de produit
         $orderData = [
             'items' => [],
             'activityName' => [],
             'offerName' => [],
             'eventName' => [],
             'partnerName' => [],
-            'cartPrice' => 0
+            'cartPrice' => 0,
+            'activities' => [],
+            'offers' => [],
+            'events' => []
         ];
-
-        // Parcourir les produits du panier
+        
+        // Parcours des produits
         foreach ($products as $product) {
+            // Ajout du prix du panier
             $orderData['cartPrice'] += $product['object']->getPrice() * $product['qty'];
 
-            // Récupérer les différentes informations produits pour l'ordre
+            // Récupérer le nom du produit
             $name = !empty($product['object']->getName()) ? $product['object']->getName() : null;
 
-            // Récupération des données du partenaire associé
+            // Vérifier que le produit possède un partenaire et récupérer ses infos
             $partner = $this->em->getRepository(Partner::class)->find($product['object']->getPartners()->getId());
             
-            // Ajouter les informations du produit dans le tableau $orderData
+            // Ajouter le nom du partenaire
+            if ($partner) {
+                $orderData['partnerName'][] = $partner->getName();
+            }
+    
+            // Ajouter les produits dans leurs sections respectives
+            switch ($product['type']) {
+                case 'activity':
+                    $orderData['activities'][] = [
+                        'name' => $name,
+                        'price' => $product['object']->getPrice(),
+                        'quantity' => $product['qty'],
+                        'tva' => $product['object']->getTva(),
+                        'image' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
+                    ];
+                    $orderData['activityName'][] = $name;
+                    break;
+
+                case 'event':
+                    $orderData['events'][] = [
+                        'name' => $name,
+                        'price' => $product['object']->getPrice(),
+                        'quantity' => $product['qty'],
+                        'tva' => $product['object']->getTva(),
+                        'image' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
+                    ];
+                    $orderData['eventName'][] = $name;
+                    break;
+
+                case 'offer':
+                    $orderData['offers'][] = [
+                        'name' => $name,
+                        'price' => $product['object']->getPrice(),
+                        'quantity' => $product['qty'],
+                        'tva' => $product['object']->getTva(),
+                        'image' => method_exists($product['object'], 'getImage') ? $product['object']->getImage() : '',
+                    ];
+                    $orderData['offerName'][] = $name;
+                    break;
+            }
+            
+            // Ajouter les informations du produit dans le tableau global
             $orderData['items'][] = [
                 'itemId' => $product['object']->getId(),
                 'name' => $product['object']->getName(),
@@ -151,7 +196,7 @@ final class OrderController extends AbstractController
                 'partnerPostal' => $partner ? $partner->getPostal() : 'Code postal inconnu',
                 'partnerWebsite' => $partner ? $partner->getWebsite() : 'Website inconnu',
                 'partnerPhone' => $partner ? $partner->getPhone() : 'Téléphone inconnu',
-                'partnerEmail' => $partner ? $partner->getEmail() : 'Adresse mail inconnu',
+                'partnerEmail' => $partner ? $partner->getEmail() : 'Adresse mail inconnue',
             ];
         }
 
@@ -160,7 +205,7 @@ final class OrderController extends AbstractController
         $orderForm->handleRequest($request);
 
         if ($orderForm->isSubmitted() && $orderForm->isValid()) {
-            $dateAndTime = $orderForm->getData();  // Récupérer la date et l'heure sélectionnées
+            $orderForm->getData();  // Récupérer la date et l'heure sélectionnées
 
             // Créer la commande (l'order)
             $order = new Order();
@@ -169,19 +214,10 @@ final class OrderController extends AbstractController
                 ->setCreateAt(new \DateTime())
                 ->setState(1)
                 ->setCartPrice($orderData['cartPrice'])
-                ->setActivityName(implode(', ', array_filter(array_map(function($product) {
-                    return ($product['type'] === 'activity') ? $product['object']->getName() : null;
-                }, $products))))
-                ->setOfferName(implode(', ', array_filter(array_map(function($product) {
-                    return ($product['type'] === 'offer') ? $product['object']->getName() : null;
-                }, $products))))
-                ->setEventName(implode(', ', array_filter(array_map(function($product) {
-                    return ($product['type'] === 'event') ? $product['object']->getName() : null;
-                }, $products))))
-                ->setPartnerName(implode(', ', array_filter(array_map(function($product) {
-                    $partner = $this->em->getRepository(Partner::class)->find($product['object']->getPartners()->getId());
-                    return $partner ? $partner->getName() : null;
-                }, $products))))
+                ->setActivityName(implode(', ', $orderData['activityName']))
+                ->setOfferName(implode(', ', $orderData['offerName']))
+                ->setEventName(implode(', ', $orderData['eventName']))
+                ->setPartnerName(implode(', ', $orderData['partnerName']));
             ;
             
             foreach ($products as $product) {
@@ -235,15 +271,17 @@ final class OrderController extends AbstractController
                 
                 // Ajouter l'OrderDetail à la commande
                 $order->addOrderDetail($orderDetail);
+                $this->em->persist($orderDetail);
             }
-
+            
             $this->em->persist($order);
             $this->em->flush();
 
             // Stocker le formulaire dans la session
             $session = $request->getSession();
             $session->set('orderForm', $orderForm->getData());
-
+            $session->set('products', $products);
+            
             return $this->redirectToRoute('app_order_summary', ['id' => $order->getId()]);
         }
 
@@ -269,33 +307,36 @@ final class OrderController extends AbstractController
     public function orderSummaryAndConfirm(Cart $cart, Request $request, EntityManagerInterface $em): Response
     {
         /** @var Order $order */
-        $order = $em->getRepository(Order::class)->find($request->get('id'));
+        $order = $em->getRepository(Order::class)->findWithDetails($request->get('id'), $this->getUser());
 
         if (!$order) {
-            $this->addFlash('error', 'Commande introuvable.');
+            $this->addFlash(
+                'error',
+                'Commande introuvable.'
+            );
             return $this->redirectToRoute('app_home');
         }
 
-        // Récupérer les orderDetails depuis la session
+        // Récupérer les orderDetails et les orderData depuis la session
         $session = $request->getSession();
         $orderDetails = $session->get('orderDetails');
-
-        // Controller de la deuxième étape
-        $session = $request->getSession();
+        
+        // Récupérer les données du formulaire stockées en session
         $orderData = $session->get('orderForm');
 
+        // Récupérer les produits associés à la commande
+        $products = $session->get('products', []);
+        
         // Recréer le formulaire avec les données stockées
         $orderForm = $this->createForm(OrderType::class, $orderData);
-
-        $products = $cart->getCart();
-
+        
         return $this->render('order/summary.html.twig', [
             'controller_name' => 'Confirmer ma commande',
             'products' => $products,
             'order' => $order,
             'total' => $cart->getTotal(),
-            'orderForm' => $orderForm->createView(),
-            'orderDetails' => $orderDetails,
+            'orderForm' => $orderForm,
+            'orderDetails' => $orderDetails
         ]);
     }
 }

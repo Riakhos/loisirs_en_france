@@ -12,17 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class PaymentController extends AbstractController
+class PaymentController extends AbstractController
 {
     #[Route('/commande/paiement/{id_order}', name: 'app_payment')]
     public function index($id_order, OrderRepository $orderRepository, EntityManagerInterface $em): Response
     {
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-
-        $order = $orderRepository->findOneBy([
-            'id' => $id_order,
-            'user' => $this->getUser()
-        ]);
+        
+        $order = $orderRepository->findWithDetails( $id_order, $this->getUser());
 
         if (!$order) {
             return $this->redirectToRoute('app_home');
@@ -31,36 +28,20 @@ final class PaymentController extends AbstractController
         $product_for_stripe = [];
         
         foreach ($order->getOrderDetails() as $product) {
-            // Vérifiez si les valeurs sont nulles et attribuez une valeur par défaut si nécessaire.
-            
-            // Nom du produit
-            $productName = $product->getProductName() ?? 'Nom de produit inconnu';  // Utilisation d'une valeur par défaut si null
-        
-            // Image du produit
-            $productImage = $product->getProductImage() 
-                ? $_ENV['DOMAIN'].'/uploads/'.$product->getProductImage() 
-                : 'default-image.jpg';  // Image par défaut si l'image est null
-        
-            // Prix du produit
-            $productPrice = $product->getProductPrice() ?? 0;  // Utiliser 0 si null
-        
-            // Quantité du produit
-            $productQuantity = $product->getProductQuantity() ?? 1;  // Utiliser 1 si null
-        
-            // TVA du produit
-            $productTva = $product->getProductTva() ?? 0;  // Utiliser 0 si null
             
             // Ajouter le produit à la liste pour Stripe
             $product_for_stripe[] = [
                 'price_data' => [
                     'currency' => 'eur',
-                    'unit_amount' => number_format($productPrice * 100, 0, '', ''),  // En centimes
+                    'unit_amount' => number_format($product->getProductPrice() * 100, 0, '', ''),  // En centimes
                     'product_data' => [
-                        'name' => $productName,
-                        'images' => [$productImage]
-                    ],
+                        'name' => $product->getProductName(),
+                        'images' => [
+                            $_ENV['DOMAIN'].'/uploads/'.$product->getProductImage()
+                        ]
+                    ]
                 ],
-                'quantity' => $productQuantity
+                'quantity' => $product->getProductQuantity()
             ];
         }
         
@@ -71,13 +52,13 @@ final class PaymentController extends AbstractController
             'customer_email' => $user->getEmail(),
             'line_items' => $product_for_stripe,
             'mode' => 'payment',
-            'success_url' => $_ENV['DOMAIN'] . '/commande/merci/{CHECKOUT_SESSION_ID}',
-            'cancel_url' => $_ENV['DOMAIN'] . '/mon-panier/annulation',
+            'success_url' => $_ENV['DOMAIN'].'/commande/merci/{CHECKOUT_SESSION_ID}',
+            'cancel_url' => $_ENV['DOMAIN'].'/mon-panier/annulation',
         ]);
-
+        
         $order->setStripeSessionId($checkout_session->id);
         $em->flush();
-        
+
         return $this->redirect($checkout_session->url);
     }
 

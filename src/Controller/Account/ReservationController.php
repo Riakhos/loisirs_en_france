@@ -25,6 +25,32 @@ class ReservationController extends AbstractController
         
         // Récupérer l'état choisi dans l'URL (par défaut toutes les commandes)
         $state = $request->query->getInt('state', 1);
+
+        // Définir la date du jour à minuit (00:00:00)
+        $today = new \DateTime();
+        $today->setTime(0, 0, 0);
+
+        // Supprimer les commandes en attente (state = 1) dont la dateStart est dépassée
+        $expiredOrders = $em->getRepository(Order::class)
+            ->createQueryBuilder('o')
+            ->leftJoin('o.orderDetails', 'od')
+            ->where('o.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('o.state = 1')
+            ->andWhere('od.dateStart < :today')
+            ->setParameter('today', $today)
+            ->getQuery()
+            ->getResult();
+
+            foreach ($expiredOrders as $expiredOrder) {
+                // Supprimer d'abord les OrderDetails liés
+                foreach ($expiredOrder->getOrderDetails() as $orderDetail) {
+                    $em->remove($orderDetail);
+                }
+                // Ensuite supprimer la commande elle-même
+                $em->remove($expiredOrder);
+            }
+        $em->flush();
         
         // Construire le critère de recherche de commandes
         $criteria = ['user' => $user];

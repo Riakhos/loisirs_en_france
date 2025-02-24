@@ -41,4 +41,17 @@ class OrderRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    
+    public function findWithDetails($id, $user)
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.orderDetails', 'od')
+            ->addSelect('od')
+            ->where('o.id = :id')
+            ->andWhere('o.user = :user')
+            ->setParameter('id', $id)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
