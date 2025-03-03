@@ -59,6 +59,7 @@ class PaymentController extends AbstractController
         $order->setStripeSessionId($checkout_session->id);
         $em->flush();
 
+
         return $this->redirect($checkout_session->url);
     }
 

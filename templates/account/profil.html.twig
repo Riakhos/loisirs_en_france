@@ -46,6 +46,11 @@
                         {% endif %}
                     </div>
                     <div class="ml-4 flex flex-col text-center">
+                        {% if user.pseudo %}
+                            <p class="mb-2 color-secondary-custom font-weight-bold">
+                                {{ user.pseudo }}
+                            </p>
+                        {% endif %}
                         <p class="mb-2 mb-2 color-secondary-custom font-weight-bold">
                             {{ user.firstname }} {{ user.lastname }}
                         </p>
@@ -60,14 +65,27 @@
                                 <a  class="text-decoration-none" href="{{ path('app_account_modify_pwd') }}">Modifier mon mot de passe</a>
                             </li>
                             <li class="mt-4">
-                                <a class="text-decoration-none cursor-pointer">
-                                    <span class="false  mb-4 cursor-pointer">
+                                <a class="text-decoration-none cursor-pointer" data-bs-toggle="collapse" href="#collapsePseudo" role="button" aria-expanded="false" aria-controls="collapsePseudo">
+                                    <span class="false mb-4 cursor-pointer">
                                         <span class="link-chevron">
-                                            Notifications
+                                            Pseudo
                                         </span>
                                         <i class="fal fa-chevron-right ml-2 font-weight-bolder" style="font-size: 10px;"></i>
                                     </span>
                                 </a>
+                                
+                                <div class="collapse mt-3" id="collapsePseudo">
+                                    <div class="card card-body">
+                                        {{ form_start(pseudoForm, {'method': 'POST'}) }}
+                                            <div class="mb-3">
+                                                {{ form_row(pseudoForm.pseudo) }}
+                                            </div>
+                                            <div class="mb-3">
+                                                {{ form_row(pseudoForm.submit) }}
+                                            </div>
+                                        {{ form_end(pseudoForm) }}
+                                    </div>
+                                </div>
                             </li>
                             <li class="mt-4">
                                 <a class="text-decoration-none cursor-pointer">

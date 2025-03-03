@@ -76,6 +76,9 @@ class Event
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'event')]
     private Collection $ratings;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -357,5 +360,17 @@ class Event
 
         $sum = array_reduce($ratings, fn($carry, $rating) => $carry + $rating->getScore(), 0);
         return round($sum / count($ratings), 1);
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 }
