@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    <div class="container mb-4">
+
+        {% set categories = {'Activités': activities, 'Offres Spéciales': offers, 'Événements': events} %}
+
+        {% for category, items in categories %}
+            {% if items is not empty %}
+                <h2 class="color-primary-custom">{{ category }}</h2>
+
+                <div id="carousel-{{ category|lower|replace({' ': '-'}) }}" class="carousel slide" data-bs-ride="carousel" aria-live="polite">
+                    <div class="carousel-inner">
+                        {% for chunk in items|batch(4) %}
+                            <div class="carousel-item {% if loop.first %}active{% endif %} d-none d-md-block">
+                                <div class="row">
+                                    {% for item in chunk %}
+                                        <div class="col-md-3">
+                                            <a href="{{ path(
+                                                category == 'Activités' ? 'app_activity' : 
+                                                (category == 'Événements' ? 'app_event' :
+                                                (category == 'Offres Spéciales' ? 'app_offer')),
+                                                {'slug': item.slug}
+                                            ) }}" class="text-decoration-none" title="Voir {{ item.name }}">
+                                                <div class="card border-0" tabindex="0">
+                                                    <div class="position-relative">
+                                                        <picture>
+                                                            <source srcset="{{ asset('uploads/photos/' ~ item.image|replace({'.jpg': '.webp', '.png': '.webp'})) }}" type="image/webp">
+                                                            <img src="{{ asset('uploads/photos/' ~ item.image) }}"
+                                                                class="figure-img img-fluid rounded border-secondary-custom" 
+                                                                alt="Image de {{ item.name }}"
+                                                                style="object-fit: cover; width: 100%; height: 400px;"
+                                                                loading="lazy">
+                                                        </picture>
+                                                        <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-75 text-white p-2 text-center" style="backdrop-filter: blur(3px);">
+                                                            <h4>{{ item.name }}</h4>
+                                                            <span class="color-secondary-custom">{{ item.price|price }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% for item in items %}
+                            {# Slide en mode Mobile (1 image) #}
+                            <div class="carousel-item {% if loop.first %}active{% endif %} d-md-none">
+                                <a href="{{ path(
+                                    category == 'Activités' ? 'app_activity' : 
+                                    (category == 'Événements' ? 'app_event' :
+                                    (category == 'Offres Spéciales' ? 'app_offer')),
+                                    {'slug': item.slug}
+                                ) }}" class="text-decoration-none">
+                                    <div class="card border-0">
+                                        <div class="position-relative">
+                                            <picture>
+                                                <source srcset="{{ asset('uploads/photos/' ~ item.image|replace({'.jpg': '.webp', '.png': '.webp'})) }}" type="image/webp">
+                                                <img 
+                                                    src="{{ asset('uploads/photos/' ~ item.image) }}"
+                                                    class="figure-img img-fluid rounded border-secondary-custom" 
+                                                    alt="{{ item.name }}" 
+                                                    style="object-fit: cover; width: 100%; height: 400px;"
+                                                    loading="lazy"
+                                                >
+                                            </picture>
+                                            <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-75 text-white p-2 text-center">
+                                                <h4>{{ item.name }}</h4>
+                                                <span class="color-secondary-custom">{{ item.price|price }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {# 🔹 Flèches de navigation #}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ category|lower|replace({' ': '-'}) }}" data-bs-slide="prev" aria-label="Image précédente de {{ category }}">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ category|lower|replace({' ': '-'}) }}" data-bs-slide="next" aria-label="Image suivante de {{ category }}">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let priceInput = document.querySelector("#{{ searchForm.price.vars.id }}");
+            let priceValue = document.getElementById("priceValue");
+            
+            let distanceInput = document.querySelector("#{{ searchForm.distance.vars.id }}");
+            let distanceValue = document.getElementById("distanceValue");
+
+            let resetButton = document.getElementById("reset-button");
+
+            if (priceInput) {
+                priceValue.innerText = priceInput.value + " €"; // Initialisation
+
+                priceInput.addEventListener("input", function () {
+                    priceValue.innerText = this.value + " €";
+                });
+            }
+            
+            if (distanceInput) {
+                distanceValue.innerText = distanceInput.value + " Km"; // Initialisation
+
+                distanceInput.addEventListener("input", function () {
+                    distanceValue.innerText = this.value + " Km";
+                });
+            }
+
+            // Écouteur sur le bouton Reset
+            if (resetButton) {
+                resetButton.addEventListener("click", function () {
+                    setTimeout(function () { // Délai pour laisser le reset du formulaire s'appliquer
+                        if (priceInput) priceValue.innerText = priceInput.value + " €";
+                        if (distanceInput) distanceValue.innerText = distanceInput.value + " Km";
+                    }, 50);
+                });
+            }
+        });
+    </script>
+{% endblock %}

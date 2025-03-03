@@ -37,6 +37,9 @@ class Rating
     #[ORM\ManyToOne(inversedBy: 'ratings')]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ratings')]
+    private ?Article $article = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -133,6 +136,18 @@ class Rating
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): static
+    {
+        $this->article = $article;
 
         return $this;
     }

@@ -3,57 +3,36 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="filterModalLabel" aria-live="polite">Filtres de recherche</h2>
+                <h5 class="modal-title" id="filterModalLabel">Filtrer la recherche</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
-            <div class="modal-body">
-                <p>Affinez votre recherche d'activités avec les filtres ci-dessous pour trouver l'activité idéale qui correspond à vos attentes.</p>
-                
-                {# Formulaire de filtres #}
-                <form id="searchFiltersForm" name="search_filters" method="POST" class="g-3">
-                    <div class="mb-3">
-                        <label for="activityType" class="form-label">Type d'activité</label>
-                        <select id="activityType" name="filters[activityType]" class="form-select" aria-label="Sélectionnez un type d'activité">
-                            <option selected disabled>Sélectionnez un type d'activité</option>
-                            <option value="sport">Sport</option>
-                            <option value="art">Art</option>
-                            <option value="music">Musique</option>
-                            <option value="outdoor">Activités extérieures</option>
-                        </select>
-                    </div>
+            <div class="modal-body bg-primaryBlue border-secondary-custom">
+                {{ form_start(searchForm) }}
+                    <div class="row g-3">
+                        <div class="col-md-4">{{ form_row(searchForm.activity) }}</div>
+                        <div class="col-md-4">{{ form_row(searchForm.offer) }}</div>
+                        <div class="col-md-4">{{ form_row(searchForm.event) }}</div>
 
-                    <div class="mb-3">
-                        <label for="activityDuration" class="form-label">Durée de l'activité</label>
-                        <select id="activityDuration" name="filters[activityDuration]" class="form-select" aria-label="Sélectionnez la durée de l'activité">
-                            <option selected disabled>Sélectionnez la durée</option>
-                            <option value="short">Moins de 1 heure</option>
-                            <option value="medium">1 à 2 heures</option>
-                            <option value="long">Plus de 2 heures</option>
-                        </select>
-                    </div>
+                        <div class="col-md-3">{{ form_row(searchForm.user) }}</div>
+                        <div class="col-md-6">{{ form_row(searchForm.score) }}</div>
+                        <div class="col-md-3">
+                            {{ form_row(searchForm.price) }}
+                            <p class="color-secondary-custom">Valeur choisie : <span id="priceValue">100 €</span></p>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="location" class="form-label">Lieu</label>
-                        <input type="text" id="location" name="filters[location]" class="form-control" placeholder="Entrez une ville ou une région" aria-label="Entrez un lieu">
-                    </div>
+                        <div class="col-md-3">{{ form_row(searchForm.tags) }}</div>
+                        <div class="col-md-3">{{ form_row(searchForm.region) }}</div>
+                        <div class="col-md-3">{{ form_row(searchForm.city) }}</div>
+                        <div class="col-md-3">
+                            {{ form_row(searchForm.distance) }}
+                            <p class="color-secondary-custom">Valeur choisie : <span id="distanceValue">100 Km</span></p>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="priceRange" class="form-label">Plage de prix</label>
-                        <select id="priceRange" name="filters[priceRange]" class="form-select" aria-label="Sélectionnez une plage de prix">
-                            <option selected disabled>Sélectionnez une plage de prix</option>
-                            <option value="low">Moins de 50€</option>
-                            <option value="medium">50€ - 100€</option>
-                            <option value="high">Plus de 100€</option>
-                        </select>
+                        <div class="col-md-6">{{ form_row(searchForm.submit) }}</div>
+                        <div class="col-md-6">{{ form_row(searchForm.reset) }}</div>
+                        
                     </div>
-
-                    {# Bouton de soumission #}
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Appliquer les filtres</button>
-                    </div>
-                </form>
-
-                <p class="mt-3">Utilisez ces filtres pour affiner votre recherche et trouver l'activité qui correspond à vos préférences, que ce soit en termes de type, de durée, de prix ou de localisation.</p>
+                {{ form_end(searchForm) }}
             </div>
         </div>
     </div>

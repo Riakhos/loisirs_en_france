@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Classe\Cart;
 use App\Entity\Partner;
 use App\Form\PartnerType;
+use App\Form\SearchAllType;
 use App\Repository\TrendRepository;
 use App\Repository\RatingRepository;
 use Twig\Extension\GlobalsInterface;
@@ -89,6 +90,8 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 		// Création d'un formulaire Partner
 		$partner = new Partner();
 		$partnerForm  = $this->formFactory->create(PartnerType::class, $partner);
+
+		$searchForm = $this->formFactory->create(SearchAllType::class);
 	
 		// Récupération des évaluations triées par date (les plus récentes en premier)
 		$ratings = $this->ratingRepository->findBy([], ['createdAt' => 'DESC']);
@@ -130,6 +133,7 @@ class GlobalVariables extends AbstractExtension implements GlobalsInterface
 			'fullStars' => $fullStars,
 			'hasHalfStar' => $hasHalfStar,
 			'emptyStars' => $emptyStars,
+			'searchForm' => $searchForm->createView(),
 		];
 	}
 }

@@ -3,6 +3,7 @@
 namespace App\Controller\Account;
 
 use App\Form\ProfilFormType;
+use App\Form\PseudoFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,13 +24,18 @@ class ProfilController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $form = $this->createForm(ProfilFormType::class, $user);
-        $form->handleRequest($request);
+        // Création des formulaires
+        $profilForm = $this->createForm(ProfilFormType::class, $user);
+        $pseudoForm = $this->createForm(PseudoFormType::class, $user);
+
+        // Vérification du formulaire soumis
+        $profilForm->handleRequest($request);
+        $pseudoForm->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($profilForm->isSubmitted() && $profilForm->isValid()) {
             
             // Gestion de l'upload de l'image
-            $file = $form->get('attachment')->getData();
+            $file = $profilForm->get('attachment')->getData();
             
             if ($file instanceof UploadedFile) {
                 $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -57,10 +63,22 @@ class ProfilController extends AbstractController
             );
             return $this->redirectToRoute('app_account_profil');
         }
+
+        if ($pseudoForm->isSubmitted() && $pseudoForm->isValid()) {
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash(
+                'success', 
+                'Pseudo mis à jour avec succès.'
+            );
+            return $this->redirectToRoute('app_account_profil');
+        }
         
         return $this->render('account/profil.html.twig', [
             'controller_name' => 'Votre Profil',
-            'profilForm' => $form->createView(),
+            'profilForm' => $profilForm->createView(),
+            'pseudoForm' => $pseudoForm->createView(),
             'user' => $user,
         ]);
     }

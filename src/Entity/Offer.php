@@ -67,6 +67,9 @@ class Offer
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'offer')]
     private Collection $ratings;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->activity = new ArrayCollection();
@@ -294,5 +297,17 @@ class Offer
 
         $sum = array_reduce($ratings, fn($carry, $rating) => $carry + $rating->getScore(), 0);
         return round($sum / count($ratings), 1);
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 }

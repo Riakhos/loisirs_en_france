@@ -44,7 +44,7 @@ class PartnerType extends AbstractType
                     ]),
                     new Regex([
                         'pattern' => "/^[A-Za-zÀ-ÖØ-öø-ÿ0-9'&.-]{2,50}$/",
-                        'message' => "Ceci n'est pas un prénom valide"
+                        'message' => "Ceci n'est pas un nom valide"
                     ]),
                 ],
                 'attr' => [
@@ -348,7 +348,8 @@ class PartnerType extends AbstractType
                     'label_attr' => [
                         'class' => 'form-label color-secondary-custom'
                     ]
-                ]);
+                ])
+            ;
         }
     }
 

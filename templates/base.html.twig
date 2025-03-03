@@ -80,7 +80,7 @@
                             </li>
                             {# Nav Items #}
                             <li class="nav-item">
-                                <a class="nav-link fs-2" href="#">
+                                <a class="nav-link fs-2" href="{{ path('app_blog') }}">
                                     Blog
                                 </a>
                             </li>
@@ -131,6 +131,19 @@
                                                 Tableau de bord
                                             </a>
                                         </li>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <li>
+                                                <a class="dropdown-item" href="{{ path('admin') }}">
+                                                    Dashboard Admin
+                                                </a>
+                                            </li>
+                                        {# {% else is_granted('ROLE_PARTNER') %}
+                                            <li>
+                                                <a class="dropdown-item" href="{{ path('admin/partner') }}">
+                                                    Dashboard
+                                                </a>
+                                            </li> #}
+                                        {% endif %}
                                         <li>
                                             <a class="dropdown-item" href="{{ path('app_logout') }}">
                                                 Déconnexion
@@ -170,17 +183,12 @@
                             </li>
                         </ul>
                         {# Search Form #}
-                        <form class="d-flex" role="search">
-                            <div class="input-group">
-                                <input type="search" class="form-control" placeholder="Rechercher" aria-label="Rechercher">
-                                <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#filterModal" aria-label="Appliquer le filtre">
-                                    <i class="bi bi-filter-square-fill"></i>
-                                </button>
-                            </div>
-                            <button class="btn ms-3" type="submit" aria-label="Soumettre la recherche">
-                                Rechercher
-                            </button>
-                        </form>
+                        <a href="{{ path('app_search') }}" class="btn btn-primary w-25">
+                            Rechercher un événement
+                        </a>
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#filterModal">
+                            <i class="bi bi-filter-square-fill color-primary-custom"></i>
+                        </button>
                     </div>
                 </div>
             </nav>
@@ -218,7 +226,7 @@
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" aria-label="Consulter le blog Loisirs en France">
+                                <a href="{{ path('app_blog') }}" aria-label="Consulter le blog Loisirs en France">
                                     Le blog Loisirs en France
                                 </a>
                             </li>
@@ -342,7 +350,7 @@
         {% include 'modals/faq_modal.html.twig' %}
         {% include 'modals/terms_modal.html.twig' %}
         {% include 'modals/legal_modal.html.twig' %}
-        {% include 'modals/filter_modal.html.twig' %}
+        {% include 'modals/filter_modal.html.twig' with { searchForm: searchForm } %}
         {% include 'modals/partner_modal.html.twig' with { partnerForm: partnerForm } %}
         {% include 'modals/invitation_modal.html.twig' %}
         {% include 'modals/contact_modal.html.twig' %}
