@@ -54,7 +54,7 @@ class RegisterUserType extends AbstractType
                         'maxMessage' => 'Le mot de passe ne peut pas dépasser {{ limit }} caractères.'
                     ]),
                     new Regex([
-                        'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/',
+                        'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{12,}$/',
                         'message' => 'Le mot de passe doit contenir au moins une lettre et un chiffre.',
                     ])
                 ],

@@ -1,0 +1,937 @@
+{# {% extends '@EasyAdmin/page/content.html.twig' %}
+	
+{% block content %} #}
+{% extends 'base.html.twig' %}
+{% block title %}
+	Loisirs En France
+{% endblock %}
+{% block body %}
+	{# Barre de navigation #}
+	{% include "admin/navbar.html.twig" %}
+	<div	class="wrapper">
+		<div	class="responsive-header">
+			<button	id="navigation-toggler"	type="button"	aria-label="Toggle navigation">
+				<span	class="icon">
+					<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 448 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"></path>
+					</svg>
+				</span>
+			</button>
+			<div	id="responsive-header-logo"	class="text-truncate ms-auto">
+				<a	class="responsive-logo"	title="Loisirs En France"	href="/admin">
+					Loisirs En France
+				</a>
+			</div>
+			<div	class="dropdown ms-auto user-menu-wrapper ">
+				<a	class="dropdown-toggle dropdown-toggle-hidden-marker user-details"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false"	data-bs-offset="0,5">
+					<span	class="user-avatar">
+						<span	class="icon">
+							<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 448 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"></path>
+							</svg>
+						</span>
+					</span>
+				</a>
+				<div	class="dropdown-overlay">
+					<ul	class="dropdown-menu dropdown-menu-end">
+						<li	class="dropdown-user-details">
+							<div>
+								<span	class="user-avatar">
+									<span	class="icon">
+										<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 448 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"></path>
+										</svg>
+									</span>
+								</span>
+							</div>
+							<div>
+								<span	class="user-label">
+									Connecté en tant que
+								</span>
+								<span	class="user-name">
+									Utilisateur anonyme
+								</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div	class="dropdown dropdown-settings">
+				<a	class="dropdown-toggle dropdown-toggle-hidden-marker dropdown-settings-button"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false"	data-bs-offset="0,5">
+					<span	class="icon">
+						<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 512 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"></path>
+						</svg>
+					</span>
+				</a>
+				<div	class="dropdown-overlay">
+					<ul	class="dropdown-menu dropdown-menu-end">
+						<li	class="dropdown-header dropdown-appearance-label">
+							<span>
+								Mode d'apparence
+							</span>
+						</li>
+						<li>
+							<a	class="dropdown-item dropdown-appearance-item"	href="#"	data-ea-color-scheme="light">
+								<span	class="icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 512 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M375.7 19.7c-1.5-8-6.9-14.7-14.4-17.8s-16.1-2.2-22.8 2.4L256 61.1 173.5 4.2c-6.7-4.6-15.3-5.5-22.8-2.4s-12.9 9.8-14.4 17.8l-18.1 98.5L19.7 136.3c-8 1.5-14.7 6.9-17.8 14.4s-2.2 16.1 2.4 22.8L61.1 256 4.2 338.5c-4.6 6.7-5.5 15.3-2.4 22.8s9.8 13 17.8 14.4l98.5 18.1 18.1 98.5c1.5 8 6.9 14.7 14.4 17.8s16.1 2.2 22.8-2.4L256 450.9l82.5 56.9c6.7 4.6 15.3 5.5 22.8 2.4s12.9-9.8 14.4-17.8l18.1-98.5 98.5-18.1c8-1.5 14.7-6.9 17.8-14.4s2.2-16.1-2.4-22.8L450.9 256l56.9-82.5c4.6-6.7 5.5-15.3 2.4-22.8s-9.8-12.9-17.8-14.4l-98.5-18.1L375.7 19.7zM269.6 110l65.6-45.2 14.4 78.3c1.8 9.8 9.5 17.5 19.3 19.3l78.3 14.4L402 242.4c-5.7 8.2-5.7 19 0 27.2l45.2 65.6-78.3 14.4c-9.8 1.8-17.5 9.5-19.3 19.3l-14.4 78.3L269.6 402c-8.2-5.7-19-5.7-27.2 0l-65.6 45.2-14.4-78.3c-1.8-9.8-9.5-17.5-19.3-19.3L64.8 335.2 110 269.6c5.7-8.2 5.7-19 0-27.2L64.8 176.8l78.3-14.4c9.8-1.8 17.5-9.5 19.3-19.3l14.4-78.3L242.4 110c8.2 5.7 19 5.7 27.2 0zM256 368a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM192 256a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z"></path>
+									</svg>
+								</span>
+								<span>
+									Clair
+								</span>
+							</a>
+						</li>
+						<li>
+							<a	class="dropdown-item dropdown-appearance-item"	href="#"	data-ea-color-scheme="dark">
+								<span	class="icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 384 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M144.7 98.7c-21 34.1-33.1 74.3-33.1 117.3c0 98 62.8 181.4 150.4 211.7c-12.4 2.8-25.3 4.3-38.6 4.3C126.6 432 48 353.3 48 256c0-68.9 39.4-128.4 96.8-157.3zm62.1-66C91.1 41.2 0 137.9 0 256C0 379.7 100 480 223.5 480c47.8 0 92-15 128.4-40.6c1.9-1.3 3.7-2.7 5.5-4c4.8-3.6 9.4-7.4 13.9-11.4c2.7-2.4 5.3-4.8 7.9-7.3c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-3.7 .6-7.4 1.2-11.1 1.6c-5 .5-10.1 .9-15.3 1c-1.2 0-2.5 0-3.7 0l-.3 0c-96.8-.2-175.2-78.9-175.2-176c0-54.8 24.9-103.7 64.1-136c1-.9 2.1-1.7 3.2-2.6c4-3.2 8.2-6.2 12.5-9c3.1-2 6.3-4 9.6-5.8c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-3.6-.3-7.1-.5-10.7-.6c-2.7-.1-5.5-.1-8.2-.1c-3.3 0-6.5 .1-9.8 .2c-2.3 .1-4.6 .2-6.9 .4z"></path>
+									</svg>
+								</span>
+								<span>
+									Sombre
+								</span>
+							</a>
+						</li>
+						<li>
+							<a	class="dropdown-item dropdown-appearance-item active"	href="#"	data-ea-color-scheme="auto">
+								<span	class="icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 576 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M64 0C28.7 0 0 28.7 0 64L0 352c0 35.3 28.7 64 64 64l176 0-10.7 32L160 448c-17.7 0-32 14.3-32 32s14.3 32 32 32l256 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-69.3 0L336 416l176 0c35.3 0 64-28.7 64-64l0-288c0-35.3-28.7-64-64-64L64 0zM512 64l0 224L64 288 64 64l448 0z"></path>
+									</svg>
+								</span>
+								<span>
+									Automatique
+								</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div	class="sidebar-wrapper">
+			<aside	class="sidebar">
+				<header	class="main-header">
+					<nav	class="navbar"	role="navigation">
+						<div	id="header-logo">
+							<a	class="logo"	title="Loisirs En France"	href="/admin">
+								<span	class="logo-custom">
+									Loisirs En France
+								</span>
+								<span	class="logo-compact">
+									<span	class="icon">
+										<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 576 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path>
+										</svg>
+									</span>
+								</span>
+							</a>
+						</div>
+					</nav>
+				</header>
+				<nav	id="main-menu">
+					<ul	class="menu">
+						<li	class="menu-item   ">
+							<a	href="http://127.0.0.1:8000/admin?routeName=admin"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+								<span	class="icon menu-icon">
+									<i	class="fa fa-chart-line"></i>
+								</span>
+								<span	class="menu-item-label position-relative">
+									Tableau de bord
+								</span>
+							</a>
+						</li>
+						<li	class="menu-item   ">
+							<a	href="http://127.0.0.1:8000/admin"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+								<span	class="icon menu-icon">
+									<i	class="fa fa-home"></i>
+								</span>
+								<span	class="menu-item-label position-relative">
+									Dashboard
+								</span>
+							</a>
+						</li>
+						<li	class="menu-item has-submenu  ">
+							<a	href=""	class="menu-item-contents submenu-toggle "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+								<span	class="icon menu-icon">
+									<i	class="fas fa-users"></i>
+								</span>
+								<span	class="menu-item-label position-relative">
+									Utilisateur
+								</span>
+								<span	class="icon submenu-toggle-icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path>
+									</svg>
+								</span>
+							</a>
+							<ul	class="submenu">
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CUserCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-user"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Utilisateurs
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CPartnerCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-handshake"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Partenaires
+										</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li	class="menu-item has-submenu  expanded">
+							<a	href=""	class="menu-item-contents submenu-toggle "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+								<span	class="icon menu-icon">
+									<i	class="fas fa-dice"></i>
+								</span>
+								<span	class="menu-item-label position-relative">
+									Loisirs
+								</span>
+								<span	class="icon submenu-toggle-icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path>
+									</svg>
+								</span>
+							</a>
+							<ul	class="submenu"	style="max-height: 101px;">
+								<li	class="menu-item active">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-layer-group"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Catégories
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CSubcategoryCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-stream"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Sous-Catégories
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CActivityCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-running"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Activités
+										</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li	class="menu-item has-submenu  ">
+							<a	href=""	class="menu-item-contents submenu-toggle "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+								<span	class="icon menu-icon">
+									<i	class="fas fa-fire"></i>
+								</span>
+								<span	class="menu-item-label position-relative">
+									Tendances
+								</span>
+								<span	class="icon submenu-toggle-icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path>
+									</svg>
+								</span>
+							</a>
+							<ul	class="submenu">
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CEventstrendCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-bolt"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Évènements Tendances
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CTrendCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-chart-line"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Activités Tendances
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CEventCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-calendar-alt"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Évènements Spéciaux
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CExclusiveCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-gift"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Offres Exclusives
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5COfferCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-tag"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Offres Spéciales
+										</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li	class="menu-item has-submenu  ">
+							<a	href=""	class="menu-item-contents submenu-toggle "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+								<span	class="icon menu-icon">
+									<i	class="fas fa-star"></i>
+								</span>
+								<span	class="menu-item-label position-relative">
+									Critères &amp; Avis
+								</span>
+								<span	class="icon submenu-toggle-icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path>
+									</svg>
+								</span>
+							</a>
+							<ul	class="submenu">
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CTagCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-tags"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Tags
+										</span>
+									</a>
+								</li>
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CRatingCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-star-half-alt"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Notes et avis
+										</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li	class="menu-item has-submenu  ">
+							<a	href=""	class="menu-item-contents submenu-toggle "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+								<span	class="icon menu-icon">
+									<i	class="fas fa-star"></i>
+								</span>
+								<span	class="menu-item-label position-relative">
+									Commandes
+								</span>
+								<span	class="icon submenu-toggle-icon">
+									<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path>
+									</svg>
+								</span>
+							</a>
+							<ul	class="submenu">
+								<li	class="menu-item ">
+									<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5COrderCrudController"	class="menu-item-contents  "	target="_self"	rel=""	referrerpolicy="origin-when-cross-origin">
+										<span	class="icon menu-icon">
+											<i	class="fas fa-list"></i>
+										</span>
+										<span	class="menu-item-label position-relative">
+											Commandes
+										</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+				<div	id="sidebar-resizer-handler"	class="resizer-handler resizer-handler-left"></div>
+			</aside>
+		</div>
+		<section	class="main-content">
+			<aside	class="content-top ea-search-enabled">
+				<div	class="content-search">
+					<form	class="form-action-search"	method="get">
+						<input	type="hidden"	name="crudAction"	value="index">
+							<input	type="hidden"	name="crudControllerFqcn"	value="App\Controller\Admin\CategoryCrudController">
+								<input	type="hidden"	name="page"	value="1">
+									<div	class="form-group">
+										<div	class="form-widget">
+											<span	class="icon content-search-icon">
+												<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 512 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path>
+												</svg>
+											</span>
+											<label	class="content-search-label"	data-value="">
+												<input	class="form-control is-blank"	type="search"	name="query"	value=""	placeholder="Rechercher"	spellcheck="false"	autocorrect="off"	oninput="this.parentNode.dataset.value=this.value"></label>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div	class="navbar-custom-menu">
+									<div	class="dropdown user-menu-wrapper ">
+										<a	class="dropdown-toggle dropdown-toggle-hidden-marker user-details"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false">
+											<span	class="user-avatar">
+												<span	class="icon">
+													<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 448 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"></path>
+													</svg>
+												</span>
+											</span>
+											<span	class="user-name"></span>
+										</a>
+										<div	class="dropdown-overlay">
+											<ul	class="dropdown-menu dropdown-menu-end">
+												<li	class="dropdown-user-details">
+													<div>
+														<span	class="user-avatar">
+															<span	class="icon">
+																<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 448 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"></path>
+																</svg>
+															</span>
+														</span>
+													</div>
+													<div>
+														<span	class="user-label">
+															Connecté en tant que
+														</span>
+														<span	class="user-name">
+															Utilisateur anonyme
+														</span>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div	class="dropdown dropdown-settings">
+									<a	class="dropdown-toggle dropdown-toggle-hidden-marker dropdown-settings-button"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false"	data-bs-offset="0,5">
+										<span	class="icon">
+											<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 512 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"></path>
+											</svg>
+										</span>
+									</a>
+									<div	class="dropdown-overlay">
+										<ul	class="dropdown-menu dropdown-menu-end">
+											<li	class="dropdown-header dropdown-appearance-label">
+												<span>
+													Mode d'apparence
+												</span>
+											</li>
+											<li>
+												<a	class="dropdown-item dropdown-appearance-item"	href="#"	data-ea-color-scheme="light">
+													<span	class="icon">
+														<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 512 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M375.7 19.7c-1.5-8-6.9-14.7-14.4-17.8s-16.1-2.2-22.8 2.4L256 61.1 173.5 4.2c-6.7-4.6-15.3-5.5-22.8-2.4s-12.9 9.8-14.4 17.8l-18.1 98.5L19.7 136.3c-8 1.5-14.7 6.9-17.8 14.4s-2.2 16.1 2.4 22.8L61.1 256 4.2 338.5c-4.6 6.7-5.5 15.3-2.4 22.8s9.8 13 17.8 14.4l98.5 18.1 18.1 98.5c1.5 8 6.9 14.7 14.4 17.8s16.1 2.2 22.8-2.4L256 450.9l82.5 56.9c6.7 4.6 15.3 5.5 22.8 2.4s12.9-9.8 14.4-17.8l18.1-98.5 98.5-18.1c8-1.5 14.7-6.9 17.8-14.4s2.2-16.1-2.4-22.8L450.9 256l56.9-82.5c4.6-6.7 5.5-15.3 2.4-22.8s-9.8-12.9-17.8-14.4l-98.5-18.1L375.7 19.7zM269.6 110l65.6-45.2 14.4 78.3c1.8 9.8 9.5 17.5 19.3 19.3l78.3 14.4L402 242.4c-5.7 8.2-5.7 19 0 27.2l45.2 65.6-78.3 14.4c-9.8 1.8-17.5 9.5-19.3 19.3l-14.4 78.3L269.6 402c-8.2-5.7-19-5.7-27.2 0l-65.6 45.2-14.4-78.3c-1.8-9.8-9.5-17.5-19.3-19.3L64.8 335.2 110 269.6c5.7-8.2 5.7-19 0-27.2L64.8 176.8l78.3-14.4c9.8-1.8 17.5-9.5 19.3-19.3l14.4-78.3L242.4 110c8.2 5.7 19 5.7 27.2 0zM256 368a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM192 256a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z"></path>
+														</svg>
+													</span>
+													<span>
+														Clair
+													</span>
+												</a>
+											</li>
+											<li>
+												<a	class="dropdown-item dropdown-appearance-item"	href="#"	data-ea-color-scheme="dark">
+													<span	class="icon">
+														<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 384 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M144.7 98.7c-21 34.1-33.1 74.3-33.1 117.3c0 98 62.8 181.4 150.4 211.7c-12.4 2.8-25.3 4.3-38.6 4.3C126.6 432 48 353.3 48 256c0-68.9 39.4-128.4 96.8-157.3zm62.1-66C91.1 41.2 0 137.9 0 256C0 379.7 100 480 223.5 480c47.8 0 92-15 128.4-40.6c1.9-1.3 3.7-2.7 5.5-4c4.8-3.6 9.4-7.4 13.9-11.4c2.7-2.4 5.3-4.8 7.9-7.3c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-3.7 .6-7.4 1.2-11.1 1.6c-5 .5-10.1 .9-15.3 1c-1.2 0-2.5 0-3.7 0l-.3 0c-96.8-.2-175.2-78.9-175.2-176c0-54.8 24.9-103.7 64.1-136c1-.9 2.1-1.7 3.2-2.6c4-3.2 8.2-6.2 12.5-9c3.1-2 6.3-4 9.6-5.8c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-3.6-.3-7.1-.5-10.7-.6c-2.7-.1-5.5-.1-8.2-.1c-3.3 0-6.5 .1-9.8 .2c-2.3 .1-4.6 .2-6.9 .4z"></path>
+														</svg>
+													</span>
+													<span>
+														Sombre
+													</span>
+												</a>
+											</li>
+											<li>
+												<a	class="dropdown-item dropdown-appearance-item active"	href="#"	data-ea-color-scheme="auto">
+													<span	class="icon">
+														<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 576 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M64 0C28.7 0 0 28.7 0 64L0 352c0 35.3 28.7 64 64 64l176 0-10.7 32L160 448c-17.7 0-32 14.3-32 32s14.3 32 32 32l256 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-69.3 0L336 416l176 0c35.3 0 64-28.7 64-64l0-288c0-35.3-28.7-64-64-64L64 0zM512 64l0 224L64 288 64 64l448 0z"></path>
+														</svg>
+													</span>
+													<span>
+														Automatique
+													</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</aside>
+							<div	class="content-wrapper">
+								<article	class="content">
+									<section	class="content-header">
+										<div	class="content-header-title">
+											<h1	class="title">
+												Gestion des Catégories, Sous-Catégories et Activités
+											</h1>
+										</div>
+										<div	class="page-actions">
+											<div	class="global-actions">
+												<a	class=" action-new btn btn-primary"	href="http://127.0.0.1:8000/admin?crudAction=new&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController"	data-action-name="new">
+													<span	class="action-label">
+														Créer Catégorie
+													</span>
+												</a>
+											</div>
+											<div	class="batch-actions d-none">
+												<a	class=" action-batchDelete btn btn-danger pr-0"	href="http://127.0.0.1:8000/admin?crudAction=batchDelete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController"	data-action-name="batchDelete"	data-bs-toggle="modal"	data-bs-target="#modal-batch-action"	data-action-csrf-token="5fd461f2250ca620036d7.1DCWT1rghXZ7A8OD27k7VgCRNRnV6Fio8wP0nQXlOzw.51rQGWqQ9hsVUpTMuvNUZmKgXHO5sRnmoFnN9FzTQkyDXPIVd6zLN0hLoA"	data-action-batch="true"	data-entity-fqcn="App\Entity\Category"	data-action-url="http://127.0.0.1:8000/admin?crudAction=batchDelete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController">
+													<span	class="action-label">
+														Supprimer
+													</span>
+												</a>
+											</div>
+										</div>
+									</section>
+									<section	id="main"	class="content-body">
+										<table	class="table datagrid ">
+											<thead>
+												<tr>
+													<th>
+														<div	class="form-check">
+															<span>
+																<input	type="checkbox"	class="form-check-input form-batch-checkbox-all"	id="form-batch-checkbox-all"></span>
+															</div>
+														</th>
+														<th	data-column="name"	class="searchable   header-for-field-text text-"	dir="ltr">
+															<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;page=1&amp;sort%5Bname%5D=DESC">
+																Titre
+																<span	class="icon">
+																	<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"></path>
+																	</svg>
+																</span>
+															</a>
+														</th>
+														<th	data-column="slug"	class="searchable   header-for-field-text text-"	dir="ltr">
+															<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;page=1&amp;sort%5Bslug%5D=DESC">
+																URL
+																<span	class="icon">
+																	<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"></path>
+																	</svg>
+																</span>
+															</a>
+														</th>
+														<th	data-column="image"	class="searchable   header-for-field-image text-center"	dir="ltr">
+															<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;page=1&amp;sort%5Bimage%5D=DESC">
+																Image
+																<span	class="icon">
+																	<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"></path>
+																	</svg>
+																</span>
+															</a>
+														</th>
+														<th	data-column="description"	class="searchable   header-for-field-text_editor text-"	dir="ltr">
+															<a	href="http://127.0.0.1:8000/admin?crudAction=index&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;page=1&amp;sort%5Bdescription%5D=DESC">
+																Description
+																<span	class="icon">
+																	<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 320 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"></path>
+																	</svg>
+																</span>
+															</a>
+														</th>
+														<th	class="actions-as-dropdown-table-head"	dir="ltr">
+															<span	class="visually-hidden">
+																Actions
+															</span>
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr	data-id="1">
+														<td	class="batch-actions-selector">
+															<div	class="form-check">
+																<input	type="checkbox"	class="form-check-input form-batch-checkbox"	id="form-batch-checkbox-0"	value="1"	data-row-index="0"></div>
+															</td>
+															<td	data-column="name"	data-label="Titre"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																<span	title="Aventure">
+																	Aventure
+																</span>
+															</td>
+															<td	data-column="slug"	data-label="URL"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																<span	title="aventure">
+																	aventure
+																</span>
+															</td>
+															<td	data-column="image"	data-label="Image"	class="searchable  text-center field-image"	dir="ltr"	required="1">
+																<a	href="#"	class="ea-lightbox-thumbnail"	data-ea-lightbox-content-selector="#ea-lightbox-01JNDSVGYP26S76FPHT8XG28H4-1">
+																	<img	src="/uploads/photos/2025-02-05-793886232d1ca028787da3d53124655c819d8e7f.webp"	class="img-fluid"></a>
+																	<div	id="ea-lightbox-01JNDSVGYP26S76FPHT8XG28H4-1"	class="ea-lightbox">
+																		<img	src="/uploads/photos/2025-02-05-793886232d1ca028787da3d53124655c819d8e7f.webp"></div>
+																	</td>
+																	<td	data-column="description"	data-label="Description"	class="searchable  text- field-text_editor"	dir="ltr"	required="1">
+																		<a	href="#"	data-bs-toggle="modal"	data-bs-target="#ea-text-editor-01JNDSVGYP26S76FPHT8XG28H6">
+																			<span	class="icon">
+																				<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 384 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M64 464c-8.8 0-16-7.2-16-16L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2 16-16 16L64 464zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-293.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0L64 0zm56 256c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0z"></path>
+																				</svg>
+																			</span>
+																			Voir le contenu
+																		</a>
+																		<div	class="modal fade"	id="ea-text-editor-01JNDSVGYP26S76FPHT8XG28H6"	tabindex="-1"	role="dialog"	aria-hidden="true">
+																			<div	class="modal-dialog modal-lg"	role="document">
+																				<div	class="modal-content">
+																					<div	class="modal-header">
+																						<h5	class="modal-title">
+																							Description
+																						</h5>
+																						<button	type="button"	class="btn-close"	data-bs-dismiss="modal"	aria-label="Fermer"></button>
+																					</div>
+																					<div	class="modal-body">
+																						&lt;div&gt;Avec Loisirs en France, plongez dans l'univers passionnant de l'aventure. Que vous soyez à la recherche de sensations fortes ou d'une escapade en plein air, nous avons sélectionné pour vous les meilleures activités d'aventure. Partez à la découverte de la nature avec des randonnées, des parcours d'accrobranche, des descentes en canoë, ou encore des sessions de parapente. Des Alpes aux Pyrénées, en passant par la Bretagne et la Côte d'Azur, vivez des moments inoubliables et ressentez l'adrénaline de l'aventure.&lt;/div&gt;
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</td>
+																	<td	class="actions actions-as-dropdown">
+																		<div	class="dropdown dropdown-actions">
+																			<a	class="dropdown-toggle dropdown-toggle-hidden-marker"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false">
+																				<span	class="icon">
+																					<svg	xmlns="http://www.w3.org/2000/svg"	fill="none"	viewBox="0 0 24 24"	stroke="currentColor">
+																						<!-- this icon is 'dots-horizontal' icon from https://heroicons.com/ because FontAwesome 'fa-ellipsis-h' isn't vertically centered -->
+																						<path	stroke-linecap="round"	stroke-linejoin="round"	stroke-width="2"	d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+																					</svg>
+																				</span>
+																			</a>
+																			<div	class="dropdown-overlay">
+																				<ul	class="dropdown-menu dropdown-menu-end">
+																					<li>
+																						<a	class="dropdown-item action-edit"	href="http://127.0.0.1:8000/admin?crudAction=edit&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=1"	data-action-name="edit">
+																							<span	class="action-label">
+																								Modifier
+																							</span>
+																						</a>
+																					</li>
+																					<li>
+																						<a	class="dropdown-item action-delete text-danger"	href="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=1"	data-action-name="delete"	formaction="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=1"	data-bs-toggle="modal"	data-bs-target="#modal-delete">
+																							<span	class="action-label">
+																								Supprimer
+																							</span>
+																						</a>
+																					</li>
+																				</ul>
+																			</div>
+																		</div>
+																	</td>
+																</tr>
+																<tr	data-id="2">
+																	<td	class="batch-actions-selector">
+																		<div	class="form-check">
+																			<input	type="checkbox"	class="form-check-input form-batch-checkbox"	id="form-batch-checkbox-1"	value="2"	data-row-index="1"></div>
+																		</td>
+																		<td	data-column="name"	data-label="Titre"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																			<span	title="Culture">
+																				Culture
+																			</span>
+																		</td>
+																		<td	data-column="slug"	data-label="URL"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																			<span	title="culture">
+																				culture
+																			</span>
+																		</td>
+																		<td	data-column="image"	data-label="Image"	class="searchable  text-center field-image"	dir="ltr"	required="1">
+																			<a	href="#"	class="ea-lightbox-thumbnail"	data-ea-lightbox-content-selector="#ea-lightbox-01JNDSVGYSAH2M1WCX3NGJ8S0M-1">
+																				<img	src="/uploads/photos/2025-02-05-0c3024b0894f8d218095281bc440ff5f468f8408.webp"	class="img-fluid"></a>
+																				<div	id="ea-lightbox-01JNDSVGYSAH2M1WCX3NGJ8S0M-1"	class="ea-lightbox">
+																					<img	src="/uploads/photos/2025-02-05-0c3024b0894f8d218095281bc440ff5f468f8408.webp"></div>
+																				</td>
+																				<td	data-column="description"	data-label="Description"	class="searchable  text- field-text_editor"	dir="ltr"	required="1">
+																					<a	href="#"	data-bs-toggle="modal"	data-bs-target="#ea-text-editor-01JNDSVGYSAH2M1WCX3NGJ8S0P">
+																						<span	class="icon">
+																							<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 384 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M64 464c-8.8 0-16-7.2-16-16L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2 16-16 16L64 464zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-293.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0L64 0zm56 256c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0z"></path>
+																							</svg>
+																						</span>
+																						Voir le contenu
+																					</a>
+																					<div	class="modal fade"	id="ea-text-editor-01JNDSVGYSAH2M1WCX3NGJ8S0P"	tabindex="-1"	role="dialog"	aria-hidden="true">
+																						<div	class="modal-dialog modal-lg"	role="document">
+																							<div	class="modal-content">
+																								<div	class="modal-header">
+																									<h5	class="modal-title">
+																										Description
+																									</h5>
+																									<button	type="button"	class="btn-close"	data-bs-dismiss="modal"	aria-label="Fermer"></button>
+																								</div>
+																								<div	class="modal-body">
+																									&lt;div&gt;Loisirs en France vous invite à explorer la richesse culturelle de la France. Découvrez des visites guidées de musées, des balades historiques, des ateliers d'art et des spectacles vivants. Plongez dans l'histoire et l'art de villes emblématiques comme Paris, Lyon, Marseille, et bien d'autres. Que vous soyez passionné d'histoire, d'art ou de patrimoine, nos activités culturelles sauront vous émerveiller et vous enrichir.&lt;/div&gt;
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</td>
+																				<td	class="actions actions-as-dropdown">
+																					<div	class="dropdown dropdown-actions">
+																						<a	class="dropdown-toggle dropdown-toggle-hidden-marker"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false">
+																							<span	class="icon">
+																								<svg	xmlns="http://www.w3.org/2000/svg"	fill="none"	viewBox="0 0 24 24"	stroke="currentColor">
+																									<!-- this icon is 'dots-horizontal' icon from https://heroicons.com/ because FontAwesome 'fa-ellipsis-h' isn't vertically centered -->
+																									<path	stroke-linecap="round"	stroke-linejoin="round"	stroke-width="2"	d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+																								</svg>
+																							</span>
+																						</a>
+																						<div	class="dropdown-overlay">
+																							<ul	class="dropdown-menu dropdown-menu-end">
+																								<li>
+																									<a	class="dropdown-item action-edit"	href="http://127.0.0.1:8000/admin?crudAction=edit&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=2"	data-action-name="edit">
+																										<span	class="action-label">
+																											Modifier
+																										</span>
+																									</a>
+																								</li>
+																								<li>
+																									<a	class="dropdown-item action-delete text-danger"	href="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=2"	data-action-name="delete"	formaction="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=2"	data-bs-toggle="modal"	data-bs-target="#modal-delete">
+																										<span	class="action-label">
+																											Supprimer
+																										</span>
+																									</a>
+																								</li>
+																							</ul>
+																						</div>
+																					</div>
+																				</td>
+																			</tr>
+																			<tr	data-id="3">
+																				<td	class="batch-actions-selector">
+																					<div	class="form-check">
+																						<input	type="checkbox"	class="form-check-input form-batch-checkbox"	id="form-batch-checkbox-2"	value="3"	data-row-index="2"></div>
+																					</td>
+																					<td	data-column="name"	data-label="Titre"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																						<span	title="Bien-être">
+																							Bien-être
+																						</span>
+																					</td>
+																					<td	data-column="slug"	data-label="URL"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																						<span	title="bien-etre">
+																							bien-etre
+																						</span>
+																					</td>
+																					<td	data-column="image"	data-label="Image"	class="searchable  text-center field-image"	dir="ltr"	required="1">
+																						<a	href="#"	class="ea-lightbox-thumbnail"	data-ea-lightbox-content-selector="#ea-lightbox-01JNDSVGYT7GGZM3NTGF09K9V2-1">
+																							<img	src="/uploads/photos/2025-02-05-43e8033219ec025712529b8516d9111d65d7feb7.webp"	class="img-fluid"></a>
+																							<div	id="ea-lightbox-01JNDSVGYT7GGZM3NTGF09K9V2-1"	class="ea-lightbox">
+																								<img	src="/uploads/photos/2025-02-05-43e8033219ec025712529b8516d9111d65d7feb7.webp"></div>
+																							</td>
+																							<td	data-column="description"	data-label="Description"	class="searchable  text- field-text_editor"	dir="ltr"	required="1">
+																								<a	href="#"	data-bs-toggle="modal"	data-bs-target="#ea-text-editor-01JNDSVGYT7GGZM3NTGF09K9V4">
+																									<span	class="icon">
+																										<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 384 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M64 464c-8.8 0-16-7.2-16-16L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2 16-16 16L64 464zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-293.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0L64 0zm56 256c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0z"></path>
+																										</svg>
+																									</span>
+																									Voir le contenu
+																								</a>
+																								<div	class="modal fade"	id="ea-text-editor-01JNDSVGYT7GGZM3NTGF09K9V4"	tabindex="-1"	role="dialog"	aria-hidden="true">
+																									<div	class="modal-dialog modal-lg"	role="document">
+																										<div	class="modal-content">
+																											<div	class="modal-header">
+																												<h5	class="modal-title">
+																													Description
+																												</h5>
+																												<button	type="button"	class="btn-close"	data-bs-dismiss="modal"	aria-label="Fermer"></button>
+																											</div>
+																											<div	class="modal-body">
+																												&lt;div&gt;Avec Loisirs en France, découvrez les meilleurs centres de bien-être et réservez votre activité en ligne. Comparez parmi plus de 500 offres partout en France au meilleur prix. Annulation gratuite.&lt;/div&gt;
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																							</td>
+																							<td	class="actions actions-as-dropdown">
+																								<div	class="dropdown dropdown-actions">
+																									<a	class="dropdown-toggle dropdown-toggle-hidden-marker"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false">
+																										<span	class="icon">
+																											<svg	xmlns="http://www.w3.org/2000/svg"	fill="none"	viewBox="0 0 24 24"	stroke="currentColor">
+																												<!-- this icon is 'dots-horizontal' icon from https://heroicons.com/ because FontAwesome 'fa-ellipsis-h' isn't vertically centered -->
+																												<path	stroke-linecap="round"	stroke-linejoin="round"	stroke-width="2"	d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+																											</svg>
+																										</span>
+																									</a>
+																									<div	class="dropdown-overlay">
+																										<ul	class="dropdown-menu dropdown-menu-end">
+																											<li>
+																												<a	class="dropdown-item action-edit"	href="http://127.0.0.1:8000/admin?crudAction=edit&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=3"	data-action-name="edit">
+																													<span	class="action-label">
+																														Modifier
+																													</span>
+																												</a>
+																											</li>
+																											<li>
+																												<a	class="dropdown-item action-delete text-danger"	href="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=3"	data-action-name="delete"	formaction="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=3"	data-bs-toggle="modal"	data-bs-target="#modal-delete">
+																													<span	class="action-label">
+																														Supprimer
+																													</span>
+																												</a>
+																											</li>
+																										</ul>
+																									</div>
+																								</div>
+																							</td>
+																						</tr>
+																						<tr	data-id="4">
+																							<td	class="batch-actions-selector">
+																								<div	class="form-check">
+																									<input	type="checkbox"	class="form-check-input form-batch-checkbox"	id="form-batch-checkbox-3"	value="4"	data-row-index="3"></div>
+																								</td>
+																								<td	data-column="name"	data-label="Titre"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																									<span	title="Gastronomie">
+																										Gastronomie
+																									</span>
+																								</td>
+																								<td	data-column="slug"	data-label="URL"	class="searchable  text- field-text"	dir="ltr"	required="1">
+																									<span	title="gastronomie">
+																										gastronomie
+																									</span>
+																								</td>
+																								<td	data-column="image"	data-label="Image"	class="searchable  text-center field-image"	dir="ltr"	required="1">
+																									<a	href="#"	class="ea-lightbox-thumbnail"	data-ea-lightbox-content-selector="#ea-lightbox-01JNDSVGYV580FF8773NQ5CP04-1">
+																										<img	src="/uploads/photos/2025-02-05-6c17c3270c41961edd83f12d6344e4d644190227.webp"	class="img-fluid"></a>
+																										<div	id="ea-lightbox-01JNDSVGYV580FF8773NQ5CP04-1"	class="ea-lightbox">
+																											<img	src="/uploads/photos/2025-02-05-6c17c3270c41961edd83f12d6344e4d644190227.webp"></div>
+																										</td>
+																										<td	data-column="description"	data-label="Description"	class="searchable  text- field-text_editor"	dir="ltr"	required="1">
+																											<a	href="#"	data-bs-toggle="modal"	data-bs-target="#ea-text-editor-01JNDSVGYV580FF8773NQ5CP06">
+																												<span	class="icon">
+																													<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 384 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M64 464c-8.8 0-16-7.2-16-16L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2 16-16 16L64 464zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-293.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0L64 0zm56 256c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24l144 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-144 0z"></path>
+																													</svg>
+																												</span>
+																												Voir le contenu
+																											</a>
+																											<div	class="modal fade"	id="ea-text-editor-01JNDSVGYV580FF8773NQ5CP06"	tabindex="-1"	role="dialog"	aria-hidden="true">
+																												<div	class="modal-dialog modal-lg"	role="document">
+																													<div	class="modal-content">
+																														<div	class="modal-header">
+																															<h5	class="modal-title">
+																																Description
+																															</h5>
+																															<button	type="button"	class="btn-close"	data-bs-dismiss="modal"	aria-label="Fermer"></button>
+																														</div>
+																														<div	class="modal-body">
+																															&lt;div&gt;Loisirs en France vous a préparé la meilleure sélection de cours de cuisine, ateliers dégustation et ateliers culinaires pour le plus grand bonheur de vos papilles. Vous pourrez apprendre la cuisine, la pâtisserie, déguster du chocolat, fromage, vin, alcools ou des produits d’exception.&lt;/div&gt;
+																														</div>
+																													</div>
+																												</div>
+																											</div>
+																										</td>
+																										<td	class="actions actions-as-dropdown">
+																											<div	class="dropdown dropdown-actions">
+																												<a	class="dropdown-toggle dropdown-toggle-hidden-marker"	href="#"	role="button"	data-bs-toggle="dropdown"	aria-haspopup="true"	aria-expanded="false">
+																													<span	class="icon">
+																														<svg	xmlns="http://www.w3.org/2000/svg"	fill="none"	viewBox="0 0 24 24"	stroke="currentColor">
+																															<!-- this icon is 'dots-horizontal' icon from https://heroicons.com/ because FontAwesome 'fa-ellipsis-h' isn't vertically centered -->
+																															<path	stroke-linecap="round"	stroke-linejoin="round"	stroke-width="2"	d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+																														</svg>
+																													</span>
+																												</a>
+																												<div	class="dropdown-overlay">
+																													<ul	class="dropdown-menu dropdown-menu-end">
+																														<li>
+																															<a	class="dropdown-item action-edit"	href="http://127.0.0.1:8000/admin?crudAction=edit&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=4"	data-action-name="edit">
+																																<span	class="action-label">
+																																	Modifier
+																																</span>
+																															</a>
+																														</li>
+																														<li>
+																															<a	class="dropdown-item action-delete text-danger"	href="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=4"	data-action-name="delete"	formaction="http://127.0.0.1:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CCategoryCrudController&amp;entityId=4"	data-bs-toggle="modal"	data-bs-target="#modal-delete">
+																																<span	class="action-label">
+																																	Supprimer
+																																</span>
+																															</a>
+																														</li>
+																													</ul>
+																												</div>
+																											</div>
+																										</td>
+																									</tr>
+																								</tbody>
+																								<tfoot></tfoot>
+																							</table>
+																							<div	class="content-panel-footer without-padding without-border">
+																								<div	class="list-pagination">
+																									<div	class="list-pagination-counter">
+																										<strong>
+																											4
+																										</strong>
+																										résultats
+																									</div>
+																								</div>
+																							</div>
+																							<form	class="d-none"	method="post"	id="delete-form">
+																								<input	type="hidden"	name="token"	value="3495851ac03e4ff668b7f113af00ce.ve63uXClIzYKYuCKuEqK_X1ndCk8RInVuxaTXmABVqU.87313hrne2A9C7XD0wjhngk0JhFaBrGEj0DqHE1WYNHxp_L1GfpmVGlTgw"></form>
+																								<div	id="modal-delete"	class="modal fade"	tabindex="-1">
+																									<div	class="modal-dialog">
+																										<div	class="modal-content">
+																											<div	class="modal-body">
+																												<h4>
+																													Voulez-vous supprimer cet élément ?
+																												</h4>
+																												<p>
+																													Cette action est irréversible.
+																												</p>
+																											</div>
+																											<div	class="modal-footer">
+																												<button	type="button"	data-bs-dismiss="modal"	class="btn btn-secondary">
+																													<span	class="btn-label">
+																														Annuler
+																													</span>
+																												</button>
+																												<button	type="button"	data-bs-dismiss="modal"	class="btn btn-danger"	id="modal-delete-button"	form="delete-form">
+																													<span	class="btn-label">
+																														Supprimer
+																													</span>
+																												</button>
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																								<div	id="modal-batch-action"	class="modal fade"	tabindex="-1">
+																									<div	class="modal-dialog">
+																										<div	class="modal-content">
+																											<div	class="modal-body">
+																												<h4	id="batch-action-confirmation-title">
+																													Vous allez appliquer l'action "%action_name%" à %num_items% élément(s).
+																												</h4>
+																												<p>
+																													Cette action est irréversible.
+																												</p>
+																											</div>
+																											<div	class="modal-footer">
+																												<button	type="button"	data-bs-dismiss="modal"	class="btn btn-secondary">
+																													<span	class="btn-label">
+																														Annuler
+																													</span>
+																												</button>
+																												<button	type="button"	data-bs-dismiss="modal"	class="btn btn-danger"	id="modal-batch-action-button">
+																													<span	class="icon">
+																														<svg	xmlns="http://www.w3.org/2000/svg"	viewBox="0 0 448 512"	fill="currentColor"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path	d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path>
+																														</svg>
+																													</span>
+																													<span	class="btn-label">
+																														Procéder
+																													</span>
+																												</button>
+																											</div>
+																										</div>
+																									</div>
+																								</div>
+																							</section>
+																						</article>
+																						<div	id="content-resizer-handler"	class="resizer-handler resizer-handler-right"></div>
+																					</div>
+																				</section>
+																			</div>
+																		</td>
+																	</td>
+																</tr>
+															</td>
+														</td>
+													</tr>
+												</tbody>
+											</thead>
+										{% endblock %}
+										

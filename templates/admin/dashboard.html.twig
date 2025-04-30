@@ -8,39 +8,39 @@
 {% block body %}
 
     {# Barre de navigation #}
-    {% include "admin/navbar.html.twig" %}
+    {# {% include "admin/navbar.html.twig" %} #}
 
     <div class="container my-4">
         
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav role="navigation" aria-label="Navigation dashboard-admin" class="navbar navbar-expand-lg bg-primaryBlue shadow-sm p-3 rounded">
             <div class="container-fluid">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav d-none d-sm-flex">
                     {# Dashboard Link #}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('admin') }}">Dashboard</a>
+                        <a class="nav-link fs-4" href="{{ path('admin') }}"  aria-label="Accéder au tableau de bord admin">Dashboard Admin</a>
                     </li>
 
                     {# Utilisateur Menu #}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle fs-4" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Liste des utilisateurs">
                             Utilisateur
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\UserCrudController'}) }}">Utilisateurs</a></li>
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\PartnerCrudController'}) }}">Partenaires</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\UserCrudController'}) }}" aria-label="Voir les utilisateurs">Utilisateurs</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\PartnerCrudController'}) }}" aria-label="Voir les partenaires">Partenaires</a></li>
                         </ul>
                     </li>
 
                     {# Loisirs Menu #}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="loisirsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle fs-4" href="#" id="loisirsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Voir les loisirs">
                             Loisirs
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="loisirsDropdown">
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\CategoryCrudController'}) }}">Catégories</a></li>
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\SubcategoryCrudController'}) }}">Sous-Catégories</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\CategoryCrudController'}) }}" aria-label="Afficher les catégories">Catégories</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\SubcategoryCrudController'}) }}" aria-label="Afficher les sous-catégories">Sous-Catégories</a></li>
 							<li>
-							<a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\ActivityCrudController'}) }}">Activités</a>
+							<a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\ActivityCrudController'}) }}" aria-label="Afficher les activités">Activités</a>
 							</li>
 							
                         </ul>
@@ -48,36 +48,36 @@
 
                     {# Tendances Menu #}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="tendancesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle fs-4" href="#" id="tendancesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Tendances
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="tendancesDropdown">
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\EventstrendCrudController'}) }}">Évènements Tendances</a></li>
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\TrendCrudController'}) }}">Activités Tendances</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\EventstrendCrudController'}) }}">Évènements Tendances</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\TrendCrudController'}) }}">Activités Tendances</a></li>
                             <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\EventCrudController'}) }}">Évènements Spéciaux</a></li>
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\ExclusiveCrudController'}) }}">Offres Exclusives</a></li>
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\OfferCrudController'}) }}">Offres Spéciales</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\ExclusiveCrudController'}) }}">Offres Exclusives</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\OfferCrudController'}) }}">Offres Spéciales</a></li>
                         </ul>
                     </li>
 
                     {# Critères & Avis Menu #}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="criteriaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle fs-4" href="#" id="criteriaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Critères & Avis
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="criteriaDropdown">
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\TagCrudController'}) }}">Tags</a></li>
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\RatingCrudController'}) }}">Notes et avis</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\TagCrudController'}) }}">Tags</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\RatingCrudController'}) }}">Notes et avis</a></li>
                         </ul>
                     </li>
 
                     {# Commandes Menu #}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="ordersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle fs-4" href="#" id="ordersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Commandes
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="ordersDropdown">
-                            <li><a class="dropdown-item" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\OrderCrudController'}) }}">Commandes</a></li>
+                            <li><a class="dropdown-item fs-4" href="{{ path('admin', {crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\OrderCrudController'}) }}">Commandes</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -88,21 +88,21 @@
         <div class="row mt-4">
             <div class="col-md-4">
                 <div class="card shadow-sm p-3">
-                    <h3>Utilisateurs</h3>
+                    <h3 class="color-primary-custom">Utilisateurs</h3>
                     <p>Nombre total : {{ userCount }}</p>
                     <a href="{{ path('admin', {crudController: 'App\\Controller\\Admin\\UserCrudController'}) }}" class="btn btn-primary">Gérer</a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm p-3">
-                    <h3>Commandes</h3>
+                    <h3 class="color-primary-custom">Commandes</h3>
                     <p>Nombre total : {{ orderCount }}</p>
-                    <a href="{{ path('admin', {crudController: 'App\\Controller\\Admin\\OrderCrudController'}) }}" class="btn btn-success">Voir les commandes</a>
+                    <a href="{{ path('admin', {crudController: 'App\\Controller\\Admin\\OrderCrudController'}) }}" class="btn btn-primary">Voir les commandes</a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm p-3">
-                    <h3>Revenus</h3>
+                    <h3 class="color-primary-custom">Revenus</h3>
                     <p>Total : {{ totalRevenue|price }}</p>
                 </div>
             </div>
